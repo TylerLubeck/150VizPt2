@@ -42,10 +42,7 @@ void draw() {
     xyAxis.setXNumTicks(table.getRowCount());
     xyAxis.resetIntervals();
     fill(myButton.getColor());
-    rect(myButton.getPosX(), myButton.getPosY(), myButton.getWidth(), myButton.getHeight());
-    line(xyAxis.xAxis_x, xyAxis.xAxis_y, xyAxis.xAxis_x + xyAxis.xLength, xyAxis.xAxis_y);
-    line(xyAxis.yAxis_x, xyAxis.yAxis_y, xyAxis.xAxis_x, xyAxis.yAxis_y - xyAxis.yLength);
-    
-    
+    rect(myButton.getPosX(), myButton.getPosY(), myButton.getWidth(), myButton.getHeight());   
+    xyAxis.render();
 }
 

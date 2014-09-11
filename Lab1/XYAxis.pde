@@ -4,6 +4,7 @@ class XYAxis {
   int xLength, yLength;
   int xAxis_x, xAxis_y, yAxis_x, yAxis_y;
   int xNumTicks, yNumTicks;
+  int tickLength;
   
   XYAxis() {
     xLabel = "X-Axis";
@@ -18,6 +19,7 @@ class XYAxis {
     yAxis_y = xAxis_y;
     xNumTicks = 10;
     yNumTicks = 10; 
+    tickLength = 10;
   }
   
   void setXLabel( String x ) {xLabel = x;}
@@ -30,6 +32,28 @@ class XYAxis {
   void resetIntervals() {
       xInterval = xLength / xNumTicks;
       yInterval = yLength / yNumTicks;  
+  }
+  
+  void render() {
+    // draw axis
+    line(xyAxis.xAxis_x, xyAxis.xAxis_y, xyAxis.xAxis_x + xyAxis.xLength, xyAxis.xAxis_y);
+    line(xyAxis.yAxis_x, xyAxis.yAxis_y, xyAxis.xAxis_x, xyAxis.yAxis_y - xyAxis.yLength);
+    // draw X ticks
+    int xTick_x = xAxis_x;
+    int xTick_y = xAxis_y + tickLength / 2;
+    int xTick_height = xTick_y - tickLength;
+    for(int i=0; i< xNumTicks; i++) {
+      xTick_x += xInterval;
+      line(xTick_x, xTick_y, xTick_x, xTick_height);
+    }
+    // draw Y ticks
+    int yTick_x = yAxis_x - tickLength / 2;
+    int yTick_y = yAxis_y;
+    int yTick_length = yTick_x + tickLength;
+    for(int i=0; i< yNumTicks; i++) {
+      yTick_y -= yInterval;
+      line(yTick_x, yTick_y, yTick_length, yTick_y);
+    }
   }
   
 }
