@@ -13,7 +13,7 @@ class XYAxis {
     yInterval = 1;
     xLength = width - width / 4;
     yLength = height - height / 4;
-    xAxis_x = width / 8;
+    xAxis_x = width / 8 + width / 16;
     xAxis_y = height - height / 8;
     yAxis_x = xAxis_x;
     yAxis_y = xAxis_y;
@@ -54,6 +54,10 @@ class XYAxis {
       yTick_y -= yInterval;
       line(yTick_x, yTick_y, yTick_length, yTick_y);
     }
+    // draw text labels
+    fill( color(0,0,0) );
+    text(xLabel, xAxis_x + xLength / 2, xAxis_y + 20);
+    text(yLabel, yAxis_x - 55, yAxis_y - yLength / 2);
   }
   
 }

@@ -7,9 +7,8 @@ Table table;
 HashMap<String, Integer> data;
 
 void setup() {
-  size(400, 300);
+  size(400, 400);
   maxNum = 0;
-  
   
   data = new HashMap<String, Integer>();
   table = loadTable("lab1-data.csv", "header");
