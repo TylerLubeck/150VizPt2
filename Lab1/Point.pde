@@ -1,14 +1,30 @@
 class Point{
   MyCircle circle;
+  int value;
   String label;
+  float pointPosX, pointPosY;
   
   Point() {
     circle = new MyCircle();
+    value = 0;
     label = "";
   }
   
+  Point( String l, int val){
+    this();
+    value = val;
+    label = "(" +l + ", " + value + ")";
+  }
+  
+  Point( int posx, int posy, String l, int val) {
+    this(l, val);
+    setCoord( posx, posy );
+  }
+  
   void setCoord( int posx, int posy){
-    circle.setPos( float(posx),float(posy));
+    pointPosX = float(posx);
+    pointPosY = float(posy);
+    circle.setPos( pointPosX,pointPosY);
     circle.setRadius(5.0);
   }
   
@@ -22,7 +38,10 @@ class Point{
   
   void intersect(int posx, int posy){
     if(circle.intersect(posx,posy)){
-      text( label, circle.posx, circle.posy + 10);
+      text( label, circle.posx - 25, circle.posy - 10);
     }
   }
+  
+  float getPosX(){return pointPosX;}
+  float getPosY(){return pointPosY;}
 }

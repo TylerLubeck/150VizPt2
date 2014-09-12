@@ -10,7 +10,7 @@ class MyCircle {
      posx = random(radius, width-radius);
      posy = random(radius, height-radius);
      //c = color(int(random(0, 255)), int(random(0, 255)), int(random(0, 255)));
-     c = color(random(0, 255), random(0, 255), random(0, 255));
+     c = color(80, 50, 70);
   }
   
   boolean intersect (int mousex, int mousey) {
@@ -44,4 +44,6 @@ class MyCircle {
     fill(c);
     ellipse(posx, posy, radius * 2, radius * 2 );
   }
+  
+  
 }

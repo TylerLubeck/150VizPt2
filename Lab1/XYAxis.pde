@@ -29,7 +29,13 @@ class XYAxis {
   void setXNumTicks( int x ) {xNumTicks = x;}
   void setYNumTicks( int y ) {yNumTicks = y;}
   
-  void resetIntervals() {
+  void update() {
+      xLength = width - width / 4;
+      yLength = height - height / 4;
+      xAxis_x = width / 8 + width / 16;
+      xAxis_y = height - height / 8;
+      yAxis_x = xAxis_x;
+      yAxis_y = xAxis_y;
       xInterval = xLength / xNumTicks;
       yInterval = yLength / yNumTicks;  
   }
@@ -58,6 +64,14 @@ class XYAxis {
     fill( color(0,0,0) );
     text(xLabel, xAxis_x + xLength / 2, xAxis_y + 20);
     text(yLabel, yAxis_x - 55, yAxis_y - yLength / 2);
+  }
+  
+  int getTickX(int i) {
+    return xAxis_x + ((i+1) * xInterval);
+  }
+  
+  int getTickY(int val) {
+    return yAxis_y - (val * yInterval); 
   }
   
 }
