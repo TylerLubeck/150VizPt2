@@ -30,8 +30,8 @@ class Bar{
   
   void intersect(int posx, int posy){
     if( posx >= xCoord && posx <= bWidth + xCoord &&
-        posy <= yCoord && posy >= (yCoord+ bHeight)){
-      text( label, xCoord - bWidth - 10, yCoord + bHeight - 2);
+        posy >= yCoord && posy <= (yCoord+ bHeight)){
+      text( label, xCoord - bWidth - 10, yCoord - 2);
     }
   }
 }
@@ -67,9 +67,9 @@ class BarGraph{
     //calculate each point's posx and posy based on val
     for(int i=0; i< bars.size(); i++){
       bars.get(i).SetGeometry(axis.getTickX(i),
-                              axis.xAxis_y,
+                              axis.getTickY(bars.get(i).value),
                               5,
-                              -axis.getTickY(bars.get(i).value));
+                              bars.get(i).value * axis.yInterval);
     }
   }
   
