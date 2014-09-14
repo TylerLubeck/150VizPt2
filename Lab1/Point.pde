@@ -38,7 +38,9 @@ class Point{
   
   void intersect(int posx, int posy){
     if(circle.intersect(posx,posy)){
+      fill(color(255, 0, 0));
       text( label, circle.posx - 25, circle.posy - 10);
+      fill(color(0));
     }
   }
   

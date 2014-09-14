@@ -56,14 +56,17 @@ class XYAxis {
     int yTick_x = yAxis_x - tickLength / 2;
     int yTick_y = yAxis_y;
     int yTick_length = yTick_x + tickLength;
+    //manually slap in the zero index on the axis
+    text(0, yTick_x - 17, xAxis_y+5);
     for(int i=0; i< yNumTicks; i++) {
       yTick_y -= yInterval;
       line(yTick_x, yTick_y, yTick_length, yTick_y);
+      text(i+1, yTick_x - 17, yTick_y+5);
     }
     // draw text labels
     fill( color(0,0,0) );
     text(xLabel, xAxis_x + xLength / 2, xAxis_y + 20);
-    text(yLabel, yAxis_x - 55, yAxis_y - yLength / 2);
+    text(yLabel, yAxis_x - 73, yAxis_y - yLength / 2);
   }
   
   int getTickX(int i) {

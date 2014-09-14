@@ -11,7 +11,7 @@ String switchToLine, switchToBar;
 HashMap<String, Integer> data;
 
 void setup() {
-  size(400, 400);
+  size(600, 600);
   maxNum = 0;
   
   data = new HashMap<String, Integer>();

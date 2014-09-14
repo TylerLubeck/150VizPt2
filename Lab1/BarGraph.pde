@@ -31,7 +31,10 @@ class Bar{
   void intersect(int posx, int posy){
     if( posx >= xCoord && posx <= bWidth + xCoord &&
         posy >= yCoord && posy <= (yCoord+ bHeight)){
+      fill(color(255, 0, 0));
       text( label, xCoord - bWidth - 10, yCoord - 2);
+      fill(color(0));
+
     }
   }
 }
@@ -45,8 +48,8 @@ class BarGraph{
   BarGraph(){
     axis = new XYAxis();
     bars = new ArrayList<Bar>();
-    fill = color(70);
-    stroke = color(0);
+    fill = color(155, 161, 163);
+    stroke = color(216, 224, 227);
   }
   
   BarGraph( XYAxis a) {
@@ -68,7 +71,7 @@ class BarGraph{
     for(int i=0; i< bars.size(); i++){
       bars.get(i).SetGeometry(axis.getTickX(i),
                               axis.getTickY(bars.get(i).value),
-                              5,
+                              14,
                               bars.get(i).value * axis.yInterval);
     }
   }
