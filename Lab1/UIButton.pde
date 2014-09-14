@@ -23,6 +23,23 @@ class UIButton {
       T1 = t;
   }
   
+  void updatePosition( int x, int y ){
+    m_posX = x;
+    m_posY = y;
+  }
+  
+  void render(){
+    fill(m_c);
+    rect(getPosX(), getPosY(), getWidth(), getHeight());
+    fill(color(0));
+    text(T1, getPosX() + 2, getPosY() + getHeight()/2);
+  }
+  
+  boolean intersect( int mousex, int mousey ){
+    setWithin(mousex,mousey);
+    return isWithin();
+  }
+  
   void setWithin( int mousex, int mousey ) {
     if( mousex >= m_posX && mousex <= (m_posX + m_width) &&
         mousey >= m_posY && mousey <= (m_posY + m_height) ) {
