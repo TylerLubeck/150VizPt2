@@ -47,21 +47,26 @@ class Node {
     }
     return sum;
   }
-  
-  boolean isParentOf(int childID) {
-    return false; 
-  }
-  
+
+  /* This just means that there is more than one level below this
+   * node. So, does this node's children have children?
+   */
   boolean supportsZoom() {
-    return false; 
+    if (this.isLeaf()) {
+     return false; 
+    }
+    boolean childrenHaveChildren = false;
+    for (Node child : self.children) {
+      if (! child.isLeaf()) {
+        childrenHaveChildren = true;
+      } 
+    }
+    return childrenHaveChildren;
   }
   
   boolean isWithin(int x, int y) {
+    //This is for drawing
     return false; 
-  }
-  
-  int getRootId(int childId) {
-    return -1; 
   }
   
   int getValue() {
