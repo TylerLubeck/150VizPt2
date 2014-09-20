@@ -1,6 +1,7 @@
 import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
+
 class Parser {
   private String fileName;  //Stores the file name, just in case.
   private String[] lines;   //Stores all of the lines in the input file
@@ -94,7 +95,6 @@ class Parser {
     return this.fileName;
   }
 
-  //TODO: Not void
   Node parse() {
     if (this.rootNode != null) {
       return this.rootNode;
@@ -119,7 +119,7 @@ class Parser {
     }
     
     thisBranch.sumTheChildren();
-    println(thisBranch.getID() + ": " + thisBranch.getValue());
+    //println(thisBranch.getID() + ": " + thisBranch.getValue());
     return thisBranch;
   }
   

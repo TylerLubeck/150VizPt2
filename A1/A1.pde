@@ -8,7 +8,7 @@ void setup() {
    
   Parser p = new Parser("hierarchy2.shf"); 
   Node myNode = p.parse();
-  myNode.printTree(); 
+  //myNode.printTree(); 
   //println("There are " + p.getNumberOfLeaves() + " leaves");
 }
 

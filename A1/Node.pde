@@ -19,11 +19,7 @@ class Node {
     this.val = val;
     this.children = null;
   }
-  
-  
-  
-  //TODO: Literally all of these.
-  //TODO: Don't forget this. Very important.
+    //TODO: Don't forget this. Very important.
   boolean isLeaf() {
     return this.children == null; 
   }
