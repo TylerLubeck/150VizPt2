@@ -1,3 +1,6 @@
+import java.util.Comparator; 
+import java.util.Collections;
+
 class Node {
   private int ID;
   private int val;
@@ -48,6 +51,8 @@ class Node {
     return sum;
   }
 
+
+  
   /* This just means that there is more than one level below this
    * node. So, does this node's children have children?
    */
@@ -56,7 +61,7 @@ class Node {
      return false; 
     }
     boolean childrenHaveChildren = false;
-    for (Node child : self.children) {
+    for (Node child : this.children) {
       if (! child.isLeaf()) {
         childrenHaveChildren = true;
       } 
@@ -75,5 +80,40 @@ class Node {
   
   int getID() {
     return this.ID; 
+  }
+  
+  ArrayList<Node> getChildren() {
+    return this.children; 
+  }
+  
+  
+  void sortTree() {
+    if (this.isLeaf()) {
+      return; 
+    }
+    this.sortChildren();  
+    for (Node child : this.children) {
+      child.sortTree(); 
+    }
+  }
+  
+  void sortChildren() {
+    Collections.sort(this.children, new Comparator<Node>() {
+        @Override
+        public int compare(Node x, Node y) {
+          return (x.getValue() > y.getValue() ? -1 : (x.getValue() == y.getValue() ? 0 : 1)); 
+        }
+    }); 
+  } 
+
+  /* for debugging, delete before turning in.  */   
+ void printTree() {
+    println("Node Id: " + this.ID + "\nNode Value: " + this.val);  
+    if (this.isLeaf()) {
+      return;
+    }
+    for(Node child : this.children) {  
+      child.printTree(); 
+    }
   }
 }

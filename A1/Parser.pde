@@ -101,6 +101,7 @@ class Parser {
     }
     
     this.rootNode = buildRoot(this.rootNodeID);
+    rootNode.sortTree();  
     return this.rootNode;
   }
   
@@ -121,5 +122,7 @@ class Parser {
     println(thisBranch.getID() + ": " + thisBranch.getValue());
     return thisBranch;
   }
+  
+
 }
 
