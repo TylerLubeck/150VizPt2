@@ -1,0 +1,4 @@
+enum Sides {
+  WIDTH,
+  HEIGHT
+};

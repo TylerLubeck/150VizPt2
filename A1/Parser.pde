@@ -44,7 +44,6 @@ class Parser {
       this.idToValMap.put(int(parts[0]), int(parts[1]));
     }
     
-    println("Expected value: " + val);
   }
 
   // Goes through the input file and grabs the (parent id, child id) tuples.
