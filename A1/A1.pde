@@ -12,7 +12,7 @@ void setup() {
    * When right click, if there is an ID recorded, just draw that one
   */
   frame.setResizable(true);  
-  Parser p = new Parser("hierarchy2.shf"); 
+  Parser p = new Parser("hierarchy.shf"); 
   Node root = p.parse();
   
   /* TESTING ROW */ 
@@ -23,13 +23,27 @@ void setup() {
   int cWidth = width; 
   currentSide = height > width ? Sides.WIDTH : Sides.HEIGHT; 
   int short_side = min(height, width); 
+  
+  //traverse the tree
+  println(root.children.size());
+  squarify(root);
  
-  Row testRow = new Row(VA_Ratio, 0, 0, 0, short_side);
-  testRow.addRect(short_side, currentSide, root.getChildren().get(0)); 
+  //Row testRow = new Row(VA_Ratio, 0, 0, 0, short_side);
+  //testRow.addRect(short_side, currentSide, root.getChildren().get(0)); 
   //testRow.addRect(short_side, currentSide, root.getChildren().get(1));  
-  testRow.render(); 
+  //testRow.render(); 
   
   
+}
+
+void squarify(Node x){
+  if(x.children == null){
+    println(x.getValue());
+  } else{
+    for(int i=0; i<x.children.size(); i++){
+      squarify(x.children.get(i));
+    }
+  }
 }
 
 void draw() {
