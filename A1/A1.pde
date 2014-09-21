@@ -6,7 +6,7 @@ Sides currentSide;
 Canvas c;
 
 void setup() {
-  size(300, 400); 
+  size(500, 400); 
   /* TODO:
    * In order to zoom out properly, consider doing this:
    * When left click, record the ID of the element clicked on.
@@ -23,15 +23,17 @@ void setup() {
   VA_Ratio = total_area/(total_value); 
   int cHeight = height;
   int cWidth = width; 
-  currentSide = height > width ? Sides.WIDTH : Sides.HEIGHT; 
+  println(cHeight + " " + cWidth); 
+  currentSide = cHeight > cWidth ? Sides.WIDTH : Sides.HEIGHT; 
   int short_side = min(height, width); 
  
   //Row testRow = new Row(VA_Ratio, 0, 0, 0, short_side, currentSide);
-  Row testRow = new Row(root.getChildren().get(0), 0, 0, short_side, currentSide, VA_Ratio); 
-  testRow.addRect(root.getChildren().get(1)); 
+  //Row testRow = new Row(root.getChildren().get(0), 0, 0, short_side, currentSide, VA_Ratio); 
+  //testRow.addRect(root.getChildren().get(1)); 
+  
  // testRow.addRect(short_side, root.getChildren().get(0)); 
   //testRow.addRect(short_side, root.getChildren().get(1));  
-  testRow.render(); 
+  //testRow.render(); 
   
   //traverse the tree
   println(root.children.size());

@@ -31,7 +31,7 @@ class Row {
     
     
     this.rects = new ArrayList<Rectangle>(); 
-    
+    print("w " + w + " h " + h + " x " + this.posX + " y " + this.posY); 
     this.rects.add(new Rectangle(this.posX, this.posY, h, w, n.getID())); 
   }
   /* Adds a rectangle if the aspect ratio is optimum. Otherwise, returns false; */ 
@@ -55,7 +55,6 @@ class Row {
   boolean resizeRects(float nodeArea, Node node) {
     float h, w; 
     float totalArea = (float)this.sumAreas() + nodeArea; 
-    println(nodeArea); 
     float new_side = totalArea / this.short_side;
     
     if (this.fixedSide == Sides.HEIGHT) { 
@@ -65,7 +64,7 @@ class Row {
         w = (node.getValue() * this.VA_Ratio) / new_side;  
         h = new_side;
     }
-       
+    
     float asp_ratio = max(h/w, w/h); 
     if(asp_ratio < this.rects.get(this.rects.size() - 1).getAspectRatio()) {
       
@@ -116,18 +115,6 @@ class Row {
     return false; 
   }
   
-  /* Given the already calculated "non_shortest side" of the 
-   * new rectangle, calculate the new dimension of the rectangles already placed on the row:  
-   * if SIDES == HEIGHT 
-      height = r.getArea() / new_side
-     else 
-      width = r.getArea() / new_side
-   * posX and posY might have to happen outside this fnc since order matters..?: 
-    first rect in arraylist should be above (or to the left of) second, and so so forth 
-   */ 
-  Rectangle recalculate(Rectangle r, float new_side) {
-    return null; 
-  }
 
   int sumAreas() {
     int sum = 0; 
