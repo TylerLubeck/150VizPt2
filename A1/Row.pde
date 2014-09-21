@@ -2,9 +2,9 @@ class Row {
   private int posX, posY;
   private int mHeight, mWidth; 
   private ArrayList<Rectangle> rects; 
-  private int VA_Ratio; 
+  private float VA_Ratio; 
   
-  Row(int va_ratio,int x, int y, int w, int h) {
+  Row(float va_ratio,int x, int y, int w, int h) {
     this.VA_Ratio = va_ratio;
     this.posX = x;
     this.posY = y;
@@ -15,8 +15,8 @@ class Row {
   
   /* Adds a rectangle if the aspect ratio is optimum. Otherwise, returns false; */ 
   boolean addRect(int short_side, Sides currentSide, Node node) {
-    int area = node.getValue() * this.VA_Ratio;
-    int h, w;  
+    float area = (float)node.getValue() * this.VA_Ratio;
+    float h, w;  
     if (currentSide == Sides.HEIGHT) { 
       h = short_side;
       w = area/h; 
@@ -26,14 +26,13 @@ class Row {
     }
     
     if (this.rects == null) {
-      float asp_ratio = max((h / w), (w / h));
       this.rects = new ArrayList<Rectangle>(); 
       this.rects.add(new Rectangle(0, 0, h, w, node.getID())); 
       return true; 
     }
     else {
-      // return resizeRects(short_side, currentSide); 
-      return false; 
+      this.rects.add(new Rectangle(0, 0, h, w, node.getID())); 
+      return resizeRects(short_side, currentSide); 
     }
   }
   
@@ -41,7 +40,7 @@ class Row {
   returns false if the aspect ratio is not optimum */ 
   boolean resizeRects(int short_side, Sides currentSide) {
     int h, w; 
-      int totalArea = this.sumAreas(); 
+    int totalArea = this.sumAreas(); 
       
      /* 2. Divide total area by short_side to determine the value of the opposite side */ 
       if (currentSide == Sides.HEIGHT) { 
@@ -53,15 +52,11 @@ class Row {
       }
        int asp_ratio = max(h/w, w/h); 
        if(asp_ratio < this.rects.get(this.rects.size() - 1).getAspectRatio()) {
-         
      /* TODO: If the aspect ratio is better, create a new ArrayList that contains
          the values of all of the newly resized rectangles.  */ 
-         ArrayList newRects = new ArrayList<Rectangle>(); 
-         for (Rectangle r : this.rects) {
-           newRects.add(recalculate(r, totalArea/short_side)); // <-- other stuff needs to passed in too? 
-         } 
-         return true; 
-       }  
+           return true;     
+        } 
+       
        return false; 
   }
   
@@ -71,7 +66,7 @@ class Row {
       height = r.getArea() / new_side
      else 
       width = r.getArea() / new_side
-   * posX and posY might have to happen outside this fnc since order matters: 
+   * posX and posY might have to happen outside this fnc since order matters..?: 
     first rect in arraylist should be above (or to the left of) second, and so so forth 
    */ 
   Rectangle recalculate(Rectangle r, int new_side) {
@@ -81,6 +76,7 @@ class Row {
   int sumAreas() {
     int sum = 0; 
     for (Rectangle r : this.rects) {
+      println("Area here is: " + r.getArea()); 
       sum += r.getArea(); 
     }
     return sum;
