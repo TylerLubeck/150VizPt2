@@ -2,7 +2,8 @@ float VA_Ratio;
 int cHeight;
 int cWidth; 
 int short_side; 
-Sides currentSide; 
+Sides currentSide;
+Canvas c;
 
 void setup() {
   size(300, 400); 
@@ -32,7 +33,34 @@ void setup() {
   //testRow.addRect(short_side, root.getChildren().get(1));  
   testRow.render(); 
   
+  //traverse the tree
+  println(root.children.size());
+  c = new Canvas(0,0,width,height);
+  squarify(root, c.mWidth*c.mHeight / root.getValue());
+  c.Print();
+  println("Num of rows in canvas is ", c.rows.size());
+ 
+  //Row testRow = new Row(root.getChildren().get(0), 0, 0, short_side, currentSide, VA_Ratio); 
+  //testRow.render(); 
   
+  
+}
+
+void squarify(Node x, float siblingSum){
+  if(x.children == null){
+    println("Adding node x:",x.getValue());
+    c.addSquare(x, siblingSum);
+    c.Print();
+  } else{
+    int denom = 0;
+    for( Node child : x.children ){
+      denom+= child.getValue();
+    }
+    siblingSum = c.mWidth * c.mHeight / denom;
+    for(int i=0; i<x.children.size(); i++){
+      squarify(x.children.get(i),siblingSum);
+    }
+  }
 }
 
 void draw() {
