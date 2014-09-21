@@ -3,7 +3,7 @@ class Rectangle{
   private float mHeight, mWidth;
   private int iD;
   
-  Rectangle( float posX, float posY, float h, float w, int iD ){
+  Rectangle( float posX, float posY, float w, float h, int iD ){
     this.posX = posX;
     this.posY = posY;
     this.mHeight = h;
@@ -34,5 +34,33 @@ class Rectangle{
   float getAspectRatio() {
     return max(this.mWidth/this.mHeight, this.mHeight/this.mWidth); 
   }
+  
+  float getHeight() {
+    return this.mHeight; 
+  }
+  
+  float getPosX() {
+    return this.posX; 
+  }
+  
+  float getPosY() {
+    return this.posY; 
+  }
+  void setHeight(float h) {
+    this.mHeight = h;
+  }
+  
+  void setWidth(float w) {
+    this.mWidth = w;
+  }
+  
+  void setPosX(float x) {
+    this.posX = x;
+  }
+  
+  void setPosY(float y) {
+    this.posY = y; 
+  }
+
 
 }

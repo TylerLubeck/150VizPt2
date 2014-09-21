@@ -29,55 +29,88 @@ class Row {
     this.mHeight = h;
     this.mWidth = w; 
     
+    
     this.rects = new ArrayList<Rectangle>(); 
-    print(h);
-    print(w); 
     
     this.rects.add(new Rectangle(this.posX, this.posY, h, w, n.getID())); 
-    
   }
   /* Adds a rectangle if the aspect ratio is optimum. Otherwise, returns false; */ 
-  boolean addRect(int short_side, Node node) {
+  boolean addRect(Node node) {
     float area = (float)node.getValue() * this.VA_Ratio;
     float h, w;  
     if (this.fixedSide == Sides.HEIGHT) { 
-      h = short_side;
+      h = this.short_side;
       w = area/h; 
     } else {
-      w = short_side;
+      w = this.short_side;
       h = area/w; 
     }
     
-    if (this.rects == null) {
-      this.rects = new ArrayList<Rectangle>(); 
-      this.rects.add(new Rectangle(0, 0, h, w, node.getID())); 
-      return true; 
-    }
-    else {
-      this.rects.add(new Rectangle(0, 0, h, w, node.getID()));  // <-- not the right xPos & yPos 
-      return resizeRects(short_side); 
-    }
+      //this.rects.add(new Rectangle(0, 0, h, w, node.getID()));  // <-- not the right xPos & yPos  
+    return resizeRects(area, node); 
   }
   
   /* given a new rectangle, attempt to fit the rectangle on the given row. 
   returns false if the aspect ratio is not optimum */ 
-  boolean resizeRects(int short_side) {
-    int h, w; 
-    int totalArea = this.sumAreas(); 
-      
+  boolean resizeRects(float nodeArea, Node node) {
+    float h, w; 
+    float totalArea = (float)this.sumAreas() + nodeArea; 
+    println(nodeArea); 
+    float new_side = totalArea / this.short_side;
+    
     if (this.fixedSide == Sides.HEIGHT) { 
-        h = short_side; 
-        w = totalArea / short_side; 
+        h = (node.getValue() * this.VA_Ratio) / new_side; 
+        w = new_side; 
     } else {
-        w = short_side; 
-        h = totalArea / short_side; 
+        w = (node.getValue() * this.VA_Ratio) / new_side;  
+        h = new_side;
     }
        
-    int asp_ratio = max(h/w, w/h); 
+    float asp_ratio = max(h/w, w/h); 
     if(asp_ratio < this.rects.get(this.rects.size() - 1).getAspectRatio()) {
-     /* TODO: If the aspect ratio is better, create a new ArrayList that contains
-         the values of all of the newly resized rectangles.  */ 
-           return true;     
+      
+      this.rects.add(new Rectangle(0, 0, w, h, 1 )); // FIX THIS ID IS NOT CORRECT 
+      println("adding... " + w +" " + h);  
+      ArrayList<Rectangle> resizedRects = new ArrayList<Rectangle>(); 
+      Rectangle first = this.rects.get(0);
+      
+      println("NEW SIDE: " + new_side); 
+     
+      if (this.fixedSide == Sides.HEIGHT) {
+        first.setHeight(first.getArea() / new_side); 
+        first.setWidth(new_side); 
+        first.setPosX(this.posX); 
+        first.setPosY(this.posY);    
+      } else {
+        first.setWidth(first.getArea() / new_side); 
+        first.setHeight(new_side); 
+        first.setPosY(this.posY); 
+        first.setPosX(this.posX); 
+      }
+      
+      println(first.getWidth() + " " + first.getHeight() + " " + first.getPosX() + " " + first.getPosY()); 
+      resizedRects.add(first); 
+    
+      float x, y;  
+      for (int i = 1; i < this.rects.size(); i++) {
+        if (this.fixedSide == Sides.HEIGHT) {
+          h = rects.get(i).getArea() / new_side;
+          println("AREA " + rects.get(i).getArea()); 
+          w = new_side;
+          y = resizedRects.get(i - 1).getPosY() + rects.get(i - 1).getHeight();
+          x = this.posX; 
+        } else {
+          w = rects.get(i).getArea() / new_side;
+          h = new_side;
+          x = resizedRects.get(i - 1).getPosX() + rects.get(i - 1).getWidth();
+          y = this.posY; 
+        }
+        
+        print(w + " " + h + " " + x + " " + y + " "); 
+        resizedRects.add(new Rectangle(x, y, w, h, this.rects.get(i).getID())); 
+      }
+      this.rects = resizedRects; 
+      return true;     
     } 
        
     return false; 
@@ -122,7 +155,7 @@ class Row {
     return (this.mWidth * this.mHeight);
   }
   
-  float getShorterSide() {
+  Sides getShorterSide() {
     return this.fixedSide; 
   }
   
