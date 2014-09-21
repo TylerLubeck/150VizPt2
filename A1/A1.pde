@@ -24,9 +24,10 @@ void setup() {
   currentSide = height > width ? Sides.WIDTH : Sides.HEIGHT; 
   int short_side = min(height, width); 
  
-  Row testRow = new Row(VA_Ratio, 0, 0, 0, short_side);
-  testRow.addRect(short_side, currentSide, root.getChildren().get(0)); 
-  //testRow.addRect(short_side, currentSide, root.getChildren().get(1));  
+  //Row testRow = new Row(VA_Ratio, 0, 0, 0, short_side, currentSide);
+  Row testRow = new Row(root.getChildren().get(0), 0, 0, short_side, currentSide, VA_Ratio); 
+ // testRow.addRect(short_side, root.getChildren().get(0)); 
+  //testRow.addRect(short_side, root.getChildren().get(1));  
   testRow.render(); 
   
   
