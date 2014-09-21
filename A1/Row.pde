@@ -110,15 +110,17 @@ class Row {
     }
   }
   
-  void getPosX() {
+  int getPosX() {
     return this.posX; 
   }
   
-  void getPosY() {
+  int getPosY() {
     return this.posY;
   }
   
-  void getArea() {
+  float getArea() {
     return (this.mWidth * this.mHeight);
   }
+  
+  
 }
