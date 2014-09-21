@@ -122,5 +122,9 @@ class Row {
     return (this.mWidth * this.mHeight);
   }
   
+  float getShorterSide() {
+    return this.fixedSide; 
+  }
+  
   
 }
