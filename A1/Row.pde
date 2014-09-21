@@ -109,4 +109,16 @@ class Row {
       r.render(); 
     }
   }
+  
+  void getPosX() {
+    return this.posX; 
+  }
+  
+  void getPosY() {
+    return this.posY;
+  }
+  
+  void getArea() {
+    return (this.mWidth * this.mHeight);
+  }
 }
