@@ -66,10 +66,9 @@ class Canvas{
   }
   
   //Adds a Node by adjusting the current configuration to obtain the best aspect ratio
-  void addSquare(Node square){
+  void addSquare(Node square, float va_ratio){
     //if no rows, add a row 
     if(this.rows.size() == 0){
-      float va_ratio = this.rs_mWidth * this.rs_mHeight / square.getValue();
       Row firstRow = new Row(square,this.rs_posX, this.rs_posY,
                              this.fixedLength, this.fixedSide,va_ratio);
       this.addRow(firstRow);
