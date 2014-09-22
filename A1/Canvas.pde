@@ -1,9 +1,9 @@
 class Canvas{
   private int posX, posY, mWidth, mHeight;
   //rs is for remaining space dimensions
-  private int rs_posX, rs_posY, rs_mWidth, rs_mHeight;
+  private float rs_posX, rs_posY, rs_mWidth, rs_mHeight;
   private Sides fixedSide;
-  private int fixedLength;
+  private float fixedLength;
   private ArrayList<Row> rows;
 
   
@@ -43,18 +43,34 @@ class Canvas{
     }
   }
   
-  //adds a row and calculates the remaining space
-  void addRow(Row row){
-    println("In addRow");
-    println("Row is x,y,w,h",row.posX,row.posY,row.mWidth,row.mHeight);
-    this.rows.add(row);
+  void rsChangedByNewRow(){
+    println("rs by new row");
+    int numRows = this.rows.size();
+    Row row = this.rows.get(numRows-1);
     //CASTING EVERYTHING TO INT, BE WEARY
     if(row.fixedSide == Sides.HEIGHT){
+      println("fixed is HEIGHT");
       this.rs_posX = int(row.posX + row.mWidth);
       this.rs_mWidth -= int(row.mWidth);
     } else{
       this.rs_posY = int(row.posY + row.mHeight);
       this.rs_mHeight -= int(row.mHeight);
+    }
+    calculateShorterSide();
+  }
+  
+  void rsChangedByCurrentRow(Sides s, float oW, float oH){
+    println("rs by old row", s, oW, oH);
+    int numRows = this.rows.size();
+    Row row = this.rows.get(numRows-1);
+    //CASTING EVERYTHING TO INT, BE WEARY
+    if(row.fixedSide == Sides.HEIGHT){
+      println("fixed is HEIGHT");
+      this.rs_posX = row.posX + row.mWidth; 
+      this.rs_mWidth = this.rs_mWidth + oW - row.mWidth;
+    } else{
+      this.rs_posY = int(row.posY + row.mHeight);
+      this.rs_mHeight = this.rs_mHeight + oH - row.mHeight;
     }
     calculateShorterSide();
   }
@@ -71,17 +87,26 @@ class Canvas{
     if(this.rows.size() == 0){
       Row firstRow = new Row(square,this.rs_posX, this.rs_posY,
                              this.fixedLength, this.fixedSide,va_ratio);
-      this.addRow(firstRow);
+      this.rows.add(firstRow);
+      this.rsChangedByNewRow();
     } else{
       //attempt adding a node to the last row
       int size = this.rows.size();
-      if(!this.rows.get(size-1).addRect(square)){
+      Row copyRow = this.rows.get(size-1);
+      Sides oldRowSide = copyRow.fixedSide;
+      float oldRowWidth = copyRow.mWidth;
+      float oldRowHeight = copyRow.mHeight;
+      boolean rowStretched = this.rows.get(size-1).addRect(square);
+      if(!rowStretched){
         Row newRow = new Row(square, this.rs_posX, this.rs_posY,
                              this.fixedLength, this.fixedSide,va_ratio);
+        this.rows.add(newRow);
+        this.rsChangedByNewRow();
+      } else{
+        this.rsChangedByCurrentRow(oldRowSide,oldRowWidth,oldRowHeight);
       }
-      calculateShorterSide();
     }
-    
+    println("RS x,y,w,h: ",rs_posX,rs_posY,rs_mWidth,rs_mHeight);
   }
   
 }

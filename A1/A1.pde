@@ -6,14 +6,14 @@ Sides currentSide;
 Canvas c;
 
 void setup() {
-  size(500, 400); 
+  size(800, 400); 
   /* TODO:
    * In order to zoom out properly, consider doing this:
    * When left click, record the ID of the element clicked on.
    * When right click, if there is an ID recorded, just draw that one
   */
   frame.setResizable(true);  
-  Parser p = new Parser("hierarchy.shf"); 
+  Parser p = new Parser("hierarchy2.shf"); 
   Node root = p.parse();
   
   /* TESTING ROW */ 
@@ -36,12 +36,11 @@ void setup() {
   //testRow.render(); 
   
   //traverse the tree
-  println(root.children.size());
+  //println(root.children.size());
   c = new Canvas(0,0,width,height);
   squarify(root, c.mWidth*c.mHeight / root.getValue());
-  c.Print();
-  println("Num of rows in canvas is ", c.rows.size());
- 
+  //c.Print();
+  //println("Num of rows in canvas is ", c.rows.size());
   //Row testRow = new Row(root.getChildren().get(0), 0, 0, short_side, currentSide, VA_Ratio); 
   //testRow.render(); 
   
@@ -52,7 +51,7 @@ void squarify(Node x, float siblingSum){
   if(x.children == null){
     println("Adding node x:",x.getValue());
     c.addSquare(x, siblingSum);
-    c.Print();
+    //c.Print();
   } else{
     int denom = 0;
     for( Node child : x.children ){
@@ -66,5 +65,5 @@ void squarify(Node x, float siblingSum){
 }
 
 void draw() {
-  
+  c.render();
 }

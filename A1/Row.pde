@@ -1,17 +1,18 @@
 class Row {
-  private int posX, posY;
+  private float posX, posY;
   private float mHeight, mWidth; 
   private ArrayList<Rectangle> rects; 
   private float VA_Ratio; 
   private Sides fixedSide; 
   private float short_side; 
   
-  Row(Node n, int x, int y, float short_side, Sides side, float va_ratio) {
+  Row(Node n, float x, float y, float short_side, Sides side, float va_ratio) {
     this.short_side = short_side; 
     this.fixedSide = side;
     this.VA_Ratio = va_ratio; 
     this.posX = x;
     this.posY = y; 
+    println("IN NEW ROW: short_side -- " + short_side); 
     addFirstRect(n);
   }
   
@@ -29,22 +30,13 @@ class Row {
     this.mHeight = h;
     this.mWidth = w; 
     
-    
     this.rects = new ArrayList<Rectangle>(); 
-    print("w " + w + " h " + h + " x " + this.posX + " y " + this.posY); 
-    this.rects.add(new Rectangle(this.posX, this.posY, h, w, n.getID())); 
+    println("NEW ROW: w " + w + " h " + h + " x " + this.posX + " y " + this.posY); 
+    this.rects.add(new Rectangle(this.posX, this.posY, w, h, n.getID())); 
   }
   /* Adds a rectangle if the aspect ratio is optimum. Otherwise, returns false; */ 
   boolean addRect(Node node) {
     float area = (float)node.getValue() * this.VA_Ratio;
-    float h, w;  
-    if (this.fixedSide == Sides.HEIGHT) { 
-      h = this.short_side;
-      w = area/h; 
-    } else {
-      w = this.short_side;
-      h = area/w; 
-    }
     
       //this.rects.add(new Rectangle(0, 0, h, w, node.getID()));  // <-- not the right xPos & yPos  
     return resizeRects(area, node); 
@@ -68,7 +60,7 @@ class Row {
     float asp_ratio = max(h/w, w/h); 
     if(asp_ratio < this.rects.get(this.rects.size() - 1).getAspectRatio()) {
       
-      this.rects.add(new Rectangle(0, 0, w, h, 1 )); // FIX THIS ID IS NOT CORRECT 
+      this.rects.add(new Rectangle(0, 0, w, h, node.getID())); // FIX THIS ID IS NOT CORRECT 
       println("adding... " + w +" " + h);  
       ArrayList<Rectangle> resizedRects = new ArrayList<Rectangle>(); 
       Rectangle first = this.rects.get(0);
@@ -94,18 +86,25 @@ class Row {
       for (int i = 1; i < this.rects.size(); i++) {
         if (this.fixedSide == Sides.HEIGHT) {
           h = rects.get(i).getArea() / new_side;
-          println("AREA " + rects.get(i).getArea()); 
+          //println("AREA " + rects.get(i).getArea()); 
           w = new_side;
           y = resizedRects.get(i - 1).getPosY() + rects.get(i - 1).getHeight();
           x = this.posX; 
+          this.mWidth = w;
+          this.mHeight = h;
+          this.posY = (int)y; 
         } else {
           w = rects.get(i).getArea() / new_side;
           h = new_side;
           x = resizedRects.get(i - 1).getPosX() + rects.get(i - 1).getWidth();
           y = this.posY; 
+          this.mWidth = w;
+          this.mHeight = h;
+          this.posX = (int)x; 
         }
         
-        print(w + " " + h + " " + x + " " + y + " "); 
+        println(w + " " + h + " " + x + " " + y + " "); 
+        println(" SQUISHING: " + w + " " + h + " " + x + " " + y + " "); 
         resizedRects.add(new Rectangle(x, y, w, h, this.rects.get(i).getID())); 
       }
       this.rects = resizedRects; 
@@ -130,11 +129,11 @@ class Row {
     }
   }
   
-  int getPosX() {
+  float getPosX() {
     return this.posX; 
   }
   
-  int getPosY() {
+  float getPosY() {
     return this.posY;
   }
   
