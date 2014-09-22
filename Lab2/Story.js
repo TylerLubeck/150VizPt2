@@ -1,3 +1,7 @@
+Number.prototype.map = function ( in_min , in_max , out_min , out_max ) {
+      return ( this - in_min ) * ( out_max - out_min ) / ( in_max - in_min ) + out_min;
+}
+
 Drawing = {};
 var Drawing = function() {
     var result;
@@ -25,6 +29,9 @@ var Drawing = function() {
     function countFrequency(result) {
         var count = {}; 
         for (var i = 0; i < result.length; i++) {
+            if (! Boolean(result[i].zip)) {
+                continue;
+            }
             if (Boolean(count[result[i].zip])) {
                 count[result[i].zip]++;
             } else {
@@ -35,30 +42,6 @@ var Drawing = function() {
     }
 
     this.init = function() {
-        d3.csv("pothole_callins.csv", function(d){
-            return {
-                zip : d.LOCATION_ZIPCODE 
-              };		
-        }, function(err, d){
-            if(err) {
-                return console.log('Oops! csv died.');
-            }
-            allPotholes = countFrequency(d);
-            console.log(allPotholes); 
-        });
-
-        d3.csv("closed_potholes.csv", function (d) {
-            return {
-                zip : d.LOCATION_ZIPCODE
-            }; 
-        }, function(err, d) {
-            if(err) {
-                return console.log('Oops! csv died.');
-            }
-            closedPotholes = countFrequency(d); 
-            console.log(closedPotholes);  
-        }); 
-
         d3.csv("open_potholes.csv", function (d) {
             return {
                 zip : d.LOCATION_ZIPCODE
@@ -67,16 +50,57 @@ var Drawing = function() {
             if(err) {
                 return console.log('Oops! csv died.');
             }
-            openPotholes = countFrequency(d); 
-            console.log(openPotholes);  
+            _this.openPotholes = countFrequency(d); 
+            console.log(_this.openPotholes);
+            console.log("GOT OPEN: " + _this.openPotholes);  
+
+            d3.csv("closed_potholes.csv", function (d) {
+                return {
+                    zip : d.LOCATION_ZIPCODE
+                }; 
+            }, function(err, d) {
+                if(err) {
+                    return console.log('Oops! csv died.');
+                }
+                _this.closedPotholes = countFrequency(d); 
+                console.log(_this.closedPotholes);  
+
+                d3.csv("pothole_callins.csv", function(d){
+                    return {
+                        zip : d.LOCATION_ZIPCODE 
+                      };		
+                }, function(err, d){
+                    if(err) {
+                        return console.log('Oops! csv died.');
+                    }
+                    _this.allPotholes = countFrequency(d);
+                    console.log(_this.allPotholes); 
+                    _this.run();
+                });
+
+            }); 
         }); 
     }
     
     function sketchProc(p) {	
-        var margin = 30, iWidth = 600, iHeight = 400;
+        var margin = 30, iWidth = 700, iHeight = 400;
+        var x1 = margin, x2 = iWidth;
+        function drawLines() {
+            p.line(x1, iHeight+margin, x2, iHeight+margin);
+            p.line(x1, iHeight+margin, x1, margin);
+        }
 
-        function step0() {
-              
+        function step0(objects, width) {
+            var leftMost = x1 + 10;
+            Object.keys(objects).forEach(function drawOpen(key) {
+                var val = objects[key];
+                val = val.map(0, 2221, 0, iHeight-margin)
+
+                p.rect(leftMost, iHeight+margin, width, -val);
+
+                leftMost += 20;
+            });
+            console.log("LEFTMOST: " + leftMost);
         }
        
         p.setup = function(){ 
@@ -90,19 +114,20 @@ var Drawing = function() {
        
         p.draw = function() {
             p.background(p.color(250));
-            p.rect(0, 0, 100, 100);
+            p.stroke(p.color(0));
+            p.fill(p.color(0));
+            drawLines();
             switch (_this.mode) {
                 case 0:
-                   //step0();
-                   console.log("STEP 0");
-                   break; 
+                    step0(_this.openPotholes, 10);
+                    break; 
                case 1:
                    //step1();
-                   console.log("STEP 1");
+                    step0(_this.closedPotholes, 10);
                    break;
                case 2:
                    //step2();
-                   console.log("STEP 2");
+                    step0(_this.allPotholes, 10);
                    break;
            }
         };
@@ -119,15 +144,26 @@ var Drawing = function() {
 $(function() {
     drawing = new Drawing();
     drawing.init();
-
-    $('#pre').click(function(e) {
-        drawing.prevMode();
-    });
+    $('#pre').attr('disabled', true);
+    
     $('#next').click(function(e) {
         drawing.nextMode();
+        if (drawing.mode >= 2) {
+            $('#next').attr('disabled', true);
+        }
+        if (drawing.mode > 0) {
+            $('#pre').attr('disabled', false);
+        }
     });
-
-    drawing.run();
+    $('#pre').click(function(e) {
+        drawing.prevMode();
+        if (drawing.mode === 0) {
+            $('#pre').attr('disabled', true);
+        }
+        if (drawing.mode < 2) {
+            $('#next').attr('disabled', false);
+        }
+    });
 
 });
 

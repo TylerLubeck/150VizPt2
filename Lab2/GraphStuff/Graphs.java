@@ -1,4 +1,0 @@
-enum Graphs{
-  LINE,
-  BAR
-};
