@@ -1,0 +1,40 @@
+canvas{
+   padding: 0 27% 2% 23%;
+}
+#intro{
+    line-height: 2;
+    text-align: left;
+}
+p,h2{
+    font-family: "Arial";
+    line-height: 0.3;
+    padding: 0 25% 0 25%;
+    text-align: center;
+}
+
+h2{
+    padding-top: 0%;
+}
+
+p{
+    font-size:0.9em;
+}
+
+button{
+    width: 80px;
+    height: 20px;
+}
+
+#buttons{
+   margin-left:44%;
+
+}
+
+footer{
+   font-size:10px;
+}
+
+img{
+    margin-left:42%;
+    text-align: center;
+}

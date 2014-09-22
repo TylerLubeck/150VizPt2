@@ -12,6 +12,7 @@ class Row {
     this.VA_Ratio = va_ratio; 
     this.posX = x;
     this.posY = y; 
+    println("IN NEW ROW: short_side -- " + short_side); 
     addFirstRect(n);
   }
   
@@ -29,9 +30,8 @@ class Row {
     this.mHeight = h;
     this.mWidth = w; 
     
-    
     this.rects = new ArrayList<Rectangle>(); 
-    println("w " + w + " h " + h + " x " + this.posX + " y " + this.posY); 
+    println("NEW ROW: w " + w + " h " + h + " x " + this.posX + " y " + this.posY); 
     this.rects.add(new Rectangle(this.posX, this.posY, h, w, n.getID())); 
   }
   /* Adds a rectangle if the aspect ratio is optimum. Otherwise, returns false; */ 
@@ -60,7 +60,7 @@ class Row {
     float asp_ratio = max(h/w, w/h); 
     if(asp_ratio < this.rects.get(this.rects.size() - 1).getAspectRatio()) {
       
-      this.rects.add(new Rectangle(0, 0, w, h, 1 )); // FIX THIS ID IS NOT CORRECT 
+      this.rects.add(new Rectangle(0, 0, w, h, node.getID())); // FIX THIS ID IS NOT CORRECT 
       println("adding... " + w +" " + h);  
       ArrayList<Rectangle> resizedRects = new ArrayList<Rectangle>(); 
       Rectangle first = this.rects.get(0);
@@ -86,18 +86,28 @@ class Row {
       for (int i = 1; i < this.rects.size(); i++) {
         if (this.fixedSide == Sides.HEIGHT) {
           h = rects.get(i).getArea() / new_side;
-          println("AREA " + rects.get(i).getArea()); 
+          //println("AREA " + rects.get(i).getArea()); 
           w = new_side;
           y = resizedRects.get(i - 1).getPosY() + rects.get(i - 1).getHeight();
           x = this.posX; 
+          this.mWidth = w;
+          this.mHeight = h;
+          this.posY = (int)y; 
         } else {
           w = rects.get(i).getArea() / new_side;
           h = new_side;
           x = resizedRects.get(i - 1).getPosX() + rects.get(i - 1).getWidth();
           y = this.posY; 
+          this.mWidth = w;
+          this.mHeight = h;
+          this.posX = (int)x; 
         }
         
+<<<<<<< HEAD
         println(w + " " + h + " " + x + " " + y + " "); 
+=======
+        println(" SQUISHING: " + w + " " + h + " " + x + " " + y + " "); 
+>>>>>>> 0d933bb5c44563fdf758702049b9b16b244ba864
         resizedRects.add(new Rectangle(x, y, w, h, this.rects.get(i).getID())); 
       }
       this.rects = resizedRects; 
