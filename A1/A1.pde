@@ -52,7 +52,7 @@ void squarify(Node x, float siblingSum){
   if(x.children == null){
     println("Adding node x:",x.getValue());
     c.addSquare(x, siblingSum);
-    c.Print();
+    //c.Print();
   } else{
     int denom = 0;
     for( Node child : x.children ){

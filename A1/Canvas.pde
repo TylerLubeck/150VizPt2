@@ -43,11 +43,9 @@ class Canvas{
     }
   }
   
-  //adds a row and calculates the remaining space
-  void addRow(Row row){
-    println("In addRow");
-    println("Row is x,y,w,h",row.posX,row.posY,row.mWidth,row.mHeight);
-    this.rows.add(row);
+  void updateRemainingCanvasSize(){
+    int numRows = this.rows.size();
+    Row row = this.rows.get(numRows-1);
     //CASTING EVERYTHING TO INT, BE WEARY
     if(row.fixedSide == Sides.HEIGHT){
       this.rs_posX = int(row.posX + row.mWidth);
@@ -71,18 +69,18 @@ class Canvas{
     if(this.rows.size() == 0){
       Row firstRow = new Row(square,this.rs_posX, this.rs_posY,
                              this.fixedLength, this.fixedSide,va_ratio);
-      this.addRow(firstRow);
+      this.rows.add(firstRow);
     } else{
       //attempt adding a node to the last row
       int size = this.rows.size();
       if(!this.rows.get(size-1).addRect(square)){
-        println("RS x,y,w,h: ",rs_posX,rs_posY,rs_mWidth,rs_mHeight);
         Row newRow = new Row(square, this.rs_posX, this.rs_posY,
                              this.fixedLength, this.fixedSide,va_ratio);
-        this.addRow(newRow);
+        this.rows.add(newRow);
       }
     }
-    
+    this.updateRemainingCanvasSize();
+    println("RS x,y,w,h: ",rs_posX,rs_posY,rs_mWidth,rs_mHeight);
   }
   
 }

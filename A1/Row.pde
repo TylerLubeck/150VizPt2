@@ -31,20 +31,12 @@ class Row {
     
     
     this.rects = new ArrayList<Rectangle>(); 
-    print("w " + w + " h " + h + " x " + this.posX + " y " + this.posY); 
+    println("w " + w + " h " + h + " x " + this.posX + " y " + this.posY); 
     this.rects.add(new Rectangle(this.posX, this.posY, h, w, n.getID())); 
   }
   /* Adds a rectangle if the aspect ratio is optimum. Otherwise, returns false; */ 
   boolean addRect(Node node) {
     float area = (float)node.getValue() * this.VA_Ratio;
-    float h, w;  
-    if (this.fixedSide == Sides.HEIGHT) { 
-      h = this.short_side;
-      w = area/h; 
-    } else {
-      w = this.short_side;
-      h = area/w; 
-    }
     
       //this.rects.add(new Rectangle(0, 0, h, w, node.getID()));  // <-- not the right xPos & yPos  
     return resizeRects(area, node); 
@@ -105,7 +97,7 @@ class Row {
           y = this.posY; 
         }
         
-        print(w + " " + h + " " + x + " " + y + " "); 
+        println(w + " " + h + " " + x + " " + y + " "); 
         resizedRects.add(new Rectangle(x, y, w, h, this.rects.get(i).getID())); 
       }
       this.rects = resizedRects; 
