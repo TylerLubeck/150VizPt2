@@ -1,5 +1,5 @@
 class Canvas{
-  private int posX, posY, mWidth, mHeight;
+  private float posX, posY, mWidth, mHeight;
   //rs is for remaining space dimensions
   private float rs_posX, rs_posY, rs_mWidth, rs_mHeight;
   private Sides fixedSide;
@@ -7,7 +7,7 @@ class Canvas{
   private ArrayList<Row> rows;
 
   
-  Canvas(int posX, int posY, int w, int h){
+  Canvas(float posX, float posY, float w, float h){
     this.posX = posX;
     this.posY = posY;
     this.mWidth = w;
@@ -49,8 +49,7 @@ class Canvas{
     Row row = this.rows.get(numRows-1);
     //CASTING EVERYTHING TO INT, BE WEARY
     if(row.fixedSide == Sides.HEIGHT){
-      println("fixed is HEIGHT");
-      this.rs_posX = int(row.posX + row.mWidth);
+      this.rs_posX = row.posX + row.mWidth;
       this.rs_mWidth -= int(row.mWidth);
     } else{
       this.rs_posY = int(row.posY + row.mHeight);
@@ -69,7 +68,7 @@ class Canvas{
       this.rs_posX = row.posX + row.mWidth; 
       this.rs_mWidth = this.rs_mWidth + oW - row.mWidth;
     } else{
-      this.rs_posY = int(row.posY + row.mHeight);
+      this.rs_posY = row.posY + row.mHeight;
       this.rs_mHeight = this.rs_mHeight + oH - row.mHeight;
     }
     calculateShorterSide();

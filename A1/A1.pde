@@ -13,7 +13,7 @@ void setup() {
    * When right click, if there is an ID recorded, just draw that one
   */
   frame.setResizable(true);  
-  Parser p = new Parser("hierarchy_original.shf"); 
+  Parser p = new Parser("hierarchy.shf"); 
   root = p.parse();
    
 }
@@ -35,6 +35,7 @@ void squarify(Node x, float siblingSum){
     }
   }
 }
+
 
 void draw() {
   c = new Canvas(0,0,width,height); 

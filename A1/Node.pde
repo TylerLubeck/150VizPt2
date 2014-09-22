@@ -5,6 +5,7 @@ class Node {
   private int ID;
   private int val;
   private ArrayList<Node> children;
+  boolean visited = false; 
   
   Node() {
     this(-1, -1);
