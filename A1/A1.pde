@@ -12,7 +12,7 @@ void setup() {
    * When right click, if there is an ID recorded, just draw that one
   */
   frame.setResizable(true);  
-  Parser p = new Parser("hierarchy.shf"); 
+  Parser p = new Parser("hierarchy3.shf"); 
   root = p.parse();
   println("root id is",root.getID());
   println("root num children is",root.children.size());
@@ -26,12 +26,15 @@ void squarify(Node x, Canvas c){
     
     for(int i=0; i<x.children.size(); i++){
       c.addSquare(x.children.get(i), va_ratio);
-    }/*
+    }
+    c.render();
     for(int i=0; i<x.children.size(); i++){
+      println("MAKING NEW SUBRECT");
       Rectangle childRect = c.getRectByID(x.children.get(i).getID());
       Canvas childCanvas = new Canvas(childRect);
       squarify(x.children.get(i),childCanvas);
-    }*/
+      childCanvas.render();
+    }
   }
 }
 
@@ -39,5 +42,5 @@ void squarify(Node x, Canvas c){
 void draw() {
   mainCanvas = new Canvas(0,0,width,height);
   squarify(root, mainCanvas);
-  mainCanvas.render();
+  //mainCanvas.render();
 }
