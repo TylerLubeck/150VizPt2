@@ -12,10 +12,11 @@ class Rectangle{
   }
   
   void render(){
+    fill(255); 
     rect(this.posX, this.posY, this.mWidth, this.mHeight);
-    stroke(255, 0, 0); 
+    fill(255, 0, 0); 
     textSize(10); //<-- Need to calculate in a smart way 
-    text(iD, posX, posY);
+    text(iD, this.posX + 50, this.posY + 50);
     //textWidth(CENTER,CENTER); 
   }
   

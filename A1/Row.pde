@@ -1,12 +1,12 @@
 class Row {
-  private int posX, posY;
+  private float posX, posY;
   private float mHeight, mWidth; 
   private ArrayList<Rectangle> rects; 
   private float VA_Ratio; 
   private Sides fixedSide; 
   private float short_side; 
   
-  Row(Node n, int x, int y, float short_side, Sides side, float va_ratio) {
+  Row(Node n, float x, float y, float short_side, Sides side, float va_ratio) {
     this.short_side = short_side; 
     this.fixedSide = side;
     this.VA_Ratio = va_ratio; 
@@ -129,11 +129,11 @@ class Row {
     }
   }
   
-  int getPosX() {
+  float getPosX() {
     return this.posX; 
   }
   
-  int getPosY() {
+  float getPosY() {
     return this.posY;
   }
   
