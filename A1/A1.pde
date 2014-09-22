@@ -66,5 +66,5 @@ void squarify(Node x, float siblingSum){
 }
 
 void draw() {
-  
+  c.render();
 }

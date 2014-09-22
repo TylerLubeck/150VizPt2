@@ -76,10 +76,11 @@ class Canvas{
       //attempt adding a node to the last row
       int size = this.rows.size();
       if(!this.rows.get(size-1).addRect(square)){
+        println("RS x,y,w,h: ",rs_posX,rs_posY,rs_mWidth,rs_mHeight);
         Row newRow = new Row(square, this.rs_posX, this.rs_posY,
                              this.fixedLength, this.fixedSide,va_ratio);
+        this.addRow(newRow);
       }
-      calculateShorterSide();
     }
     
   }
