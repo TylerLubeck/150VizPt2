@@ -32,7 +32,7 @@ class Row {
     
     this.rects = new ArrayList<Rectangle>(); 
     println("NEW ROW: w " + w + " h " + h + " x " + this.posX + " y " + this.posY); 
-    this.rects.add(new Rectangle(this.posX, this.posY, h, w, n.getID())); 
+    this.rects.add(new Rectangle(this.posX, this.posY, w, h, n.getID())); 
   }
   /* Adds a rectangle if the aspect ratio is optimum. Otherwise, returns false; */ 
   boolean addRect(Node node) {
