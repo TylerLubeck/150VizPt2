@@ -1,9 +1,8 @@
-float VA_Ratio; 
 int cHeight;
 int cWidth; 
 int short_side; 
 Sides currentSide;
-Canvas c;
+Canvas mainCanvas;
 Node root; 
 void setup() {
   size(400, 500); 
@@ -13,31 +12,29 @@ void setup() {
    * When right click, if there is an ID recorded, just draw that one
   */
   frame.setResizable(true);  
-  Parser p = new Parser("hierarchy_original.shf"); 
+  Parser p = new Parser("hierarchy2.shf"); 
   root = p.parse();
-   
+  mainCanvas = new Canvas(0,0,width,height);
 }
 
-void squarify(Node x, float siblingSum){
+void squarify(Node x, Canvas c){
   if(x.children == null){
-    println("Adding node x:",x.getValue());
-    c.addSquare(x, siblingSum);
-    //c.Print();
-  } else{
-    int denom = 0;
-    for( Node child : x.children ){
-      println("Node x has children " + x.getID() + " " + x.getValue()); 
-      denom+= child.getValue();
+      return;
+    }else{
+    float va_ratio = c.mWidth * c.mHeight / x.getValue();
+    
+    for(int i=0; i<x.children.size(); i++){
+      c.addSquare(x.children.get(i), va_ratio);
     }
-    siblingSum = c.mWidth * c.mHeight / denom;
-    for(int i=0; i<x.children.size(); i++){   
-      squarify(x.children.get(i),siblingSum);
+    for(int i=0; i<x.children.size(); i++){
+      Rectangle childRect = c.getRectByID(x.children.get(i).getID());
+      Canvas childCanvas = new Canvas(childRect);
+      squarify(x.children.get(i),childCanvas);
     }
   }
 }
 
 void draw() {
-  c = new Canvas(0,0,width,height); 
-  squarify(root, c.mWidth*c.mHeight / root.getValue());
-  c.render();
+  squarify(root, mainCanvas);
+  mainCanvas.render();
 }
