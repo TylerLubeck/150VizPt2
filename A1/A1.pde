@@ -12,7 +12,7 @@ void setup() {
    * When right click, if there is an ID recorded, just draw that one
   */
   frame.setResizable(true);  
-  Parser p = new Parser("hierarchy.shf"); 
+  Parser p = new Parser("hierarchy2.shf"); 
   root = p.parse();
   mainCanvas = new Canvas(0,0,width,height);
 }
