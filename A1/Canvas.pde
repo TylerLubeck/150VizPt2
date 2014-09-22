@@ -53,11 +53,12 @@ class Canvas{
     Row row = this.rows.get(numRows-1);
     //CASTING EVERYTHING TO INT, BE WEARY
     if(row.fixedSide == Sides.HEIGHT){
+      println("fixed is HEIGHT");
       this.rs_posX = row.posX + row.mWidth;
-      this.rs_mWidth -= int(row.mWidth);
+      this.rs_mWidth -= row.mWidth;
     } else{
-      this.rs_posY = int(row.posY + row.mHeight);
-      this.rs_mHeight -= int(row.mHeight);
+      this.rs_posY = row.posY + row.mHeight;
+      this.rs_mHeight -= row.mHeight;
     }
     calculateShorterSide();
   }
@@ -120,6 +121,7 @@ class Canvas{
         }
       }
     }
+    println("COULD NOT FIND");
     return null;
   }
   
