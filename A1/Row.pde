@@ -103,11 +103,8 @@ class Row {
           this.posX = (int)x; 
         }
         
-<<<<<<< HEAD
         println(w + " " + h + " " + x + " " + y + " "); 
-=======
         println(" SQUISHING: " + w + " " + h + " " + x + " " + y + " "); 
->>>>>>> 0d933bb5c44563fdf758702049b9b16b244ba864
         resizedRects.add(new Rectangle(x, y, w, h, this.rects.get(i).getID())); 
       }
       this.rects = resizedRects; 
