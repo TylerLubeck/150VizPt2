@@ -15,7 +15,7 @@ class Rectangle{
     fill(255); 
     rect(this.posX, this.posY, this.mWidth, this.mHeight);
     fill(255, 0, 0); 
-    textSize(20); //<-- Need to calculate in a smart way 
+    textSize(10); //<-- Need to calculate in a smart way 
     text(iD, this.posX + 50, this.posY + 50);
     //textWidth(CENTER,CENTER); 
   }
