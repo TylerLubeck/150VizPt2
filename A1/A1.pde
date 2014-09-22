@@ -13,25 +13,9 @@ void setup() {
    * When right click, if there is an ID recorded, just draw that one
   */
   frame.setResizable(true);  
-  Parser p = new Parser("hierarchy.shf"); 
+  Parser p = new Parser("hierarchy_original.shf"); 
   root = p.parse();
-  
-  /* TESTING ROW */ 
-  float total_area = width * height;
-  float total_value = root.val; 
-
-  VA_Ratio = total_area/(total_value); 
-  int cHeight = height;
-  int cWidth = width; 
-  println(cHeight + " " + cWidth); 
-  currentSide = cHeight > cWidth ? Sides.WIDTH : Sides.HEIGHT; 
-  int short_side = min(height, width); 
- 
-  
-  //traverse the tree
-  //c = new Canvas(0,0,width,height); 
-  
-  
+   
 }
 
 void squarify(Node x, float siblingSum){

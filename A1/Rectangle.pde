@@ -13,6 +13,8 @@ class Rectangle{
   
   void render(){
     fill(255); 
+    stroke(0); 
+    strokeWeight(5);  
     rect(this.posX, this.posY, this.mWidth, this.mHeight);
     fill(255, 0, 0); 
     textSize(10); //<-- Need to calculate in a smart way 
