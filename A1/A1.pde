@@ -15,6 +15,9 @@ void setup() {
   Parser p = new Parser("hierarchy2.shf"); 
   root = p.parse();
   mainCanvas = new Canvas(0,0,width,height);
+  squarify(root, mainCanvas);
+  println("root id is",root.getID());
+  println("root num children is",root.children.size());
 }
 
 void squarify(Node x, Canvas c){
@@ -25,16 +28,15 @@ void squarify(Node x, Canvas c){
     
     for(int i=0; i<x.children.size(); i++){
       c.addSquare(x.children.get(i), va_ratio);
-    }
+    }/*
     for(int i=0; i<x.children.size(); i++){
       Rectangle childRect = c.getRectByID(x.children.get(i).getID());
       Canvas childCanvas = new Canvas(childRect);
       squarify(x.children.get(i),childCanvas);
-    }
+    }*/
   }
 }
 
 void draw() {
-  squarify(root, mainCanvas);
   mainCanvas.render();
 }
