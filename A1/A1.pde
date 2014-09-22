@@ -6,7 +6,7 @@ Sides currentSide;
 Canvas c;
 
 void setup() {
-  size(500, 400); 
+  size(800, 400); 
   /* TODO:
    * In order to zoom out properly, consider doing this:
    * When left click, record the ID of the element clicked on.
