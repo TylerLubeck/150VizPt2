@@ -21,6 +21,10 @@ class Canvas{
     calculateShorterSide();
   }
   
+  Canvas(Rectangle rect){
+    this(rect.posX,rect.posY,rect.mWidth,rect.mHeight);
+  }
+  
   void Print(){
     /*
     println("Pos X:",this.posX);
@@ -106,6 +110,17 @@ class Canvas{
       }
     }
     println("RS x,y,w,h: ",rs_posX,rs_posY,rs_mWidth,rs_mHeight);
+  }
+  
+  Rectangle getRectByID(int ID){
+    for(Row row : this.rows){
+      for(Rectangle rect : row.rects){
+        if(rect.getID() == ID){
+          return rect;
+        }
+      }
+    }
+    return null;
   }
   
 }
