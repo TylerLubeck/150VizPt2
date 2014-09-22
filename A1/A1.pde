@@ -40,7 +40,7 @@ void setup() {
   c = new Canvas(0,0,width,height);
   squarify(root, c.mWidth*c.mHeight / root.getValue());
   //c.Print();
-  println("Num of rows in canvas is ", c.rows.size());
+  //println("Num of rows in canvas is ", c.rows.size());
   c.render(); 
   //Row testRow = new Row(root.getChildren().get(0), 0, 0, short_side, currentSide, VA_Ratio); 
   //testRow.render(); 

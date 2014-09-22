@@ -79,6 +79,8 @@ class Canvas{
         Row newRow = new Row(square, this.rs_posX, this.rs_posY,
                              this.fixedLength, this.fixedSide,va_ratio);
       }
+      println("JUST ADDED ROW! "); 
+      Print(); 
       calculateShorterSide();
     }
     
