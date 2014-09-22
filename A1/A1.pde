@@ -14,8 +14,6 @@ void setup() {
   frame.setResizable(true);  
   Parser p = new Parser("hierarchy.shf"); 
   root = p.parse();
-  mainCanvas = new Canvas(0,0,width,height);
-  squarify(root, mainCanvas);
   println("root id is",root.getID());
   println("root num children is",root.children.size());
 }
@@ -39,5 +37,7 @@ void squarify(Node x, Canvas c){
 
 
 void draw() {
+  mainCanvas = new Canvas(0,0,width,height);
+  squarify(root, mainCanvas);
   mainCanvas.render();
 }
