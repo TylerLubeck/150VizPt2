@@ -73,10 +73,13 @@ class Canvas{
                              this.fixedLength, this.fixedSide,va_ratio);
       this.addRow(firstRow);
     } else{
-      //if row
-      //make a copy of the row and change its dimensions, add the square and compute aspect ratio
-      //if old row's aspect ratios suck, make a new row and add that square baby!
-        //update shortside
+      //attempt adding a node to the last row
+      int size = this.rows.size();
+      if(!this.rows.get(size-1).addRect(square)){
+        Row newRow = new Row(square, this.rs_posX, this.rs_posY,
+                             this.fixedLength, this.fixedSide,va_ratio);
+      }
+      calculateShorterSide();
     }
     
   }
