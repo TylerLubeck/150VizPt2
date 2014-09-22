@@ -12,7 +12,7 @@ class Row {
     this.VA_Ratio = va_ratio; 
     this.posX = x;
     this.posY = y; 
-    println("IN NEW ROW: short_side -- " + short_side); 
+    //println("IN NEW ROW: short_side -- " + short_side); 
     addFirstRect(n);
   }
   
@@ -31,7 +31,7 @@ class Row {
     this.mWidth = w; 
     
     this.rects = new ArrayList<Rectangle>(); 
-    println("NEW ROW: w " + w + " h " + h + " x " + this.posX + " y " + this.posY); 
+    //println("NEW ROW: w " + w + " h " + h + " x " + this.posX + " y " + this.posY); 
     this.rects.add(new Rectangle(this.posX, this.posY, w, h, n.getID())); 
   }
   /* Adds a rectangle if the aspect ratio is optimum. Otherwise, returns false; */ 
@@ -61,11 +61,11 @@ class Row {
     if(asp_ratio < this.rects.get(this.rects.size() - 1).getAspectRatio()) {
       
       this.rects.add(new Rectangle(0, 0, w, h, node.getID())); // FIX THIS ID IS NOT CORRECT 
-      println("adding... " + w +" " + h);  
+      //println("adding... " + w +" " + h);  
       ArrayList<Rectangle> resizedRects = new ArrayList<Rectangle>(); 
       Rectangle first = this.rects.get(0);
       
-      println("NEW SIDE: " + new_side); 
+      //println("NEW SIDE: " + new_side); 
      
       if (this.fixedSide == Sides.HEIGHT) {
         first.setHeight(first.getArea() / new_side); 
@@ -79,7 +79,7 @@ class Row {
         first.setPosX(this.posX); 
       }
       
-      println(first.getWidth() + " " + first.getHeight() + " " + first.getPosX() + " " + first.getPosY()); 
+      //println(first.getWidth() + " " + first.getHeight() + " " + first.getPosX() + " " + first.getPosY()); 
       resizedRects.add(first); 
     
       float x, y;  
@@ -103,8 +103,8 @@ class Row {
           this.posX = (int)x; 
         }
         
-        println(w + " " + h + " " + x + " " + y + " "); 
-        println(" SQUISHING: " + w + " " + h + " " + x + " " + y + " "); 
+        //println(w + " " + h + " " + x + " " + y + " "); 
+        //println(" SQUISHING: " + w + " " + h + " " + x + " " + y + " "); 
         resizedRects.add(new Rectangle(x, y, w, h, this.rects.get(i).getID())); 
       }
       this.rects = resizedRects; 
