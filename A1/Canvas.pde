@@ -22,7 +22,7 @@ class Canvas{
   }
   
   Canvas(Rectangle rect){
-    this(rect.posX,rect.posY,rect.mWidth,rect.mHeight);
+    this(rect.posX+5,rect.posY+5,rect.mWidth-5,rect.mHeight-5);
   }
   
   void Print(){
