@@ -118,7 +118,6 @@ class Parser {
     }
     
     thisBranch.sumTheChildren();
-    //println(thisBranch.getID() + ": " + thisBranch.getValue());
     return thisBranch;
   }
   

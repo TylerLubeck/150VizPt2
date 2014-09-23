@@ -19,8 +19,6 @@ void setup() {
   root = p.parse();
   currentRoot = root;
   rootStack = new Stack<Node>();
-  println("root id is",currentRoot.getID());
-  println("root num children is",currentRoot.children.size());
 }
 
 void squarify(Node x, Canvas c){
@@ -40,34 +38,46 @@ void squarify(Node x, Canvas c){
       childCanvas.render();
     }
   }
-  println(root.getNodeById(6).getValue()); 
 }
 
+int getSelectedId(float x, float y) {
+  for (Row r : mainCanvas.rows) {
+    for (Rectangle re : r.rects) {
+      if (re.isWithin(x, y)) {
+        return re.getID();
+      }
+    }
+  }
+  return -1;
+}
 
 void draw() {
   mainCanvas = new Canvas(0,0,width,height);
   squarify(currentRoot, mainCanvas);
-  //mainCanvas.render();
 }
 
-void zoomIn(){
-  println("LOL zoom in ha");
+void zoomIn(float x, float y){
+  int id = getSelectedId(x, y);
+  if (id == -1) {
+    return;
+  }
+  Node n = root.getNodeById(id);
+  if (n == null) {
+    return;
+  }
   rootStack.push(currentRoot);
-  /*
-   * currentRoot = Node.findRoot(); //I made this up, implement it
-   */
+  currentRoot = n;
 }
 
 void zoomOut(){
   if(!rootStack.empty()) {
       currentRoot = rootStack.pop();
-      println("LOL zoom out ha");
   }
 }
 
 void mouseClicked() {
   if (mouseButton == LEFT) {
-    zoomIn();
+    zoomIn(mouseX, mouseY);
   } else if(mouseButton == RIGHT) {
     zoomOut();
   }

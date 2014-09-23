@@ -12,7 +12,6 @@ class Row {
     this.VA_Ratio = va_ratio; 
     this.posX = x;
     this.posY = y; 
-    //println("IN NEW ROW: short_side -- " + short_side); 
     addFirstRect(n);
   }
   
