@@ -48,12 +48,12 @@ class Canvas{
   }
   
   void rsChangedByNewRow(){
-    println("rs by new row");
+    //println("rs by new row");
     int numRows = this.rows.size();
     Row row = this.rows.get(numRows-1);
     //CASTING EVERYTHING TO INT, BE WEARY
     if(row.fixedSide == Sides.HEIGHT){
-      println("fixed is HEIGHT");
+      //println("fixed is HEIGHT");
       this.rs_posX = row.posX + row.mWidth;
       this.rs_mWidth -= row.mWidth;
     } else{
@@ -64,12 +64,12 @@ class Canvas{
   }
   
   void rsChangedByCurrentRow(Sides s, float oW, float oH){
-    println("rs by old row", s, oW, oH);
+    //println("rs by old row", s, oW, oH);
     int numRows = this.rows.size();
     Row row = this.rows.get(numRows-1);
     //CASTING EVERYTHING TO INT, BE WEARY
     if(row.fixedSide == Sides.HEIGHT){
-      println("fixed is HEIGHT");
+      //println("fixed is HEIGHT");
       this.rs_posX = row.posX + row.mWidth; 
       this.rs_mWidth = this.rs_mWidth + oW - row.mWidth;
     } else{
@@ -110,7 +110,7 @@ class Canvas{
         this.rsChangedByCurrentRow(oldRowSide,oldRowWidth,oldRowHeight);
       }
     }
-    println("RS x,y,w,h: ",rs_posX,rs_posY,rs_mWidth,rs_mHeight);
+    //println("RS x,y,w,h: ",rs_posX,rs_posY,rs_mWidth,rs_mHeight);
   }
   
   Rectangle getRectByID(int ID){
@@ -121,7 +121,7 @@ class Canvas{
         }
       }
     }
-    println("COULD NOT FIND");
+    //println("COULD NOT FIND");
     return null;
   }
   

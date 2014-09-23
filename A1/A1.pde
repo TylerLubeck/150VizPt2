@@ -4,6 +4,7 @@ int short_side;
 Sides currentSide;
 Canvas mainCanvas;
 Node root; 
+Node currentRoot;
 void setup() {
   size(400, 500); 
   /* TODO:
@@ -12,10 +13,11 @@ void setup() {
    * When right click, if there is an ID recorded, just draw that one
   */
   frame.setResizable(true);  
-  Parser p = new Parser("hierarchy3.shf"); 
+  Parser p = new Parser("hierarchy2.shf"); 
   root = p.parse();
-  println("root id is",root.getID());
-  println("root num children is",root.children.size());
+  currentRoot = root;
+  println("root id is",currentRoot.getID());
+  println("root num children is",currentRoot.children.size());
 }
 
 void squarify(Node x, Canvas c){
@@ -29,7 +31,6 @@ void squarify(Node x, Canvas c){
     }
     c.render();
     for(int i=0; i<x.children.size(); i++){
-      println("MAKING NEW SUBRECT");
       Rectangle childRect = c.getRectByID(x.children.get(i).getID());
       Canvas childCanvas = new Canvas(childRect);
       squarify(x.children.get(i),childCanvas);
@@ -41,6 +42,23 @@ void squarify(Node x, Canvas c){
 
 void draw() {
   mainCanvas = new Canvas(0,0,width,height);
-  squarify(root, mainCanvas);
+  squarify(currentRoot, mainCanvas);
   //mainCanvas.render();
+}
+
+void zoomIn(){
+  println("LOL zoom in ha");
+}
+
+void zoomOut(){
+  println("LOL zoom out ha");
+  currentRoot = root;
+}
+
+void mouseClicked() {
+  if (mouseButton == LEFT) {
+    zoomIn();
+  } else if(mouseButton == RIGHT) {
+    zoomOut();
+  }
 }
