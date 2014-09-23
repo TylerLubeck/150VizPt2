@@ -30,8 +30,10 @@ class Row {
     this.mHeight = h;
     this.mWidth = w; 
     
-    this.rects = new ArrayList<Rectangle>(); 
-    this.rects.add(new Rectangle(this.posX, this.posY, w, h, n.getID())); 
+    this.rects = new ArrayList<Rectangle>();
+    Rectangle rect = new Rectangle(this.posX, this.posY, w, h, n.getID());
+    this.rects.add(rect);
+    n.rect = rect;
   }
   /* Adds a rectangle if the aspect ratio is optimum. Otherwise, returns false; */ 
   boolean addRect(Node node) {
@@ -56,8 +58,9 @@ class Row {
     
     float asp_ratio = max(h/w, w/h); 
     if(asp_ratio < this.rects.get(this.rects.size() - 1).getAspectRatio()) {
-      
-      this.rects.add(new Rectangle(0, 0, w, h, node.getID())); // FIX THIS ID IS NOT CORRECT 
+      Rectangle rect = new Rectangle(0, 0, w, h, node.getID());
+      this.rects.add(rect); // FIX THIS ID IS NOT CORRECT
+      node.rect = rect;
       ArrayList<Rectangle> resizedRects = new ArrayList<Rectangle>(); 
       Rectangle first = this.rects.get(0);
            
@@ -93,7 +96,6 @@ class Row {
           this.mHeight = h;
           this.posX = (int)x; 
         }
-        
         resizedRects.add(new Rectangle(x, y, w, h, this.rects.get(i).getID())); 
       }
       this.rects = resizedRects; 
