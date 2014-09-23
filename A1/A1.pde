@@ -1,9 +1,11 @@
+import java.util.Stack;
 int cHeight;
 int cWidth; 
 int short_side; 
 Sides currentSide;
 Canvas mainCanvas;
 Node root; 
+Stack<Node> rootStack;
 Node currentRoot;
 void setup() {
   size(400, 500); 
@@ -16,6 +18,7 @@ void setup() {
   Parser p = new Parser("hierarchy2.shf"); 
   root = p.parse();
   currentRoot = root;
+  rootStack = new Stack<Node>();
   println("root id is",currentRoot.getID());
   println("root num children is",currentRoot.children.size());
 }
@@ -48,11 +51,17 @@ void draw() {
 
 void zoomIn(){
   println("LOL zoom in ha");
+  rootStack.push(currentRoot);
+  /*
+   * currentRoot = Node.findRoot(); //I made this up, implement it
+   */
 }
 
 void zoomOut(){
-  println("LOL zoom out ha");
-  currentRoot = root;
+  if(!rootStack.empty()) {
+      currentRoot = rootStack.pop();
+      println("LOL zoom out ha");
+  }
 }
 
 void mouseClicked() {
