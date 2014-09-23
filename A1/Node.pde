@@ -5,7 +5,8 @@ class Node {
   private int ID;
   private int val;
   private ArrayList<Node> children;
-  boolean visited = false; 
+  boolean visited = false;
+  private Rectangle rect;
   
   Node() {
     this(-1, -1);
