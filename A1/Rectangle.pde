@@ -12,13 +12,19 @@ class Rectangle{
   }
   
   void render(){
-    fill(255); 
+    if(mouseX > this.posX && mouseX < this.posX + this.mWidth
+        && mouseY > this.posY && mouseY < this.posY + this.mHeight) {
+      fill(112, 128, 144);
+    } else {
+      fill(255);
+    }
     stroke(0); 
     strokeWeight(5);  
     rect(this.posX, this.posY, this.mWidth, this.mHeight);
     fill(255, 0, 0); 
     textSize(10); //<-- Need to calculate in a smart way 
-    text(iD, this.posX + 50, this.posY + 50);
+    textAlign(CENTER, CENTER);
+    text(Integer.toString(this.iD), this.posX, this.posY, this.mWidth, this.mHeight);
     //textWidth(CENTER,CENTER); 
   }
   
