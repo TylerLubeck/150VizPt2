@@ -103,6 +103,16 @@ class Node {
         }
     }); 
   } 
+  
+  Node getNodeById(int id) {
+    if (this.ID == id) { return this; }    
+    else {
+      for (Node child : this.children) {
+        return child.getNodeById(id); 
+      }
+    }
+    return null; 
+  }
 
   /* for debugging, delete before turning in.  */   
  void printTree() {
