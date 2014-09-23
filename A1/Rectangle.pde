@@ -11,6 +11,11 @@ class Rectangle{
     this.iD = iD;     
   }
   
+  boolean isWithin(float x, float y) {
+    return x > this.posX && x < this.posX + this.mWidth
+        && y > this.posY && y < this.posY + this.mHeight;
+  }
+
   void render(){
     if(mouseX > this.posX && mouseX < this.posX + this.mWidth
         && mouseY > this.posY && mouseY < this.posY + this.mHeight) {
@@ -19,7 +24,7 @@ class Rectangle{
       fill(255);
     }
     stroke(0); 
-    strokeWeight(5);  
+    strokeWeight(4);  
     rect(this.posX, this.posY, this.mWidth, this.mHeight);
     fill(255, 0, 0); 
     textSize(10); //<-- Need to calculate in a smart way 
