@@ -40,6 +40,7 @@ void squarify(Node x, Canvas c){
       childCanvas.render();
     }
   }
+  println(root.getNodeById(6).getValue()); 
 }
 
 

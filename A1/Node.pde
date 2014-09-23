@@ -105,13 +105,15 @@ class Node {
   } 
   
   Node getNodeById(int id) {
-    if (this.ID == id) { return this; }    
-    else {
+    if (this.children != null) {
       for (Node child : this.children) {
-        return child.getNodeById(id); 
+        if (child.ID == id) {
+          return child; 
+        }  
+        child.getNodeById(id);   
       }
     }
-    return null; 
+   return null;  
   }
 
   /* for debugging, delete before turning in.  */   
