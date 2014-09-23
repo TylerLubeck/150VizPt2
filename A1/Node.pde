@@ -105,8 +105,9 @@ class Node {
   } 
   
   Node getNodeById(int id) {
+    println("AT ID: ", this.ID);
     if (this.ID == id) { return this; }    
-    else {
+    else if (this.children != null){
       for (Node child : this.children) {
         return child.getNodeById(id); 
       }
