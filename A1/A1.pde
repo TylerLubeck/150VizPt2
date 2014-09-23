@@ -19,8 +19,6 @@ void setup() {
   root = p.parse();
   currentRoot = root;
   rootStack = new Stack<Node>();
-  println("root id is",currentRoot.getID());
-  println("root num children is",currentRoot.children.size());
 }
 
 void squarify(Node x, Canvas c){
@@ -40,13 +38,11 @@ void squarify(Node x, Canvas c){
       childCanvas.render();
     }
   }
-  println(root.getNodeById(6).getValue()); 
 }
 
 int getSelectedId(float x, float y) {
   for (Row r : mainCanvas.rows) {
     for (Rectangle re : r.rects) {
-      println("In rect ", re.getID());
       if (re.isWithin(x, y)) {
         return re.getID();
       }
@@ -58,23 +54,15 @@ int getSelectedId(float x, float y) {
 void draw() {
   mainCanvas = new Canvas(0,0,width,height);
   squarify(currentRoot, mainCanvas);
-  //println("NUM ROWS: ", mainCanvas.rows.size());
-  //mainCanvas.render();
 }
 
 void zoomIn(float x, float y){
-  println("Current Root ID: ", currentRoot.getID());
-  println("LOL zoom in ha");
   int id = getSelectedId(x, y);
   if (id == -1) {
-    println("NO ID");
     return;
   }
-  println("Found ID: ", id);
   Node n = root.getNodeById(id);
-  println("Found Node: ", n);
   if (n == null) {
-    println("NO NODE");
     return;
   }
   rootStack.push(currentRoot);
@@ -84,7 +72,6 @@ void zoomIn(float x, float y){
 void zoomOut(){
   if(!rootStack.empty()) {
       currentRoot = rootStack.pop();
-      println("LOL zoom out ha");
   }
 }
 
