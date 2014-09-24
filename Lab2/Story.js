@@ -41,7 +41,16 @@ var Drawing = function() {
         //TODO: I think if you can turn this dictionary in to a list of the form
         //      [{02155: 20}, {02156: 10}, ...] 
         //      then we'll be in pretty good shape.
-        return count; 
+        var keys = Object.keys(count);
+        keys.sort();
+        objects = [];
+        for (var k in keys) {
+            obj = {}
+            obj[keys[k]] = count[keys[k]];
+            objects.push(obj);
+        }
+        //return count; 
+        return objects;
     }
 
     this.init = function() {
@@ -95,15 +104,21 @@ var Drawing = function() {
 
         function step0(objects, width, offset) {
             var leftMost = x1 + 10;
-            Object.keys(objects).forEach(function drawOpen(key) {
-                var val = objects[key];
-                val = val.map(0, 2221, 0, iHeight-margin)
-
-                p.rect(leftMost+offset, iHeight+margin, width, -val);
-
-                leftMost += 20;
-            });
-            console.log("LEFTMOST: " + leftMost);
+            for (item in objects) {
+                for (k in objects[item]) {
+                    var val = objects[item][k];
+                    if(leftMost + offset < p.mouseX &&
+                       p.mouseX < leftMost+offset+width) {
+                        p.fill(p.color(255, 0, 0));
+                        $('#display').text(k + " has " + val + " potholes");
+                    } else {
+                    }
+                    val = val.map(0, 2221, 0, iHeight-margin);
+                    p.rect(leftMost+offset, iHeight+margin, width, -val);
+                    leftMost += 20;
+                    p.fill(p.color(0));
+                }
+            }
         }
        
         p.setup = function(){ 
@@ -113,6 +128,7 @@ var Drawing = function() {
             p.smooth();   	 
             p.rectMode(p.CORNER);
             p.ellipseMode(p.RADIUS);
+            console.log(p)
         };
        
         p.draw = function() {
@@ -122,17 +138,19 @@ var Drawing = function() {
             drawLines();
             switch (_this.mode) {
                 case 0:
+                    $('#subtitle').text("Open Potholes");
                     step0(_this.openPotholes, 10, 0);
                     break; 
                case 1:
+                    $('#subtitle').text("Closed Potholes");
                    //step1();
                     step0(_this.closedPotholes, 10, 0);
                    break;
                case 2:
-                   //step2();
-                    step0(_this.allPotholes, 5, 0);
+                    $('#subtitle').text("Combined Potholes");
+                    step0(_this.closedPotholes, 5, 5);
                     p.fill(p.color(255, 0, 0));
-                    step0(_this.openPotholes, 5, 5);
+                    step0(_this.openPotholes, 5, 0);
                    break;
            }
         };

@@ -5,7 +5,7 @@ canvas{
     line-height: 2;
     text-align: left;
 }
-p,h2{
+p,h2,h3{
     font-family: "Arial";
     line-height: 0.3;
     padding: 0 25% 0 25%;
