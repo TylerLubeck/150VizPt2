@@ -38,6 +38,9 @@ var Drawing = function() {
                 count[result[i].zip] = 1; 
             }
         }
+        //TODO: I think if you can turn this dictionary in to a list of the form
+        //      [{02155: 20}, {02156: 10}, ...] 
+        //      then we'll be in pretty good shape.
         return count; 
     }
 
