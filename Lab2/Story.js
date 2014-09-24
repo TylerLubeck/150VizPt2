@@ -90,13 +90,13 @@ var Drawing = function() {
             p.line(x1, iHeight+margin, x1, margin);
         }
 
-        function step0(objects, width) {
+        function step0(objects, width, offset) {
             var leftMost = x1 + 10;
             Object.keys(objects).forEach(function drawOpen(key) {
                 var val = objects[key];
                 val = val.map(0, 2221, 0, iHeight-margin)
 
-                p.rect(leftMost, iHeight+margin, width, -val);
+                p.rect(leftMost+offset, iHeight+margin, width, -val);
 
                 leftMost += 20;
             });
@@ -119,15 +119,17 @@ var Drawing = function() {
             drawLines();
             switch (_this.mode) {
                 case 0:
-                    step0(_this.openPotholes, 10);
+                    step0(_this.openPotholes, 10, 0);
                     break; 
                case 1:
                    //step1();
-                    step0(_this.closedPotholes, 10);
+                    step0(_this.closedPotholes, 10, 0);
                    break;
                case 2:
                    //step2();
-                    step0(_this.allPotholes, 10);
+                    step0(_this.allPotholes, 5, 0);
+                    p.fill(p.color(255, 0, 0));
+                    step0(_this.openPotholes, 5, 5);
                    break;
            }
         };
