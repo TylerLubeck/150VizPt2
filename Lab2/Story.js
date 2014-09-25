@@ -8,13 +8,14 @@ var Drawing = function() {
     this.closedPotholes = {};  
     this.allPotholes = {}; 
     this.openPotholes = {}; 
+    this.remainingPotholes = {};
     var intColor = 0;
     this.mode = 0;
     var _this = this;
 
     this.nextMode = function() {
         this.mode++;
-        if (this.mode > 2) {
+        if (this.mode > 3) {
             this.mode = 0;
         }
     }
@@ -22,7 +23,7 @@ var Drawing = function() {
     this.prevMode = function() {
         this.mode--;
         if (this.mode < 0) {
-            this.mode = 2;
+            this.mode = 3;
         }
     }
 
@@ -63,7 +64,9 @@ var Drawing = function() {
                 return console.log('Oops! csv died.');
             }
             _this.openPotholes = countFrequency(d); 
+            _this.remainingPotholes = countFrequency(d);
             console.log(_this.openPotholes);
+            console.log(_this.remainingPotholes);
             console.log("GOT OPEN: " + _this.openPotholes);  
 
             d3.csv("closed_potholes.csv", function (d) {
@@ -75,7 +78,18 @@ var Drawing = function() {
                     return console.log('Oops! csv died.');
                 }
                 _this.closedPotholes = countFrequency(d); 
-                console.log(_this.closedPotholes);  
+                console.log("Got closed");
+                console.log(_this.closedPotholes);
+                for(i in _this.closedPotholes){
+                    for(k in _this.closedPotholes[i]){
+                        valR = _this.remainingPotholes[i][k];
+                        valC = _this.closedPotholes[i][k];
+                        valDif = valR - valC;
+                        _this.remainingPotholes[i][k]=valDif;
+                    }
+                }
+                console.log("Got remaining");
+
 
                 d3.csv("pothole_callins.csv", function(d){
                     return {
@@ -102,15 +116,21 @@ var Drawing = function() {
             p.line(x1, iHeight+margin, x1, margin);
         }
 
-        function step0(objects, width, offset) {
+        function step0(objects, width, offset, r,g,b, caseNum) {
             var leftMost = x1 + 10;
             for (item in objects) {
                 for (k in objects[item]) {
                     var val = objects[item][k];
                     if(leftMost + offset < p.mouseX &&
                        p.mouseX < leftMost+offset+width) {
-                        p.fill(p.color(255, 0, 0));
-                        $('#display').text(k + " has " + val + " potholes");
+                        p.fill(p.color(r, g, b));
+                        if(caseNum==0){
+                            $('#display').text("zipcode:" + k + " had " + val + " open potholes");
+                        } else if(caseNum==1){
+                            $('#display').text("zipcode:" + k + " closed " + val + " potholes");
+                        } else{
+                            $('#display').text("zipcode:" + k + " still had " + val + " open potholes");
+                        }
                     } else {
                     }
                     val = val.map(0, 2221, 0, iHeight-margin);
@@ -138,19 +158,24 @@ var Drawing = function() {
             drawLines();
             switch (_this.mode) {
                 case 0:
-                    $('#subtitle').text("Open Potholes");
-                    step0(_this.openPotholes, 10, 0);
+                    $('#subtitle').text("During the year of 2012,");
+                    step0(_this.openPotholes, 10, 0, 255, 0, 0, 0);
                     break; 
                case 1:
-                    $('#subtitle').text("Closed Potholes");
+                    $('#subtitle').text("By the end of 2012,");
                    //step1();
-                    step0(_this.closedPotholes, 10, 0);
+                    step0(_this.closedPotholes, 10, 0, 0, 255, 0, 1);
                    break;
                case 2:
-                    $('#subtitle').text("Combined Potholes");
-                    step0(_this.closedPotholes, 5, 5);
-                    p.fill(p.color(255, 0, 0));
-                    step0(_this.openPotholes, 5, 0);
+                    $('#subtitle').text("During 2012,");
+                    step0(_this.closedPotholes, 5, 5, 0, 255, 0, 1);
+                    p.fill(p.color(0, 0, 0));
+                    step0(_this.openPotholes, 5, 0, 255, 0, 0, 0);
+                   break;
+               case 3:
+                    $('#subtitle').text("By the end of 2012,");
+                    p.fill(p.color(0, 0, 0));
+                    step0(_this.remainingPotholes, 5, 0, 255, 0, 0, 3);
                    break;
            }
         };
@@ -171,7 +196,7 @@ $(function() {
     
     $('#next').click(function(e) {
         drawing.nextMode();
-        if (drawing.mode >= 2) {
+        if (drawing.mode >= 3) {
             $('#next').attr('disabled', true);
         }
         if (drawing.mode > 0) {
@@ -183,7 +208,7 @@ $(function() {
         if (drawing.mode === 0) {
             $('#pre').attr('disabled', true);
         }
-        if (drawing.mode < 2) {
+        if (drawing.mode < 3) {
             $('#next').attr('disabled', false);
         }
     });
