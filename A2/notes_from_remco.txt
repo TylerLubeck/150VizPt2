@@ -1,0 +1,72 @@
+Useful Functions/Variables: 
+	-- lerp() // on a2 description 
+	-- smooth (for rendering in floating points)
+	-- frameRate() number of framrates per second
+	-- bool transition //am I currently transitioning
+	-- int numFrames // current state/progress in animation
+
+Tips: 
+* Don't think about it as pixels, instead render in floats. 
+	- Coordinate system: 0 : 1 instead of width : height
+	- Consequently, each sub-rectangle and sub-visualization can also be represented as 0 : 1 
+	- The advantage: this makes our classes more transferrable. 
+		The only information we need to know is the "parent" coordinating system so you can 'un-nest' 
+		your canvas from 0 : 1
+
+* This only works for rectangles, not pie charts. 
+
+Ex: 
+
+BAR CHART -> LINE CHART -> BAR CHART 
+
+class Viewport {
+	float x, y, w, h; //  0 to 1 measured in terms of the overall canvas's coordinate system
+
+	//constructor and getters and setters
+
+	//convert my represetnation of 0 : 1 into its real world values
+	Viewport getChild(x, y, w, h) {
+		Viewport v = new Viewport(coordX(x) //etc )
+		return v; 
+	}
+}
+
+void draw() {
+	
+	// global Viewport (0, 0, 1, 1)
+	// canvas : global - border
+	// drawBars
+		areaPerRow : 1/float(numRows);
+		startPointX = 0;
+		offset = 0.1f;
+		// for each number of rows, create new viewport for each bar. 
+		// then, transform them into pixels. 
+
+		// make sure to calculate dataRatio:
+			dataRatio = data[i]/maxVal 
+
+}
+
+
+* Adding Animation: 
+	There are three parts: 
+		1. Consider your coordinate system.
+		2. Let the transition direct the story. The animated transition has 
+	   	to make sense. 
+		3. ... never finished 
+
+	- to animate/shorten the bar, update the x/y/w/h coords when drawing the rect
+	  along with the numFrames and frameRate. 
+
+
+* Converting Bar to Pie: go from Cartesian (x, y) to Polar (r, theta)
+	- both x and y are encoded in theta...
+	- NOTE: to get the nightingale rose, map x to theta and y to r. 
+
+
+
+
+
+
+
+
