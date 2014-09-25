@@ -29,7 +29,7 @@ class MyCircle {
     noFill();
     ellipse(posx, posy, radius*2, radius*2);  
   }
-  
+
   void renderIsect(PGraphics pg) {
     pg.fill(red(id), green(id), blue(id));
     pg.stroke(red(id), green(id), blue(id));
@@ -44,9 +44,10 @@ class MyCircle {
     ellipse(posx, posy, radius*2, radius*2);      
   }
   
-  boolean isect () {
-
-    //TODO: Fill in this function
+  boolean isect (PGraphics img) {
+    if (img.get(mouseX, mouseY) == color(red(id), green(id), blue(id))) {
+      return true;
+    }
 
     return false;
   }

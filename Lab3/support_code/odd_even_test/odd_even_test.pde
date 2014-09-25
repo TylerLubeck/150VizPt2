@@ -51,10 +51,19 @@ void drawShape() {
 }
 
 boolean isectTest() {
-  
-  //TODO: Fill in this function
-  
-  return false;
+  int count = 0;
+  println("CHECK INTERSECT");
+  for (Point p : shape) {
+    if (isBetween(p.x, endP.x, mouseX) 
+        && isBetween(p.y, endP.y, mouseY)) {
+      count++;
+    }
+  }
+  println("GOT A COUNT OF: ", count);
+  if (count % 2 == 0) {
+    return false;
+  }
+  return true;
 }
 
 boolean isBetween(float val, float range1, float range2) {
