@@ -1,5 +1,6 @@
 import java.util.LinkedHashMap;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 class Parser {
     String[] columnNames;
@@ -7,7 +8,10 @@ class Parser {
     LinkedHashMap<String, HashMap<String, Float>> labelToAttrib;
     HashMap<String, Float> totalSums;
 
-    Parser( String filename) {
+    Parser (String filename) {
+        this(filename, false);
+    }
+    Parser( String filename, boolean debug) {
         Table t = loadTable(filename, "header");
         this.labelToAttrib = new LinkedHashMap<String, HashMap<String, Float>>();
         this.totalSums = new HashMap<String, Float>();
@@ -59,5 +63,21 @@ class Parser {
              */
             this.labelToAttrib.put(label, attribs);
         }
+        
+        if (debug) {
+            println("VALUES");
+            for ( Entry<String, HashMap<String, Float>> entry : this.labelToAttrib.entrySet() ) {
+                println(entry.getKey() + ": ");
+                for (Entry<String, Float> e : entry.getValue().entrySet() ) {
+                    println("\t" + e.getKey() + ": " + e.getValue());
+                }
+            }
+        
+            println("LABELS: ");
+            for (String s : this.columnNames) {
+                println(s + ": " + this.totalSums.get(s));
+            }
+        }
     }
+
 }
