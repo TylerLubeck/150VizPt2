@@ -4,10 +4,6 @@ class pieChart {
 
   pieChart(float diameter) {
     this.angles = new ArrayList<Float>(); 
-    for (int i = 0; i < testAngles.length; i++) {
-      this.angles.add(testAngles[i]);
-      println(this.angles.get(i)); 
-    } 
     this.diameter = diameter; 
   }
   
@@ -27,7 +23,3 @@ class pieChart {
   }
 
 }
-
-
-
-
