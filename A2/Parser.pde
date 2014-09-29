@@ -3,8 +3,8 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 class Parser {
-    String[] columnNames;
     String xTitle;
+    String[] columnNames;
     LinkedHashMap<String, HashMap<String, Float>> labelToAttrib;
     HashMap<String, Float> totalSums;
 
@@ -52,7 +52,7 @@ class Parser {
                  * total sum for any given column
                  */
                 if (this.totalSums.containsKey(keyName)) {
-                    this.totalSums.put(keyName, attribs.get(keyName) + value);
+                    this.totalSums.put(keyName, totalSums.get(keyName) + value);
                 } else {
                     this.totalSums.put(keyName, value);
                 }
@@ -92,4 +92,7 @@ class Parser {
         return this.totalSums;
     }
 
+    String getXTitle() {
+        return this.xTitle;
+    }
 }

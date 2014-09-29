@@ -12,21 +12,38 @@ class pieChart {
   }
   
   void addAngle(float ratio) {
+      println("ADDING ANGLE WITH RATIO: " + ratio);
      this.angles.add(ratio * 360); 
   }
   
   void render() {
       float lastAngle = 0; 
+      stroke(color(0));
       for (int i = 0; i < this.angles.size(); i++) {
-        float gray = map(i, 0, this.angles.size(), 100, 255);
-        fill(gray);
-        arc(width/2, height/2, diameter, diameter, lastAngle, 
-        lastAngle+radians(this.angles.get(i)));
+        //float gray = map(i, 0, this.angles.size(),0, 255);
+        //float c = color(random(0, 200), random(0, 200), random(0, 200));
+        //fill(c);
+        float lastThing = lastAngle + radians(this.angles.get(i));
+        arc(width/2, 
+             height/2, 
+             diameter, 
+             diameter, 
+             lastAngle, 
+             lastThing);
+        line(width/2, 
+             height/2, 
+             width/2 + diameter/2.0 * cos(diameter),
+             height/2 + diameter/2.0 * sin(diameter));
+        line(width/2,
+             height/2,
+             width/2 + diameter/2.0 * cos(lastThing),
+             height/2 + diameter/2.0 * sin(lastThing));
         lastAngle += radians(this.angles.get(i));
       }
   }
   
   void drawNextWedge() {
+    stroke(color(0));
     float gray = map(this.index, 0, this.angles.size(), 100, 255); 
     fill(gray);
     arc(width/2, height/2, diameter, diameter, this.lastAngle, 
