@@ -14,6 +14,7 @@ void setup() {
     labelToAttrib = p.getLabelToAttribMap();
     totalSums = p.getTotalSums();
     XAxis = p.getXTitle();
+
     /* Create a Bar Chart */
     /*
     axis = new XYAxis();
@@ -33,10 +34,7 @@ void setup() {
     pie = new pieChart(300.0); 
     for (int i = 1; i < 2; i++) {
         for(Entry<String, HashMap<String, Float>> e : labelToAttrib.entrySet()) {
-            String column = columnNames[i]; 
-            float upperVal = e.getValue().get(column);
-            float lowerVal = totalSums.get(column);
-            pie.addAngle(upperVal / lowerVal);
+            pie.addAngle(e.getValue().get(columnNames[i]) / totalSums.get(columnNames[i]));
         }
     }
 }
