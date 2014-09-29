@@ -80,4 +80,16 @@ class Parser {
         }
     }
 
+    String[] getColumnNames() {
+        return this.columnNames;
+    }
+
+    LinkedHashMap<String, HashMap<String, Float>> getLabelToAttribMap() {
+        return this.labelToAttrib;
+    }
+
+    HashMap<String, Float> getTotalSums() {
+        return this.totalSums;
+    }
+
 }
