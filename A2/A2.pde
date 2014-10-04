@@ -4,11 +4,12 @@ LinkedHashMap<String, HashMap<String, Float>> labelToAttrib;
 HashMap<String, Float> totalSums;
 String XAxis;
 BarGraph bar;
+LineGraph lineGraph;
 XYAxis axis;
 pieChart pie;
 
 void setup() {
-    size(400, 400);
+    size(600, 600);
     Parser p = new Parser(FILE_NAME, /*debug*/ true);
     columnNames = p.getColumnNames();
     labelToAttrib = p.getLabelToAttribMap();
@@ -16,19 +17,20 @@ void setup() {
     XAxis = p.getXTitle();
 
     /* Create a Bar Chart */
-    /*
-    axis = new XYAxis();
-    axis.setXLabel(XAxis);
-    axis.setYLabel(columnNames[1]);
-    axis.setXNumTicks(10);
-    axis.setYNumTicks(200);
-    bar = new BarGraph(axis);
+    bar = new BarGraph(600,600);
     for (int i = 1; i < 2; i++) {
         for(Entry<String, HashMap<String, Float>> e : labelToAttrib.entrySet()) {
             bar.addBar(e.getKey(), int(e.getValue().get(columnNames[i])));
         }
     }
-    */
+
+    /* Create a Line Graph */
+    lineGraph = new LineGraph(2.0,5.0);
+    for (int i = 1; i < 2; i++) {
+        for(Entry<String, HashMap<String, Float>> e : labelToAttrib.entrySet()) {
+            lineGraph.addPoint(e.getKey(), int(e.getValue().get(columnNames[i])));
+        }
+    }
 
     /* Create a Pie Chart */
     pie = new pieChart(300.0); 
@@ -40,6 +42,7 @@ void setup() {
 }
 
 void draw() {
-    // bar.render(); 
-    pie.render();
+    //bar.render(); 
+    //pie.render();
+    lineGraph.render();
 }

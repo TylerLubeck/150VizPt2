@@ -1,6 +1,6 @@
 class Bar{
   int value;
-  float xCoord, yCoord;
+  float xCoord, yCoord, pointX,pointY;
   float bWidth, bHeight;
   String label;
   color fill, stroke;
@@ -16,7 +16,9 @@ class Bar{
   }
   
   void SetGeometry( float xC, float yC, float w, float h){
-    xCoord = xC - w/2;
+    pointX = xC;
+    pointY = yC;
+    xCoord = pointX - w/2;
     yCoord = yC;
     bWidth = w;
     bHeight = h;
@@ -41,24 +43,23 @@ class Bar{
 
 
 class BarGraph{
-  XYAxis axis;
   ArrayList<Bar> bars;
   color fill, stroke;
+  float w, h;
+  float leftSpacing;
+  float rightSpacing;
+  float paddedHeight;
   
-  BarGraph(){
-    axis = new XYAxis();
+  BarGraph(float w, float h){
     bars = new ArrayList<Bar>();
     fill = color(155, 161, 163);
     stroke = color(216, 224, 227);
-  }
-  
-  BarGraph( XYAxis a) {
-    this();
-    setAxis(a);
-  }
-  
-  void setAxis( XYAxis a) {
-    axis = a;
+    this.w = w;
+    this.h = h;
+    //Need to make spacing dynamic
+    this.leftSpacing = 20;
+    this.rightSpacing = 20;
+    this.paddedHeight = height - 100;
   }
   
   void addBar( String lbl, int val){
@@ -66,22 +67,30 @@ class BarGraph{
     bars.add(b);
   }
   
-  void drawBars(){
-    //calculate each point's posx and posy based on val
+  void setGeometry(){
+    //calculate appropriate width/height and spacing for each bar
+    int numBars = bars.size();
+    float barSpacing = 5.0;
+    float totalSpacing = (numBars - 1) * barSpacing;
+    float availableWidth = width - totalSpacing - this.leftSpacing - this.rightSpacing;
+    float barWidth = availableWidth / numBars;
+    float yFactor = 2.0;
+    
+    //set up starting coords
+    float startPosX = this.leftSpacing;
+    
     for(int i=0; i< bars.size(); i++){
-      bars.get(i).SetGeometry(axis.getTickX(i),
-                              axis.getTickY(bars.get(i).value),
-                              14,
-                              bars.get(i).value * axis.yInterval);
+      float barHeight = bars.get(i).value * yFactor;
+      bars.get(i).SetGeometry(startPosX,
+                              paddedHeight - barHeight,
+                              barWidth,
+                              barHeight);
+      startPosX+=barWidth + barSpacing;
     }
   }
   
-  void updateAxis(){
-    axis.update();
-  }
-  
   void render(){
-    axis.render();
+    this.setGeometry();
     for (Bar b : bars) {
       b.render();
     }
