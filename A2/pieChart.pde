@@ -1,5 +1,6 @@
 class pieChart {
   private ArrayList<Float> angles; 
+  //private ArrayList<color> colors;
   private float diameter; 
   private float lastAngle; 
   private int index; 
@@ -12,8 +13,9 @@ class pieChart {
   }
   
   void addAngle(float ratio) {
-      println("ADDING ANGLE WITH RATIO: " + ratio);
+     println("ADDING ANGLE WITH RATIO * 360 = " + (ratio*360));
      this.angles.add(ratio * 360); 
+     //this.colors.add(
   }
   
   void render() {
@@ -30,10 +32,6 @@ class pieChart {
              diameter, 
              lastAngle, 
              lastThing);
-        line(width/2, 
-             height/2, 
-             width/2 + diameter/2.0 * cos(diameter),
-             height/2 + diameter/2.0 * sin(diameter));
         line(width/2,
              height/2,
              width/2 + diameter/2.0 * cos(lastThing),

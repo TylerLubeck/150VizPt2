@@ -1,4 +1,4 @@
-final String FILE_NAME = "Dataset2.csv";
+final String FILE_NAME = "Dataset1.csv";
 String[] columnNames;
 LinkedHashMap<String, HashMap<String, Float>> labelToAttrib;
 HashMap<String, Float> totalSums;
@@ -14,6 +14,7 @@ void setup() {
     columnNames = p.getColumnNames();
     labelToAttrib = p.getLabelToAttribMap();
     totalSums = p.getTotalSums();
+    println("total sums is " + totalSums.get(columnNames[1]));
     XAxis = p.getXTitle();
 
     /* Create a Bar Chart */
@@ -43,6 +44,6 @@ void setup() {
 
 void draw() {
     //bar.render(); 
-    //pie.render();
-    lineGraph.render();
+    pie.render();
+    //lineGraph.render();
 }
