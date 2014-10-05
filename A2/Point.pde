@@ -21,9 +21,9 @@ class Point{
     setCoord( posx, posy );
   }
   
-  void setCoord( int posx, int posy){
-    pointPosX = float(posx);
-    pointPosY = float(posy);
+  void setCoord( float posx, float posy){
+    pointPosX = posx;
+    pointPosY = posy;
     circle.setPos( pointPosX,pointPosY);
     circle.setRadius(5.0);
   }
