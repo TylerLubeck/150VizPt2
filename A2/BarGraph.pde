@@ -60,7 +60,7 @@ class BarGraph {
     this.h = h;
     //Need to make spacing dynamic
     this.leftSpacing = 20;
-    this.rightSpacing = 20;
+    this.rightSpacing = 20; 
     this.paddedHeight = height - 100;
     this.sumBarValues = 0;
   }
@@ -88,8 +88,8 @@ class BarGraph {
     int numBars = bars.size();
     float barSpacing = 5.0;
     float totalSpacing = (numBars + 1) * barSpacing;
-    float availableWidth = this.w - totalSpacing - this.leftSpacing - this.rightSpacing;
-    println("available Width is " + availableWidth);
+    float availableWidth = (width - width/4) - totalSpacing - this.leftSpacing - this.rightSpacing;
+    println("bar width is " + availableWidth/numBars);
     float barWidth = availableWidth / numBars;
     float yFactor = 2.0;
 
@@ -107,6 +107,7 @@ class BarGraph {
   }
 
   void render() {
+    setGeometry(); 
     for (Bar b : bars) {
       b.render();
     }

@@ -12,7 +12,7 @@ Button[] buttons;
 
 void setup() {
     frame.setResizable(true); 
-    size(800, 800);
+    size(700, 700);
     currentGraph = 0; 
     buttons = new Button[3]; 
     Parser p = new Parser(FILE_NAME, /*debug*/ true);
@@ -22,7 +22,7 @@ void setup() {
     XAxis = p.getXTitle();
 
     /* Create a Bar Chart */
-    barGraph = new BarGraph(3*width/4, height);
+    barGraph = new BarGraph(width, height);
     for (int i = 1; i < 2; i++) {
         for(Entry<String, HashMap<String, Float>> e : labelToAttrib.entrySet()) {
             barGraph.addBar(e.getKey(), int(e.getValue().get(columnNames[i])));
@@ -32,7 +32,7 @@ void setup() {
 
     /* Create a Line Graph */
     //lineGraph = new LineGraph(2.0,5.0);
-    lineGraph = new LineGraph(600, 600); 
+    lineGraph = new LineGraph(width, height); 
     for (int i = 1; i < 2; i++) {
         for(Entry<String, HashMap<String, Float>> e : labelToAttrib.entrySet()) {
             lineGraph.addPoint(e.getKey(), int(e.getValue().get(columnNames[i])));
