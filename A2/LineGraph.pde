@@ -24,30 +24,11 @@ class LineGraph{
     Point p = new Point(lbl,val);
     points.add(p);
   }
-  
-  void findMax() {
-    this.max = 0; 
-    for (Point p : this.points) {
-      if (p.value > this.max) {
-        this.max = p.value;
-      }
-    }
-  }
-  void findMin() {
-    this.min = Float.POSITIVE_INFINITY; 
-    for (Point p : this.points) {
-      if (p.value < this.min) {
-        this.min = p.value; 
-      }
-    }
-  }
 
-  void setGeometry() {
-    findMax();
-    findMin();  
+  void setGeometry() { 
     float numPoints = points.size(); 
     float totalSpacing = numPoints - 1;
-    float xInterval = (width - totalSpacing - this.rightSpacing) / numPoints; 
+    float xInterval = (width - this.leftSpacing - width/4) / numPoints; 
     float yInterval = 2.0; 
     for (int i = 0; i < numPoints; i++) {
       points.get(i).setCoord(xInterval + (i * xInterval), points.get(i).value * yInterval); 
@@ -55,7 +36,9 @@ class LineGraph{
   }
   
   void connectTheDots(){
-    for(int i = 0; i < points.size() - 1; i++) {                     fill(color(0));
+    for(int i = 0; i < points.size() - 1; i++) {                     
+      fill(color(0));
+      strokeWeight(2); 
       line(points.get(i).getPosX(), points.get(i).getPosY(), points.get(i+1).getPosX(), points.get(i+1).getPosY());
     }
   }
