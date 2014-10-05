@@ -95,8 +95,10 @@ class LineGraph{
         }
     }
 
-    void moveTheSpots(float stepVal) {
+    void moveTheSpots(float stepVal, pieChart pie) {
+        for (float angle : pie.angles) {
             
+        }
     }
 
     void reset() {
