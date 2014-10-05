@@ -4,6 +4,7 @@ class Bar {
   float bWidth, bHeight;
   String label;
   color fill, stroke;
+  
   Bar() {
     value = 0;
     label = "";
@@ -51,6 +52,7 @@ class BarGraph {
   float paddedHeight;
   float pad;
   boolean[] barIsAnimating;
+  float barWidth; 
 
   BarGraph(float w, float h) {
     bars = new ArrayList<Bar>();
@@ -60,7 +62,7 @@ class BarGraph {
     this.h = h;
     //Need to make spacing dynamic
     this.leftSpacing = 20;
-    this.rightSpacing = 20;
+    this.rightSpacing = 20; 
     this.paddedHeight = height - 100;
     this.sumBarValues = 0;
   }
@@ -88,9 +90,9 @@ class BarGraph {
     int numBars = bars.size();
     float barSpacing = 5.0;
     float totalSpacing = (numBars + 1) * barSpacing;
-    float availableWidth = this.w - totalSpacing - this.leftSpacing - this.rightSpacing;
-    println("available Width is " + availableWidth);
-    float barWidth = availableWidth / numBars;
+    float availableWidth = (width - width/4) - totalSpacing - this.leftSpacing - this.rightSpacing;
+    println("bar width is " + availableWidth/numBars);
+    this.barWidth = availableWidth / numBars;
     float yFactor = 2.0;
 
     //set up starting coords
@@ -100,13 +102,14 @@ class BarGraph {
       float barHeight = bars.get(i).value * yFactor;
       bars.get(i).SetGeometry(startPosX, 
       paddedHeight - barHeight, 
-      barWidth, 
+      this.barWidth, 
       barHeight);
-      startPosX+=barWidth + barSpacing;
+      startPosX+=this.barWidth + barSpacing;
     }
   }
 
   void render() {
+    setGeometry(); 
     for (Bar b : bars) {
       b.render();
     }
