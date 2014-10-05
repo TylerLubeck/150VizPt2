@@ -13,6 +13,8 @@ Button[] buttons;
 Integer PIE = 0;
 int LINE = 1;
 int BAR = 2; 
+boolean currentlyAnimating = false;
+float lineToBarStepAmount = 0.0;
 
 void setup() {
   frame.setResizable(true); 
@@ -82,8 +84,16 @@ void transitionBetweenGraphs() {
       // transition line to bar
       currentGraph = 2;
     } else if (transitionGraph == PIE) {
-      //transition line to pie
-      currentGraph = 0;
+        if ( lineToBarStepAmount < 1.0 ) {
+          lineGraph.disconnectTheDots(lineToBarStepAmount);
+          lineToBarStepAmount += 0.012;
+          println("NEW STEP: " + lineToBarStepAmount);
+        } else {
+            println("RESETTING");
+          lineToBarStepAmount = 0.0;
+          lineGraph.reset();
+          currentGraph = 0;
+        }
     }
     break;
   case 2:
@@ -126,5 +136,3 @@ void mousePressed() {
     }
   }
 }
-
-

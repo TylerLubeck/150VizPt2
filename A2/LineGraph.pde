@@ -1,7 +1,7 @@
 class LineGraph{
     //XYAxis axis;
     ArrayList<Point> points;
-    ArrayList<Point> currentPoints;
+    ArrayList<Point> backupPoints;
     float w, h;
     float leftSpacing;
     float rightSpacing;
@@ -9,17 +9,18 @@ class LineGraph{
     float min, max; 
     ArrayList<Boolean> isAnimating;
     float xDelta, yDelta;
+    boolean firstRender = true;
 
     LineGraph(float w, float h) {
-        this.xDelta = 0.5;
-        this.yDelta = 0.5;
+        this.xDelta = 12.5;
+        this.yDelta = 12.5;
         this.w = w;
         this.h = h - 100;
         this.leftSpacing = 40;
         this.rightSpacing = width/4;
         this.paddedHeight = height - 100;
         this.points = new ArrayList<Point>(); 
-        this.currentPoints = new ArrayList<Point>(); 
+        this.backupPoints = new ArrayList<Point>(); 
         this.isAnimating = new ArrayList<Boolean>();
     } 
 
@@ -29,8 +30,9 @@ class LineGraph{
 
     void addPoint( String lbl, int val){
         Point p = new Point(lbl,val);
+        Point p2 = new Point(lbl, val);
         points.add(p);
-        this.currentPoints.add(p);
+        this.backupPoints.add(p2);
         this.isAnimating.add(false);
     }
 
@@ -39,19 +41,26 @@ class LineGraph{
         float totalSpacing = numPoints - 1;
         float xInterval = (width - this.leftSpacing - width/4) / numPoints; 
         float yInterval = 2.0; 
-        for (int i = 0; i < numPoints; i++) {
-            points.get(i).setCoord(xInterval + (i * xInterval), points.get(i).value * yInterval); 
+        if (this.firstRender) {
+            println("FIRST RENDER");
+            for (int i = 0; i < numPoints; i++) {
+                points.get(i).setCoord(xInterval + (i * xInterval), 
+                                       points.get(i).value * yInterval); 
+                backupPoints.get(i).setCoord(xInterval + (i * xInterval), 
+                                       points.get(i).value * yInterval); 
+            }
+            this.firstRender = false;
         }
     }
 
     void connectTheDots(){
-        for(int i = 0; i < points.size() - 1; i++) {                     
+        for(int i = 0; i < this.points.size() - 1; i++) {                     
             fill(color(0));
             strokeWeight(2); 
-            line(points.get(i).getPosX(), 
-                    points.get(i).getPosY(), 
-                    points.get(i+1).getPosX(), 
-                    points.get(i+1).getPosY());
+            line(this.points.get(i).getPosX(), 
+                    this.points.get(i).getPosY(), 
+                    this.backupPoints.get(i+1).getPosX(), 
+                    this.backupPoints.get(i+1).getPosY());
         }
     }
 
@@ -66,32 +75,37 @@ class LineGraph{
         }
     }
 
-    boolean disconnectTheDots() {
-        fill(color(0));
+    void disconnectTheDots(float stepVal) {
+        stroke(color(255, 0, 0));
+        fill(color(255, 0, 0));
         strokeWeight(2); 
-        for (int i = 0; i < this.isAnimating.size() - 1; i++) {
-            if (this.isAnimating.get(i)) {
-                Point thisPoint = this.points.get(i);
-                Point thatPoint = this.points.get(i+1);
-                float xMod = this.xDelta, yMod;
-                float thisX = thisPoint.getPosX(), thisY = thisPoint.getPosY();
-                float thatX = thatPoint.getPosX(), thatY = thatPoint.getPosY();
-                yMod = (thisY < thatY) ? -this.yDelta : this.yDelta;
-                thisPoint.change(xMod, yMod);
-                if (thisX > thatX) {
-                    this.isAnimating.set(i, false);
-                }
-            }
+        for (int i = 0; i < this.points.size() - 1; i++) {
+            Point thisPoint = this.points.get(i);
+            Point thisPointBack = this.backupPoints.get(i);
+            Point thatPoint = this.backupPoints.get(i+1);
+            float newX = lerp(thisPointBack.getPosX(), thatPoint.getPosX(), stepVal);
+            float newY = lerp(thisPointBack.getPosY(), thatPoint.getPosY(), stepVal); 
+            this.points.get(i).change(newX, newY);
+            thisPoint.print();
+            thatPoint.print();
+            line(newX, 
+                 newY-5, 
+                 thatPoint.getPosX(), 
+                 thatPoint.getPosY()-5);
         }
+    }
 
-        //Return if we're done or not
-        for(int i = 0; i < this.isAnimating.size() - 1; i++) {
-            //Return false if any point is still animating
-            if (this.isAnimating.get(i)) return false;
+    void moveTheSpots(float stepVal) {
+            
+    }
+
+    void reset() {
+        this.points.clear();
+        for (Point p: this.backupPoints) {
+            this.points.add(new Point(p));
         }
-        //If all points are false, then everything is done animating
-        //TODO: Set the points back to original?
-        return true;
+        this.startAnimating();
+        this.firstRender = true;
     }
 
     void render(){

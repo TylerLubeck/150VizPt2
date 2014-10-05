@@ -9,6 +9,14 @@ class Point{
     value = 0;
     label = "";
   }
+
+  Point(Point p) {
+    circle = new MyCircle(p.circle);
+    value = p.value;
+    label = p.label;
+    pointPosX = p.pointPosX;
+    pointPosY = p.pointPosY;
+  }
   
   Point( String l, int val){
     this();
@@ -47,9 +55,15 @@ class Point{
   float getPosX(){return pointPosX;}
   float getPosY(){return pointPosY;}
 
-  void change(float xDelta, float yDelta) {
+  void change(float newX, float newY) {
     // pointPosX = this.pointPosX - xDelta;
     // pointPosY = this.pointPosY - yDelta;
-    this.setCoord(this.pointPosX - xDelta, this.pointPosY - yDelta);
+    this.pointPosX = newX;
+    this.pointPosY = newY;
+    //this.setCoord(newX, newY);
+  }
+
+  void print() {
+    println("Point at (" + this.pointPosX + ", " + this.pointPosY + ")");
   }
 }
