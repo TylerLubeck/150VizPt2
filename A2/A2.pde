@@ -108,7 +108,7 @@ void mousePressed() {
         case 1: // user clicked line graph 
           if (currentGraph == PIE) {
             //animate  pie to line
-          } else if (currentGraph == LINE) {
+          } else if (currentGraph == BAR) {
             //animate bar to line
           }
           currentGraph = 1; 
