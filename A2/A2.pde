@@ -12,12 +12,10 @@ pieChart pie;
 void setup() {
     frame.setResizable(true); 
     size(800, 800);
-    background(100, 200, 200); 
     Parser p = new Parser(FILE_NAME, /*debug*/ true);
     columnNames = p.getColumnNames();
     labelToAttrib = p.getLabelToAttribMap();
     totalSums = p.getTotalSums();
-    println("total sums is " + totalSums.get(columnNames[1]));
     XAxis = p.getXTitle();
 
     /* Create a Bar Chart */
@@ -55,6 +53,7 @@ void draw() {
     //pie.render();
     lineGraph.render();
     drawButtonContainer(); 
+    
 }
 
 void drawButtonContainer() {
@@ -62,7 +61,8 @@ void drawButtonContainer() {
   Button lineButton = new Button(width - width/4, height, width/4, 0, "Line Graph"); 
   Button barButton = new Button(width - width/4, height, width/4, 0, "Bar Graph"); 
   fill(255);
-  rect(width - width/4, 0, width/4, height, 7); 
-  pieButton.render(); 
+  //rect(width - width/4, 0, width/4, height, 7); 
+  //pieButton.render(); 
 }
+
 

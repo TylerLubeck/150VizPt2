@@ -6,22 +6,12 @@ class LineGraph{
   float rightSpacing;
   float paddedHeight;
   float min, max; 
-  
-//  LineGraph(){
-//    axis = new XYAxis();
-//    points = new ArrayList<Point>();
-//  }
-//  
-//  LineGraph( XYAxis a) {
-//    this();
-//    setAxis(a);
-//  }
-   
+     
   LineGraph(float w, float h) {
     this.w = w;
     this.h = h - 100;
-    this.leftSpacing = 20;
-    this.rightSpacing = 50;
+    this.leftSpacing = 40;
+    this.rightSpacing = width/4;
     this.paddedHeight = height - 100;
     this.points = new ArrayList<Point>(); 
   } 
@@ -55,26 +45,21 @@ class LineGraph{
   void setGeometry() {
     findMax();
     findMin();  
-    float numPoints = this.points.size(); 
-    float totalSpacing = (numPoints - 1) * 5.0;
-    float xInterval = (this.w  - totalSpacing) / numPoints; 
+    float numPoints = points.size(); 
+    float totalSpacing = numPoints - 1;
+    float xInterval = (width - totalSpacing - this.rightSpacing) / numPoints; 
     float yInterval = 2.0; 
-    for (int i = 0; i < this.points.size(); i++) {
-      this.points.get(i).setCoord(xInterval + (i * xInterval), this.points.get(i).value * yInterval); 
+    for (int i = 0; i < numPoints; i++) {
+      points.get(i).setCoord(xInterval + (i * xInterval), points.get(i).value * yInterval); 
     }
   }
   
   void connectTheDots(){
-    for(int i=0; i< points.size() - 1; i++){
-      stroke( color(0,0,0) );
-      line(points.get(i).getPosX(),points.get(i).getPosY(), points.get(i+1).getPosX(), points.get(i+1).getPosY());
+    for(int i = 0; i < points.size() - 1; i++) {                     fill(color(0));
+      line(points.get(i).getPosX(), points.get(i).getPosY(), points.get(i+1).getPosX(), points.get(i+1).getPosY());
     }
   }
-  
-  void updateAxis(){
-    axis.update();
-  }
-  
+    
   void render(){
     setGeometry(); 
     for (Point p : points) {
@@ -82,7 +67,6 @@ class LineGraph{
     }
     connectTheDots(); 
   }
-  
   
   
 }
