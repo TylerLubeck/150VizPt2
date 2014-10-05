@@ -8,8 +8,11 @@ LineGraph lineGraph;
 XYAxis axis;
 pieChart pie;
 
+
 void setup() {
-    size(600, 600);
+    frame.setResizable(true); 
+    size(800, 800);
+    background(100, 200, 200); 
     Parser p = new Parser(FILE_NAME, /*debug*/ true);
     columnNames = p.getColumnNames();
     labelToAttrib = p.getLabelToAttribMap();
@@ -40,10 +43,27 @@ void setup() {
             pie.addAngle(e.getValue().get(columnNames[i]) / totalSums.get(columnNames[i]));
         }
     }
+    
+    /* Create Buttons */ 
+    //Button[] buttons = new Button[3]; 
+
 }
 
 void draw() {
     //bar.render(); 
     //pie.render();
     lineGraph.render();
+    drawButtonContainer(); 
+    
 }
+
+void drawButtonContainer() {
+  Button pieButton = new Button(width - width/4, height, width/4, 0, "Pie Chart"); 
+  Button lineButton = new Button(width - width/4, height, width/4, 0, "Line Graph"); 
+  Button barButton = new Button(width - width/4, height, width/4, 0, "Bar Graph"); 
+  fill(255);
+  rect(width - width/4, 0, width/4, height, 7); 
+  pieButton.render(); 
+}
+
+
