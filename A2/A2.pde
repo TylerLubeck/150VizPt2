@@ -22,12 +22,13 @@ void setup() {
     XAxis = p.getXTitle();
 
     /* Create a Bar Chart */
-    barGraph = new BarGraph(width, height);
+    barGraph = new BarGraph(3*width/4, height);
     for (int i = 1; i < 2; i++) {
         for(Entry<String, HashMap<String, Float>> e : labelToAttrib.entrySet()) {
             barGraph.addBar(e.getKey(), int(e.getValue().get(columnNames[i])));
         }
     }
+    barGraph.doneAddingBars();
 
     /* Create a Line Graph */
     //lineGraph = new LineGraph(2.0,5.0);
