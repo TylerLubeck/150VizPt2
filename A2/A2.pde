@@ -17,6 +17,7 @@ void setup() {
     columnNames = p.getColumnNames();
     labelToAttrib = p.getLabelToAttribMap();
     totalSums = p.getTotalSums();
+    println("total sums is " + totalSums.get(columnNames[1]));
     XAxis = p.getXTitle();
 
     /* Create a Bar Chart */
@@ -54,7 +55,6 @@ void draw() {
     //pie.render();
     lineGraph.render();
     drawButtonContainer(); 
-    
 }
 
 void drawButtonContainer() {
@@ -65,5 +65,4 @@ void drawButtonContainer() {
   rect(width - width/4, 0, width/4, height, 7); 
   pieButton.render(); 
 }
-
 

@@ -27,6 +27,7 @@ class Parser {
         this.xTitle = this.columnNames[0];
 
         for (TableRow row : t.rows()) {
+            
             attribs = new HashMap<String, Float>();
             /* Get the label of the row - "Dog" in our example */
             label = row.getString(xTitle);
