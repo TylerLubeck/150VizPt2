@@ -42,6 +42,15 @@ class LineGraph{
       line(points.get(i).getPosX(), points.get(i).getPosY(), points.get(i+1).getPosX(), points.get(i+1).getPosY());
     }
   }
+  
+//  void animateToBar(float barWidth) {
+//    // remove lines
+//    // draw bars.. 
+//    float pxShrink = 2; 
+//    float barWidth = 
+//    
+//  }
+  
     
   void render(){
     setGeometry(); 

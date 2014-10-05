@@ -8,12 +8,15 @@ LineGraph lineGraph;
 XYAxis axis;
 pieChart pie;
 int currentGraph;
-Button[] buttons; 
+Button[] buttons;
+Integer PIE = 0;
+int LINE = 1;
+int BAR = 2; 
 
 void setup() {
     frame.setResizable(true); 
     size(700, 700);
-    currentGraph = 0; 
+    currentGraph = 1; 
     buttons = new Button[3]; 
     Parser p = new Parser(FILE_NAME, /*debug*/ true);
     columnNames = p.getColumnNames();
@@ -46,9 +49,9 @@ void setup() {
             pie.addAngle(e.getValue().get(columnNames[i]) / totalSums.get(columnNames[i]));
         }
     }
-   
-  
 }
+
+
 
 void draw() {
     background(255); 
@@ -61,7 +64,8 @@ void draw() {
         pie.render();     
         break;
       case 1: 
-        lineGraph.render(); 
+        lineGraph.render();
+        //lineGraph.animateToBar(); 
         break;
       case 2:
         barGraph.render();
@@ -75,6 +79,7 @@ void changeColorOnHover(Button button) {
             button.render(); 
    }
 }
+  
   
 void drawButtonContainer() {
   int b_width = width - width/4; 
@@ -92,16 +97,28 @@ void mousePressed() {
   for (int i = 0; i < 3; i++) {
     if (buttons[i].intersect(mouseX, mouseY)) {
       switch (i) {
-        case 0:
-          //transition(buttons[currentGraph], pieChart)
+        case 0:   // user clicked pie chart             
+          if (currentGraph == LINE) {
+            //animate line to pie
+          } else if (currentGraph == BAR) {
+            //animate bar to pie
+          }
           currentGraph = 0; 
           break; 
-        case 1:
-          //transition(buttons[currentGraph], lineGraph)
+        case 1: // user clicked line graph 
+          if (currentGraph == PIE) {
+            //animate  pie to line
+          } else if (currentGraph == LINE) {
+            //animate bar to line
+          }
           currentGraph = 1; 
           break; 
-        case 2: 
-          //transition(buttons[currentGraph], barChart) 
+        case 2: // user clicked bar graph. 
+          if (currentGraph == PIE) {
+            //animate pie to bar
+          } else if (currentGraph == LINE) {
+            //animate line to bar 
+          }
           currentGraph = 2; 
           break;  
       }

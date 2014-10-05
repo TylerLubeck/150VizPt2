@@ -4,6 +4,7 @@ class Bar {
   float bWidth, bHeight;
   String label;
   color fill, stroke;
+  
   Bar() {
     value = 0;
     label = "";
@@ -51,6 +52,7 @@ class BarGraph {
   float paddedHeight;
   float pad;
   boolean[] barIsAnimating;
+  float barWidth; 
 
   BarGraph(float w, float h) {
     bars = new ArrayList<Bar>();
@@ -90,7 +92,7 @@ class BarGraph {
     float totalSpacing = (numBars + 1) * barSpacing;
     float availableWidth = (width - width/4) - totalSpacing - this.leftSpacing - this.rightSpacing;
     println("bar width is " + availableWidth/numBars);
-    float barWidth = availableWidth / numBars;
+    this.barWidth = availableWidth / numBars;
     float yFactor = 2.0;
 
     //set up starting coords
@@ -100,9 +102,9 @@ class BarGraph {
       float barHeight = bars.get(i).value * yFactor;
       bars.get(i).SetGeometry(startPosX, 
       paddedHeight - barHeight, 
-      barWidth, 
+      this.barWidth, 
       barHeight);
-      startPosX+=barWidth + barSpacing;
+      startPosX+=this.barWidth + barSpacing;
     }
   }
 
