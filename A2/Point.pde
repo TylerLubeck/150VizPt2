@@ -56,12 +56,13 @@ class Point{
   float getPosX(){return pointPosX;}
   float getPosY(){return pointPosY;}
 
-  void change(float newX, float newY) {
+  Point change(float newX, float newY) {
     // pointPosX = this.pointPosX - xDelta;
     // pointPosY = this.pointPosY - yDelta;
     this.pointPosX = newX;
     this.pointPosY = newY;
     //this.setCoord(newX, newY);
+    return this;
   }
 
   void print() {

@@ -1,4 +1,4 @@
-final String FILE_NAME = "Dataset1.csv";
+final String FILE_NAME = "Dataset2.csv";
 String[] columnNames;
 LinkedHashMap<String, HashMap<String, Float>> labelToAttrib;
 HashMap<String, Float> totalSums;
@@ -84,7 +84,6 @@ void transitionBetweenGraphs() {
         background(255);
         drawButtonContainer();
         float localStepTwo = pieToLineStepAmount % 1.0;
-        println(localStepTwo);
         pie.makeLine(2.0, lineGraph); //Keep the dots on the screen
         lineGraph.connectTheDots(localStepTwo); 
         pieToLineStepAmount += 0.012;
@@ -106,14 +105,26 @@ void transitionBetweenGraphs() {
       // transition line to bar
       currentGraph = 2;
     } else if (transitionGraph == PIE) {
+        // transition line to pie
         if ( lineToPieStepAmount < 1.0 ) {
           lineGraph.disconnectTheDots(lineToPieStepAmount);
-          lineToPieStepAmount += 0.212; //TODO: Switch back to 0.012
+          lineToPieStepAmount += 0.012; //TODO: Switch back to 0.012
         } else if (lineToPieStepAmount < 2.0 ) {
-            float localStep = lineToPieStepAmount / 2.0;
-            lineGraph.moveTheSpots(localStep, pie); 
-            lineToPieStepAmount += 1.0; //TODO: Switch back to 0.012
+           background(255);
+           drawButtonContainer();
+           float lineToPieLocal = lineToPieStepAmount / 2.0;
+           lineGraph.moveDotsTo(pie.startX, pie.startY, lineToPieLocal);
+           lineToPieStepAmount += 0.012;
+        } else if (lineToPieStepAmount < 3.0) {
+           background(255);
+           drawButtonContainer();
+           float lineToPieLocal = lineToPieStepAmount / 3.0;
+           pie.grow(lineToPieLocal);
+           lineToPieStepAmount += 0.012; //TODO: Switch back to 0.012
+           pie.render();
         } else {
+          background(255);
+          drawButtonContainer();
           lineToPieStepAmount = 0.0;
           lineGraph.reset();
           currentGraph = 0;

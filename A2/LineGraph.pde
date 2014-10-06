@@ -42,7 +42,6 @@ class LineGraph{
         float xInterval = (width - this.leftSpacing - width/4) / numPoints; 
         float yInterval = 2.0; 
         if (this.firstRender) {
-            println("FIRST RENDER");
             for (int i = 0; i < numPoints; i++) {
                 points.get(i).setCoord(xInterval + (i * xInterval), 
                                        points.get(i).value * yInterval); 
@@ -103,8 +102,6 @@ class LineGraph{
             float newX = lerp(thisPointBack.getPosX(), thatPoint.getPosX(), stepVal);
             float newY = lerp(thisPointBack.getPosY(), thatPoint.getPosY(), stepVal); 
             this.points.get(i).change(newX, newY);
-            thisPoint.print();
-            thatPoint.print();
             line(newX, 
                  newY-5, 
                  thatPoint.getPosX(), 
@@ -112,7 +109,14 @@ class LineGraph{
         }
     }
 
-    void moveTheSpots(float stepVal, pieChart pie) {
+    void moveDotsTo(float destX, float destY, float stepVal) {
+        for (int i = 0; i < this.points.size(); i++) {
+            float currX = lerp(this.backupPoints.get(i).getPosX(), destX, stepVal);
+            float currY = lerp(this.backupPoints.get(i).getPosY(), destY, stepVal);
+            this.points.get(i).setCoord(currX, currY);
+            this.points.get(i).render();
+        }
+
 
     }
 

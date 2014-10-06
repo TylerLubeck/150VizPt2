@@ -8,6 +8,7 @@ class pieChart {
   private float widthDivider;
   ArrayList<Point> pointsToMove;
   private float endX, endY;
+  private float startX, startY;
  
   pieChart(float diameter) {
     this.angles = new ArrayList<Float>(); 
@@ -20,12 +21,17 @@ class pieChart {
     this.widthDivider = 1.0;
     this.endX = 0.0;
     this.endY = 0.0;
+    this.startX = 0.0;
+    this.startY = 0.0;
   }
   
   void addAngle(float ratio) {
+     float w = width - this.rightSpacing; 
      this.angles.add(ratio * 360); 
      this.backupAngles.add(ratio * 360); 
      this.pointsToMove.add(new Point());
+     this.startX = w/2 + diameter/2.0;
+     this.startY = height/2 + diameter/4.0;
   }
   
   void render() {
@@ -34,7 +40,6 @@ class pieChart {
       strokeWeight(2); 
       fill(255); 
       float w = width - this.rightSpacing; 
-      //w *= this.widthDivider;
       for (int i = 0; i < this.angles.size(); i++) {
         float nextAngle = lastAngle + radians(this.angles.get(i));
         arc(w/2, 
@@ -67,6 +72,18 @@ class pieChart {
         }
         this.endX = w/2 + diameter/4.0;
         this.endY = height/2;
+  }
+
+  void grow(float stepVal) {
+       // this.widthDivider *= stepVal;
+        for(int i = 0; i < this.angles.size(); i++) {
+            this.angles.set(i, this.backupAngles.get(i) * stepVal);
+        }
+        float w = width - this.rightSpacing;
+        for (int i = 0; i < this.pointsToMove.size(); i++) {
+            pointsToMove.get(i).setCoord(w/2 + diameter/2.0 * cos(0),
+                                         height/2 + diameter/2.0 * sin(0));
+        }
   }
 
   void makeLine(float stepVal, LineGraph lineGraph) {
