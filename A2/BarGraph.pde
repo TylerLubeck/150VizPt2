@@ -137,11 +137,10 @@ class BarGraph {
     if (barsAreDoneAnimating()) {
       setBarsAreAnimatingToFalse();
       //Step 2: Move all the bars to one stacked column in middle of screen
-      moveToMiddle();
+      stackBars();
     }
-    if(barsAreDoneAnimating()){
+    if (barsAreDoneAnimating()) {
       setBarsAreAnimatingToFalse();
-      
     }
   }
 
@@ -160,28 +159,39 @@ class BarGraph {
     }
   }
 
-  void moveToMiddle() {
-    
-    //casting everything to ints to avoid infinite loop of trying to become center
-    //i.e. bar's xPos is 10.7px and middleX is 10px
-    
-    int middlePosX = width / 2 - (int)(bars.get(0).bWidth / 2);
-    float pxMove = 1;
-    for (int i=0; i<bars.size (); i++) {
-      int barPosX = (int)bars.get(i).xCoord;
-      //if left of middleX, move right
-      if (barPosX < middlePosX) {
-        bars.get(i).xCoord += pxMove;
-        this.barIsAnimating[i]=true;
-      } else if (barPosX > middlePosX) {//if right of middleX, move left
-        bars.get(i).xCoord -= pxMove;
-        this.barIsAnimating[i]=true;
-      } else{
-        this.barIsAnimating[i]=false;
+  void stackBars() {
+    //find middle bar
+    int iMiddle = bars.size()/2;
+    //move to middle
+    moveToMiddle(iMiddle);
+    //iterate outward in both directions and move to middle
+    //might have to catch case with 2 bars
+    for (int i=0; i< bars.size()/2; i++) {
+      int iRight = iMiddle + 1;
+      int iLeft = iMiddle -1;
+      //only increment when current is done
+      if (!barIsAnimating[iRight]) {
+        moveToMiddle(iRight);
       }
     }
   }
-  
-  
+
+  void moveToMiddle(int i) {
+    //casting everything to ints to avoid infinite loop of trying to become center
+    //i.e. bar's xPos is 10.7px and middleX is 10px
+    int middlePosX = Math.round(this.w / 2) - Math.round(bars.get(0).bWidth / 2);
+    float pxMove = 1;
+    int barPosX = (int)bars.get(i).xCoord;
+    //if left of middleX, move right
+    if (barPosX < middlePosX) {
+      bars.get(i).xCoord += pxMove;
+      this.barIsAnimating[i]=true;
+    } else if (barPosX > middlePosX) {//if right of middleX, move left
+      bars.get(i).xCoord -= pxMove;
+      this.barIsAnimating[i]=true;
+    } else {
+      this.barIsAnimating[i]=false;
+    }
+  }
 }
 
