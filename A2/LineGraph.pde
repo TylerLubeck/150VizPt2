@@ -81,6 +81,24 @@ class LineGraph{
         }
     }
 
+    /* bit of a cop out, but should look better with some coloring tweaks */ 
+    void disconnectTheDots(float stepVal) {
+       for (int i = 0; i < this.points.size() - 1; i++) {
+            fill(color(255));
+            stroke(color(255)); 
+            strokeWeight(2);
+            float newX = lerp(this.backupPoints.get(i).getPosX(),
+                              this.backupPoints.get(i+1).getPosX(),
+                              stepVal);
+            float newY = lerp(this.backupPoints.get(i).getPosY(),
+                              this.backupPoints.get(i+1).getPosY(),
+                              stepVal);
+            line(this.backupPoints.get(i).getPosX(),
+                 this.backupPoints.get(i).getPosY(),
+                 newX,
+                 newY);
+        }
+    }
     boolean isSafeToAnimate() {
         for (boolean b: this.isAnimating) if (b) return false;
         return true;
@@ -92,7 +110,8 @@ class LineGraph{
         }
     }
 
-    void disconnectTheDots(float stepVal) {
+    /* old disconnect the dots */ 
+    void disconnectTheDotsTest(float stepVal) {
         stroke(color(255, 0, 0));
         fill(color(255, 0, 0));
         strokeWeight(2); 
@@ -131,5 +150,12 @@ class LineGraph{
             p.render();
         }
         connectTheDots(); 
+    }
+    
+    void drawPoints() {
+      setGeometry();
+      for (Point p: points) {
+          p.render();
+      }
     }
 }

@@ -77,7 +77,7 @@ class BarGraph {
     for (Bar b : bars) {
       this.sumBarValues += b.value;
     }
-    println("sum of bar values is", this.sumBarValues);
+    //println("sum of bar values is", this.sumBarValues);
     float masterBarHeight = 3* (paddedHeight / 4);
 
     //create array
@@ -91,7 +91,7 @@ class BarGraph {
     float barSpacing = 5.0;
     float totalSpacing = (numBars + 1) * barSpacing;
     float availableWidth = (width - width/4) - totalSpacing - this.leftSpacing - this.rightSpacing;
-    println("bar width is " + availableWidth/numBars);
+    //println("bar width is " + availableWidth/numBars);
     this.barWidth = availableWidth / numBars;
     float yFactor = 2.0;
 

@@ -16,6 +16,7 @@ int BAR = 2;
 boolean currentlyAnimating = false;
 float lineToPieStepAmount = 0.0;
 float pieToLineStepAmount = 0.0;
+float lineToBarStepAmount = 0.0; 
 
 void setup() {
   frame.setResizable(true); 
@@ -55,8 +56,6 @@ void setup() {
     }
   }
 }
-
-
 
 void draw() {
   background(255); 
@@ -102,13 +101,22 @@ void transitionBetweenGraphs() {
     break;
   case 1: 
     lineGraph.render();
-    if (transitionGraph == BAR) {
-      // transition line to bar
-      currentGraph = 2;
+    if ( transitionGraph == BAR) {
+      if ( lineToBarStepAmount < 1.0) {
+        float localStep = lineToBarStepAmount % 1.0;
+        lineGraph.drawPoints(); 
+        lineGraph.disconnectTheDots(localStep); 
+        lineToBarStepAmount += 0.012; 
+      } else {
+        currentGraph = 2;
+        lineToBarStepAmount = 0; 
+      }
     } else if (transitionGraph == PIE) {
         if ( lineToPieStepAmount < 1.0 ) {
-          lineGraph.disconnectTheDots(lineToPieStepAmount);
-          lineToPieStepAmount += 0.212; //TODO: Switch back to 0.012
+          float localStep = lineToPieStepAmount % 1.0; 
+          // old version is disconnectTheDotsTest. 
+          lineGraph.disconnectTheDots(localStep);
+          lineToPieStepAmount += 0.012; //TODO: Switch back to 0.012
         } else if (lineToPieStepAmount < 2.0 ) {
             float localStep = lineToPieStepAmount / 2.0;
             lineGraph.moveTheSpots(localStep, pie); 
