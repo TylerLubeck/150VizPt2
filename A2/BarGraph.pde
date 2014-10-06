@@ -91,7 +91,6 @@ class BarGraph {
     float barSpacing = 5.0;
     float totalSpacing = (numBars + 1) * barSpacing;
     float availableWidth = (width - width/4) - totalSpacing - this.leftSpacing - this.rightSpacing;
-    //println("bar width is " + availableWidth/numBars);
     this.barWidth = availableWidth / numBars;
     float yFactor = 2.0;
 
@@ -183,6 +182,7 @@ class BarGraph {
       }
     }
   }
+  
   
   
 }

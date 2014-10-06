@@ -1,4 +1,4 @@
-final String FILE_NAME = "Dataset2.csv";
+final String FILE_NAME = "Dataset1.csv";
 String[] columnNames;
 LinkedHashMap<String, HashMap<String, Float>> labelToAttrib;
 HashMap<String, Float> totalSums;
@@ -17,6 +17,7 @@ boolean currentlyAnimating = false;
 float lineToPieStepAmount = 0.0;
 float pieToLineStepAmount = 0.0;
 float lineToBarStepAmount = 0.0; 
+float stepHeight = 3; 
 
 void setup() {
   frame.setResizable(true); 
@@ -99,16 +100,25 @@ void transitionBetweenGraphs() {
     }
     break;
   case 1: 
-    lineGraph.render();
+    lineGraph.render(barGraph);
     if ( transitionGraph == BAR) {
       if ( lineToBarStepAmount < 1.0) {
         float localStep = lineToBarStepAmount % 1.0;
-        lineGraph.drawPoints(); 
+        lineGraph.drawPoints(barGraph); 
         lineGraph.disconnectTheDots(localStep); 
         lineToBarStepAmount += 0.012; 
+      } else if (lineToBarStepAmount < 3.0) {
+        background(255);
+        drawButtonContainer(); 
+        lineGraph.drawBars(barGraph, lineToBarStepAmount, stepHeight); 
+        lineToBarStepAmount += 0.012; 
+        stepHeight += 3; 
       } else {
+        background(255); 
+        drawButtonContainer(); 
         currentGraph = 2;
         lineToBarStepAmount = 0; 
+        stepHeight = 0; 
       }
     } else if (transitionGraph == PIE) {
         // transition line to pie
