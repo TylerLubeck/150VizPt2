@@ -12,6 +12,14 @@ class MyCircle {
      //c = color(int(random(0, 255)), int(random(0, 255)), int(random(0, 255)));
      c = color(80, 50, 70);
   }
+
+  MyCircle(MyCircle circle) {
+    this.isect = circle.isect;
+    this.radius = circle.radius;
+    this.posx = circle.posx;
+    this.posy = circle.posy;
+    this.c = circle.c;
+  }
   
   boolean intersect (int mousex, int mousey) {
     float distance = sqrt((mousex - posx) * (mousex - posx) + 

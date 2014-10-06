@@ -1,5 +1,6 @@
 class pieChart {
   private ArrayList<Float> angles; 
+  private ArrayList<Float> backupAngles;
   private float diameter; 
   private float lastAngle; 
   private int index; 
@@ -7,6 +8,7 @@ class pieChart {
  
   pieChart(float diameter) {
     this.angles = new ArrayList<Float>(); 
+    this.backupAngles = new ArrayList<Float>(); 
     this.diameter = diameter; 
     this.lastAngle = 0; 
     this.index = 0; 
@@ -16,6 +18,7 @@ class pieChart {
   void addAngle(float ratio) {
       //println("ADDING ANGLE WITH RATIO: " + ratio);
      this.angles.add(ratio * 360); 
+     this.backupAngles.add(ratio * 360); 
   }
   
   void render() {
@@ -41,6 +44,13 @@ class pieChart {
       
       strokeWeight(0); 
   }
+
+  void shrink(float stepVal) {
+        float inverseStep = 1.0 - stepVal;
+        for(int i = 0; i < this.angles.size(); i++) {
+            this.angles.set(i, this.angles.get(i) * inverseStep);
+        }
+  }
   
   void drawNextWedge() {
     stroke(color(0));
@@ -52,6 +62,11 @@ class pieChart {
     this.index++;   
   }
   
-  
+  void reset() {
+    this.angles.clear();
+    for (float angle : this.backupAngles) {
+      this.angles.add(angle);
+    }
+  }
 
 }
