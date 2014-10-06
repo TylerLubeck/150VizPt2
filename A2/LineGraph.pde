@@ -53,6 +53,23 @@ class LineGraph{
         }
     }
 
+    void connectTheDots(float stepVal) {
+        for (int i = 0; i < this.points.size() - 1; i++) {
+            fill(color(0));
+            strokeWeight(2);
+            float newX = lerp(this.backupPoints.get(i).getPosX(),
+                              this.backupPoints.get(i+1).getPosX(),
+                              stepVal);
+            float newY = lerp(this.backupPoints.get(i).getPosY(),
+                              this.backupPoints.get(i+1).getPosY(),
+                              stepVal);
+            line(this.backupPoints.get(i).getPosX(),
+                 this.backupPoints.get(i).getPosY(),
+                 newX,
+                 newY);
+        }
+    }
+
     void connectTheDots(){
         for(int i = 0; i < this.points.size() - 1; i++) {                     
             fill(color(0));
@@ -96,9 +113,7 @@ class LineGraph{
     }
 
     void moveTheSpots(float stepVal, pieChart pie) {
-        for (float angle : pie.angles) {
-            
-        }
+
     }
 
     void reset() {

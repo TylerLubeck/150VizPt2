@@ -29,11 +29,12 @@ class Point{
     setCoord( posx, posy );
   }
   
-  void setCoord( float posx, float posy){
+  Point setCoord( float posx, float posy){
     pointPosX = posx;
     pointPosY = posy;
     circle.setPos( pointPosX,pointPosY);
     circle.setRadius(5.0);
+    return this;
   }
   
   void render(){
@@ -65,5 +66,9 @@ class Point{
 
   void print() {
     println("Point at (" + this.pointPosX + ", " + this.pointPosY + ")");
+  }
+
+  String toString() {
+    return "(" + this.pointPosX + ", " + this.pointPosY + ")";
   }
 }

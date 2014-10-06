@@ -76,9 +76,21 @@ void transitionBetweenGraphs() {
         pie.shrink(pieToLineStepAmount); 
         pieToLineStepAmount += 0.012;
       } else if (pieToLineStepAmount < 2.0) {
-        
+        background(255);
+        drawButtonContainer();
+        pie.makeLine(pieToLineStepAmount, lineGraph);
+        pieToLineStepAmount += 0.012;
+      } else if (pieToLineStepAmount < 3.0) {
+        background(255);
+        drawButtonContainer();
+        float localStepTwo = pieToLineStepAmount % 1.0;
+        println(localStepTwo);
+        pie.makeLine(2.0, lineGraph); //Keep the dots on the screen
+        lineGraph.connectTheDots(localStepTwo); 
         pieToLineStepAmount += 0.012;
       } else {
+        background(255);
+        drawButtonContainer();
         pie.reset();
         pieToLineStepAmount = 0.0;
         currentGraph = 1;
@@ -96,14 +108,12 @@ void transitionBetweenGraphs() {
     } else if (transitionGraph == PIE) {
         if ( lineToPieStepAmount < 1.0 ) {
           lineGraph.disconnectTheDots(lineToPieStepAmount);
-          lineToPieStepAmount += 0.012;
-          println("NEW STEP: " + lineToPieStepAmount);
+          lineToPieStepAmount += 0.212; //TODO: Switch back to 0.012
         } else if (lineToPieStepAmount < 2.0 ) {
-            float localStep = lineToPieStepAmount / 1.0;
+            float localStep = lineToPieStepAmount / 2.0;
             lineGraph.moveTheSpots(localStep, pie); 
             lineToPieStepAmount += 1.0; //TODO: Switch back to 0.012
         } else {
-            println("RESETTING");
           lineToPieStepAmount = 0.0;
           lineGraph.reset();
           currentGraph = 0;
