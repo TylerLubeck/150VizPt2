@@ -30,7 +30,7 @@ void setup() {
   XAxis = p.getXTitle();
 
   /* Create a Bar Chart */
-  barGraph = new BarGraph(width, height);
+  barGraph = new BarGraph(3*width/4, height);
   for (int i = 1; i < 2; i++) {
     for (Entry<String, HashMap<String, Float>> e : labelToAttrib.entrySet ()) {
       barGraph.addBar(e.getKey(), int(e.getValue().get(columnNames[i])));
@@ -138,7 +138,9 @@ void transitionBetweenGraphs() {
       currentGraph = 1;
     } else if (transitionGraph == PIE) {
       //transition bar to pie
-      currentGraph = 0;
+      println("animating to pie");
+      barGraph.AnimateToPie(pie);
+      //currentGraph = 0;
     }
     break;
   }

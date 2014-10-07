@@ -4,7 +4,7 @@ class Bar {
   float bWidth, bHeight;
   String label;
   color fill, stroke;
-  
+
   Bar() {
     value = 0;
     label = "";
@@ -53,6 +53,7 @@ class BarGraph {
   float pad;
   boolean[] barIsAnimating;
   float barWidth; 
+  boolean barsHidden;
 
   BarGraph(float w, float h) {
     bars = new ArrayList<Bar>();
@@ -65,6 +66,7 @@ class BarGraph {
     this.rightSpacing = 20; 
     this.paddedHeight = height - 100;
     this.sumBarValues = 0;
+    barsHidden = false;
   }
 
   void addBar( String lbl, float val) {
@@ -83,6 +85,7 @@ class BarGraph {
     //create array
     barIsAnimating = new boolean[this.bars.size()];
     setBarsAreAnimatingToFalse();
+    setGeometry();
   }
 
   void setGeometry() {
@@ -90,8 +93,7 @@ class BarGraph {
     int numBars = bars.size();
     float barSpacing = 5.0;
     float totalSpacing = (numBars + 1) * barSpacing;
-    float availableWidth = (width - width/4) - totalSpacing - this.leftSpacing - this.rightSpacing;
-    println("bar width is " + availableWidth/numBars);
+    float availableWidth = this.w - totalSpacing - this.leftSpacing - this.rightSpacing;
     this.barWidth = availableWidth / numBars;
     float yFactor = 2.0;
 
@@ -108,10 +110,11 @@ class BarGraph {
     }
   }
 
-  void render() {
-    setGeometry(); 
-    for (Bar b : bars) {
-      b.render();
+  void render() { 
+    if (!barsHidden) {
+      for (Bar b : bars) {
+        b.render();
+      }
     }
   }
 
@@ -130,21 +133,36 @@ class BarGraph {
     }
   }
 
-  void AnimateToPie() {
+  void AnimateToPie(pieChart pie) {
 
     //Step 1: shrink bars to their pointX, pointY
     //Their heights will be proporionate to each other in terms of "masterBarHeight"
     shrink();
 
     if (barsAreDoneAnimating()) {
-      setBarsAreAnimatingToFalse();
+      //setBarsAreAnimatingToFalse();
       //Step 2: Move all the bars to one stacked column in middle of screen
-      stackBars();
+      stackBars(); //SO LONG MY FRIEND
+      //barsToWedges(pie);
     }
     if (barsAreDoneAnimating()) {
-      setBarsAreAnimatingToFalse();
+      moveUp();
     }
   }
+
+  void barsToWedges(pieChart pie) {
+    barsHidden = true;
+    for (int i=0; i<bars.size (); i++) {
+      Bar bar = bars.get(i);
+      //make a wedge
+      beginShape();
+      vertex(bar.xCoord, bar.yCoord + bar.bHeight);
+      vertex(bar.xCoord + bar.bWidth, bar.yCoord + bar.bHeight);
+      vertex(bar.pointX, bar.pointY);
+      endShape();
+    }
+  }
+
 
   void shrink() {
     float pxShrink = 2;
@@ -166,25 +184,52 @@ class BarGraph {
     int iMiddle = bars.size()/2;
     //move to middle
     moveToMiddle(iMiddle);
+    int yCoord = (int)bars.get(0).yCoord - 10;
     //iterate outward in both directions and move to middle
-    //might have to catch case with 2 bars
-    for (int i=0; i< bars.size()/2; i++) {
-      int iRight = iMiddle + 1;
-      int iLeft = iMiddle -1;
+    int iRight = iMiddle + 1;
+    int iLeft = iMiddle - 1;
+    int iCur = iRight;
+    for (int i=0; i< bars.size () - 1; i++) {
       //only increment when current is done
-      if (!barIsAnimating[iRight]) {
-        moveToMiddle(iRight);
+      if (!barIsAnimating[iCur]) {
+        if ( i%2 == 0 ) {
+          iCur = iLeft;
+          iLeft--;
+        } else {
+          iCur = iRight;
+          iRight++;
+        }
+        moveToMiddle(iCur);
       }
     }
   }
 
+  void moveUp() {
+    int middlePosY = Math.round(this.h / 2) - Math.round(bars.get(0).bHeight / 2);
+    float pxMove = 5;
+    for (int i=0; i< bars.size (); i++) {
+      int barPosY = (int)bars.get(i).yCoord;
+      if (barPosY > middlePosY) {
+        bars.get(i).yCoord -= pxMove;
+        this.barIsAnimating[i]=true;
+      } else {
+        this.barIsAnimating[i]=false;
+      }
+    }
+  }
+
+  //move bar.get(i) to middle and move it to appropriate height
   void moveToMiddle(int i) {
     //casting everything to ints to avoid infinite loop of trying to become center
     //i.e. bar's xPos is 10.7px and middleX is 10px
+
+    println("width is" + this.w);
     int middlePosX = Math.round(this.w / 2) - Math.round(bars.get(0).bWidth / 2);
-    float pxMove = 1;
+    println("middle pos is" + middlePosX);
+    float pxMove = 5;
     int barPosX = (int)bars.get(i).xCoord;
-    //if left of middleX, move right
+    int barPosY = (int)bars.get(i).yCoord;
+    int y = (int)(this.paddedHeight) - 200;
     if (barPosX < middlePosX) {
       bars.get(i).xCoord += pxMove;
       this.barIsAnimating[i]=true;
