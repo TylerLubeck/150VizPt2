@@ -85,7 +85,6 @@ void transitionBetweenGraphs() {
         drawButtonContainer();
         float localStepTwo = pieToLineStepAmount -2.0;
         pie.makeLine(1.0, lineGraph); //Keep the dots on the screen
-        println(localStepTwo);
         lineGraph.connectTheDots(localStepTwo); 
         pieToLineStepAmount += 0.012;
       } else {

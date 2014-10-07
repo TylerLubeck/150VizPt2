@@ -37,17 +37,19 @@ class LineGraph {
   }
 
   void setGeometry(BarGraph barGraph) { 
-    float numPoints = points.size(); 
+    float numPoints = this.points.size(); 
     float totalSpacing = numPoints - 1;
     float xInterval = (width - this.leftSpacing - width/4) / numPoints; 
     float yInterval = 2.0; 
     barGraph.setGeometry(); 
     if (this.firstRender) {
       for (int i = 0; i < numPoints; i++) {
-        points.get(i).setCoord(barGraph.bars.get(i).pointX, 
-        barGraph.bars.get(i).pointY); 
-        backupPoints.get(i).setCoord(barGraph.bars.get(i).pointX, 
-        barGraph.bars.get(i).pointY);
+        //*
+        this.points.get(i).setCoord(barGraph.bars.get(i).pointX, 
+                               barGraph.paddedHeight - barGraph.bars.get(i).pointY); 
+        this.backupPoints.get(i).setCoord(barGraph.bars.get(i).pointX, 
+                                     barGraph.paddedHeight - barGraph.bars.get(i).pointY);
+        //*/
       }
       this.firstRender = false;
     }
@@ -130,7 +132,6 @@ class LineGraph {
   }
 
   void moveDotsTo(float destX, float destY, float stepVal) {
-      println(stepVal);
     for (int i = 0; i < this.points.size (); i++) {
       float currX = lerp(this.backupPoints.get(i).getPosX(), destX, stepVal);
       float currY = lerp(this.backupPoints.get(i).getPosY(), destY, stepVal);
@@ -159,7 +160,7 @@ class LineGraph {
 
   void drawPoints(BarGraph barGraph) {
     setGeometry(barGraph);
-    for (Point p : points) {
+    for (Point p : this.points) {
       p.render();
     }
   }

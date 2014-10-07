@@ -68,7 +68,7 @@ class BarGraph {
   }
 
   void addBar( String lbl, float val) {
-    Bar b = new Bar( lbl, val, fill, stroke);
+    Bar b = new Bar( lbl, val, this.fill, this.stroke);
     bars.add(b);
   }
 
