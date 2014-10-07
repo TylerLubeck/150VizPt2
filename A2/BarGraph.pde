@@ -79,7 +79,7 @@ class BarGraph {
     for (Bar b : bars) {
       this.sumBarValues += b.value;
     }
-    println("sum of bar values is", this.sumBarValues);
+    //println("sum of bar values is", this.sumBarValues);
     float masterBarHeight = 3* (paddedHeight / 4);
 
     //create array
@@ -240,5 +240,7 @@ class BarGraph {
       this.barIsAnimating[i]=false;
     }
   }
+  
+  
 }
 

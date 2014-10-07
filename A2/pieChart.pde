@@ -21,8 +21,6 @@ class pieChart {
     this.widthDivider = 1.0;
     this.endX = 0.0;
     this.endY = 0.0;
-    this.startX = 0.0;
-    this.startY = 0.0;
   }
   
   void addAngle(float ratio) {
@@ -30,8 +28,8 @@ class pieChart {
      this.angles.add(ratio * 360); 
      this.backupAngles.add(ratio * 360); 
      this.pointsToMove.add(new Point());
-     this.startX = w/2 + diameter/2.0;
-     this.startY = height/2 + diameter/4.0;
+     this.startY = height/2; // w/2 + diameter/1.0 * cos(this.angles.get(0));
+     this.startX = w/2 + this.rightSpacing; // height/2 + diameter/4.0 * sin(this.angles.get(0));
   }
   
   void render() {
@@ -88,14 +86,23 @@ class pieChart {
 
   void makeLine(float stepVal, LineGraph lineGraph) {
     for(int i = 0; i < pointsToMove.size(); i++) {
+        /*
         float newX = lerp(lineGraph.points.get(i).getPosX(),
-                          this.endX,
+                          this.startX,
                           stepVal);
         float newY = lerp(lineGraph.points.get(i).getPosY(), 
-                          this.endY, 
+                          this.startY, 
+                          stepVal);
+        // */
+        float newX = lerp(this.startX,
+                          lineGraph.points.get(i).getPosX(),
+                          stepVal);
+        float newY = lerp(this.startY, 
+                          lineGraph.points.get(i).getPosY(), 
                           stepVal);
 
-        pointsToMove.get(i).setCoord(width - newX, height - newY).render();
+        //pointsToMove.get(i).setCoord(width - newX, height - newY).render();
+        pointsToMove.get(i).setCoord(newX, newY).render();
     }
   }
   

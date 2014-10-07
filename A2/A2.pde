@@ -1,4 +1,4 @@
-final String FILE_NAME = "Dataset2.csv";
+final String FILE_NAME = "Dataset1.csv";
 String[] columnNames;
 LinkedHashMap<String, HashMap<String, Float>> labelToAttrib;
 HashMap<String, Float> totalSums;
@@ -16,6 +16,8 @@ int BAR = 2;
 boolean currentlyAnimating = false;
 float lineToPieStepAmount = 0.0;
 float pieToLineStepAmount = 0.0;
+float lineToBarStepAmount = 0.0; 
+float stepHeight = 3; 
 
 void setup() {
   frame.setResizable(true); 
@@ -56,8 +58,6 @@ void setup() {
   }
 }
 
-
-
 void draw() {
   background(255); 
   drawButtonContainer(); 
@@ -69,7 +69,7 @@ void draw() {
 
 void transitionBetweenGraphs() {
   switch (currentGraph) {
-  case 0: 
+  case 0: //PIE
     pie.render(); 
     if (transitionGraph == LINE) {
       if (pieToLineStepAmount < 1.0) {
@@ -78,13 +78,14 @@ void transitionBetweenGraphs() {
       } else if (pieToLineStepAmount < 2.0) {
         background(255);
         drawButtonContainer();
-        pie.makeLine(pieToLineStepAmount, lineGraph);
+        pie.makeLine(pieToLineStepAmount-1.0, lineGraph);
         pieToLineStepAmount += 0.012;
       } else if (pieToLineStepAmount < 3.0) {
         background(255);
         drawButtonContainer();
-        float localStepTwo = pieToLineStepAmount % 1.0;
-        pie.makeLine(2.0, lineGraph); //Keep the dots on the screen
+        float localStepTwo = pieToLineStepAmount -2.0;
+        pie.makeLine(1.0, lineGraph); //Keep the dots on the screen
+        println(localStepTwo);
         lineGraph.connectTheDots(localStepTwo); 
         pieToLineStepAmount += 0.012;
       } else {
@@ -99,26 +100,44 @@ void transitionBetweenGraphs() {
       currentGraph = 2;
     }
     break;
-  case 1: 
-    lineGraph.render();
-    if (transitionGraph == BAR) {
-      // transition line to bar
-      currentGraph = 2;
+  case 1: //LINE
+    lineGraph.render(barGraph);
+    if ( transitionGraph == BAR) {
+      if ( lineToBarStepAmount < 1.0) {
+        float localStep = lineToBarStepAmount % 1.0;
+        lineGraph.drawPoints(barGraph); 
+        lineGraph.disconnectTheDots(localStep); 
+        lineToBarStepAmount += 0.012; 
+      } else if (lineToBarStepAmount < 3.0) {
+        background(255);
+        drawButtonContainer(); 
+        lineGraph.drawBars(barGraph, lineToBarStepAmount, stepHeight); 
+        lineToBarStepAmount += 0.012; 
+        stepHeight += 3; 
+      } else {
+        background(255); 
+        drawButtonContainer(); 
+        currentGraph = 2;
+        lineToBarStepAmount = 0; 
+        stepHeight = 0; 
+      }
     } else if (transitionGraph == PIE) {
         // transition line to pie
         if ( lineToPieStepAmount < 1.0 ) {
-          lineGraph.disconnectTheDots(lineToPieStepAmount);
+          float localStep = lineToPieStepAmount % 1.0; 
+          // old version is disconnectTheDotsTest w/out localStep 
+          lineGraph.disconnectTheDots(localStep);
           lineToPieStepAmount += 0.012; //TODO: Switch back to 0.012
         } else if (lineToPieStepAmount < 2.0 ) {
            background(255);
            drawButtonContainer();
-           float lineToPieLocal = lineToPieStepAmount / 2.0;
+           float lineToPieLocal = lineToPieStepAmount - 1.0;
            lineGraph.moveDotsTo(pie.startX, pie.startY, lineToPieLocal);
            lineToPieStepAmount += 0.012;
         } else if (lineToPieStepAmount < 3.0) {
            background(255);
            drawButtonContainer();
-           float lineToPieLocal = lineToPieStepAmount / 3.0;
+           float lineToPieLocal = lineToPieStepAmount - 2.0;
            pie.grow(lineToPieLocal);
            lineToPieStepAmount += 0.012; //TODO: Switch back to 0.012
            pie.render();
@@ -131,7 +150,7 @@ void transitionBetweenGraphs() {
         }
     }
     break;
-  case 2:
+  case 2: //BAR
     barGraph.render();
     if (transitionGraph == LINE) {
       // transition bar to line
@@ -152,7 +171,6 @@ void changeColorOnHover(Button button) {
     button.render();
   }
 }
-
 
 void drawButtonContainer() {
   int b_width = width - width/4; 
