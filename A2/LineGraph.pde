@@ -130,6 +130,7 @@ class LineGraph {
   }
 
   void moveDotsTo(float destX, float destY, float stepVal) {
+      println(stepVal);
     for (int i = 0; i < this.points.size (); i++) {
       float currX = lerp(this.backupPoints.get(i).getPosX(), destX, stepVal);
       float currY = lerp(this.backupPoints.get(i).getPosY(), destY, stepVal);

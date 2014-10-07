@@ -69,7 +69,7 @@ void draw() {
 
 void transitionBetweenGraphs() {
   switch (currentGraph) {
-  case 0: 
+  case 0: //PIE
     pie.render(); 
     if (transitionGraph == LINE) {
       if (pieToLineStepAmount < 1.0) {
@@ -78,13 +78,14 @@ void transitionBetweenGraphs() {
       } else if (pieToLineStepAmount < 2.0) {
         background(255);
         drawButtonContainer();
-        pie.makeLine(pieToLineStepAmount, lineGraph);
+        pie.makeLine(pieToLineStepAmount-1.0, lineGraph);
         pieToLineStepAmount += 0.012;
       } else if (pieToLineStepAmount < 3.0) {
         background(255);
         drawButtonContainer();
-        float localStepTwo = pieToLineStepAmount % 1.0;
-        pie.makeLine(2.0, lineGraph); //Keep the dots on the screen
+        float localStepTwo = pieToLineStepAmount -2.0;
+        pie.makeLine(1.0, lineGraph); //Keep the dots on the screen
+        println(localStepTwo);
         lineGraph.connectTheDots(localStepTwo); 
         pieToLineStepAmount += 0.012;
       } else {
@@ -99,7 +100,7 @@ void transitionBetweenGraphs() {
       currentGraph = 2;
     }
     break;
-  case 1: 
+  case 1: //LINE
     lineGraph.render(barGraph);
     if ( transitionGraph == BAR) {
       if ( lineToBarStepAmount < 1.0) {
@@ -130,13 +131,13 @@ void transitionBetweenGraphs() {
         } else if (lineToPieStepAmount < 2.0 ) {
            background(255);
            drawButtonContainer();
-           float lineToPieLocal = lineToPieStepAmount / 2.0;
+           float lineToPieLocal = lineToPieStepAmount - 1.0;
            lineGraph.moveDotsTo(pie.startX, pie.startY, lineToPieLocal);
            lineToPieStepAmount += 0.012;
         } else if (lineToPieStepAmount < 3.0) {
            background(255);
            drawButtonContainer();
-           float lineToPieLocal = lineToPieStepAmount / 3.0;
+           float lineToPieLocal = lineToPieStepAmount - 2.0;
            pie.grow(lineToPieLocal);
            lineToPieStepAmount += 0.012; //TODO: Switch back to 0.012
            pie.render();
@@ -149,7 +150,7 @@ void transitionBetweenGraphs() {
         }
     }
     break;
-  case 2:
+  case 2: //BAR
     barGraph.render();
     if (transitionGraph == LINE) {
       // transition bar to line
@@ -168,7 +169,6 @@ void changeColorOnHover(Button button) {
     button.render();
   }
 }
-
 
 void drawButtonContainer() {
   int b_width = width - width/4; 
