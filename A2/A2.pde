@@ -17,7 +17,9 @@ boolean currentlyAnimating = false;
 float lineToPieStepAmount = 0.0;
 float pieToLineStepAmount = 0.0;
 float lineToBarStepAmount = 0.0; 
+float barToLineStepAmount = 0.0;
 float stepHeight = 3; 
+float reverseStepHeight = -3;
 
 void setup() {
   frame.setResizable(true); 
@@ -25,7 +27,7 @@ void setup() {
   currentGraph = 1; 
   transitionGraph = 1; 
   buttons = new Button[3]; 
-  Parser p = new Parser(FILE_NAME, /*debug*/ true);
+  Parser p = new Parser(FILE_NAME, /*debug*/ false);
   columnNames = p.getColumnNames();
   labelToAttrib = p.getLabelToAttribMap();
   totalSums = p.getTotalSums();
@@ -152,11 +154,29 @@ void transitionBetweenGraphs() {
   case 2: //BAR
     barGraph.render();
     if (transitionGraph == LINE) {
-      // transition bar to line
-      currentGraph = 1;
+        if (barToLineStepAmount < 1.0) {
+            float localStep = lineToBarStepAmount % 1.0;
+            background(255);
+            drawButtonContainer();
+            lineGraph.drawBarsUp(barGraph, barToLineStepAmount, reverseStepHeight);
+            barToLineStepAmount += 0.012;
+            reverseStepHeight -= 3;
+        } else if (barToLineStepAmount < 2.0) {
+            background(255);
+            drawButtonContainer();
+            float localStep = barToLineStepAmount - 1.0;
+            lineGraph.drawPoints(barGraph);
+            lineGraph.connectTheDots(localStep);
+            barToLineStepAmount += 0.012;
+        } else {
+          background(255);
+          drawButtonContainer();
+          barToLineStepAmount = 0.0;
+          reverseStepHeight = -3;
+          currentGraph = 1;
+        }
     } else if (transitionGraph == PIE) {
       //transition bar to pie
-      println("animating to pie");
       barGraph.AnimateToPie(pie);
       //currentGraph = 0;
     }

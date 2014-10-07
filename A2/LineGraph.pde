@@ -179,5 +179,18 @@ class LineGraph {
        }
     }
   }
+
+  void drawBarsUp(BarGraph barGraph, float stepVal, float stepHeight) {
+    ArrayList<Bar> bars = barGraph.bars;
+    for (int i=0; i< bars.size (); i++) {
+      Bar newBar = bars.get(i); 
+      if (stepVal * newBar.bHeight < this.points.get(i).pointPosY) {
+        newBar.bHeight = (1.0 - stepVal)  * (barGraph.paddedHeight - this.points.get(i).pointPosY);
+        newBar.render(); 
+       } else {
+         bars.get(i).render(); 
+       }
+    }
+  }
 }
 

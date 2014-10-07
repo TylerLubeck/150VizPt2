@@ -79,7 +79,6 @@ class BarGraph {
     for (Bar b : bars) {
       this.sumBarValues += b.value;
     }
-    //println("sum of bar values is", this.sumBarValues);
     float masterBarHeight = 3* (paddedHeight / 4);
 
     //create array
@@ -223,9 +222,7 @@ class BarGraph {
     //casting everything to ints to avoid infinite loop of trying to become center
     //i.e. bar's xPos is 10.7px and middleX is 10px
 
-    println("width is" + this.w);
     int middlePosX = Math.round(this.w / 2) - Math.round(bars.get(0).bWidth / 2);
-    println("middle pos is" + middlePosX);
     float pxMove = 5;
     int barPosX = (int)bars.get(i).xCoord;
     int barPosY = (int)bars.get(i).yCoord;
