@@ -44,11 +44,11 @@ class LineGraph {
     barGraph.setGeometry(); 
     if (this.firstRender) {
       for (int i = 0; i < numPoints; i++) {
-        //*
+          //*
         this.points.get(i).setCoord(barGraph.bars.get(i).pointX, 
-                               barGraph.paddedHeight - barGraph.bars.get(i).pointY); 
+                               barGraph.bars.get(i).pointY); 
         this.backupPoints.get(i).setCoord(barGraph.bars.get(i).pointX, 
-                                     barGraph.paddedHeight - barGraph.bars.get(i).pointY);
+                                     barGraph.bars.get(i).pointY);
         //*/
       }
       this.firstRender = false;
