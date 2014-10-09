@@ -1,0 +1,9 @@
+
+The `a1` directory contains the sketch for the "Basic Requirements". If you are on
+a linux system you should be able to cd into a1 then execute "./run" to run the sketch.
+
+The `funding` directory contains the sketch for the "Additional Requirements". This
+sketch also has a "./run" script for executing the sketch.
+
+NOTE: must have "processing-java" installed somewhere in your path to use our "run" scripts.
+

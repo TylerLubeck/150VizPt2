@@ -1,0 +1,6 @@
+Karl implemented the Pie to Line and Line to Pie transition and did general code book-keeping.
+Justin implemented the Line to Bar and Bar to Line animation
+Susi did the file parsing and implemented the Pie to Bar, Bar to Pie, Pie to Rose, Rose to Pie, 
+	Bar to Stacked Bar, and Stacked Bar to Bar animation.
+
+Everyone collaborated to determine who would do what, and how to link together our separate parts.
