@@ -6,6 +6,7 @@ final int DECIDE_YOURSELF = -1; // This is a placeholder for variables you will 
  * This is a global variable for the dataset in your visualization. You'll be overwriting it each trial.
  */
 Data d = null;
+PieGraph pie;
 
 void setup() {
     totalWidth = displayWidth;
@@ -28,7 +29,8 @@ void setup() {
     /**
      ** Finish this: decide how to generate the dataset you are using (see DataGenerator)
      **/
-    d = null;
+    d = new Data();
+    pie = new PieGraph(d);
 
     /**
      ** Finish this: how to generate participant IDs
@@ -56,7 +58,7 @@ void draw() {
         /**
          **  Finish this: decide the chart type. You can do this randomly.
          **/
-        int chartType = DECIDE_YOURSELF;
+        int chartType = 0; //DECIDE_YOURSELF;
 
         switch (chartType) {
             case -1: // This is a placeholder, you can remove it and use the other cases for the final version
