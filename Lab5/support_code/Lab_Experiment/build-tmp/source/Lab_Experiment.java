@@ -20,10 +20,10 @@ public class Lab_Experiment extends PApplet {
 
 
 
-final int DECIDE_YOURSELF = -1;
+final int DECIDE_YOURSELF = -1; // This is a placeholder for variables you will replace.
 
 /**
- * this should be the global variable, the dataset in your visualization
+ * This is a global variable for the dataset in your visualization. You'll be overwriting it each trial.
  */
 Data d = null;
 
@@ -34,7 +34,7 @@ public void setup() {
     chartLeftY = totalHeight / 2.0f - chartSize / 2.0f - margin_top;
 
     size((int) totalWidth, (int) totalHeight);
-    //if you use a Retina displayer, please use the line below (better looklike)
+    //if you have a Retina display, use the line below (looks better)
     //size((int) totalWidth, (int) totalHeight, "processing.core.PGraphicsRetina2D");
 
     background(255);
@@ -46,12 +46,13 @@ public void setup() {
     page1 = true;
 
     /**
-     ** finish this: decide how to control dataset you are using
+     ** Finish this: decide how to generate the dataset you are using (see DataGenerator)
      **/
     d = null;
 
     /**
-     ** finish this: how to control the id of the partipant
+     ** Finish this: how to generate participant IDs
+     ** You can write a short alphanumeric ID generator (cool) or modify this for each participant (less cool).
      **/
     partipantID = DECIDE_YOURSELF;
 }
@@ -73,12 +74,12 @@ public void draw() {
         }
 
         /**
-         **  finish this: decide the chart type
+         **  Finish this: decide the chart type. You can do this randomly.
          **/
         int chartType = DECIDE_YOURSELF;
 
         switch (chartType) {
-            case DECIDE_YOURSELF:
+            case -1: // This is a placeholder, you can remove it and use the other cases for the final version
                  stroke(0);
                  strokeWeight(1);
                  fill(255);
@@ -131,7 +132,7 @@ public void next() {
     String str = cp5.get(Textfield.class, "answer").getText().trim();
     float num = parseFloat(str);
     /*
-     * We check the input for you.
+     * We check their percentage input for you.
      */
     if (!(num >= 0)) {
         warning = "Please input a number!";
@@ -145,14 +146,14 @@ public void next() {
             float ans = parseFloat(cp5.get(Textfield.class, "answer").getText());
 
             /**
-             ** finish this: decide how to compute the right anwer
+             ** Finish this: decide how to compute the right answer
              **/
-            truePerc = DECIDE_YOURSELF;
+            truePerc = DECIDE_YOURSELF; // hint: from your list of DataPoints, extract the two marked ones to calculate the "true" percentage
 
-            reportPerc = ans / 100.0f;
+            reportPerc = ans / 100.0f; // this is the participant's response
             
             /**
-             ** finish this: decide how to compute the log error
+             ** Finish this: decide how to compute the log error from Cleveland and McGill (see the handout for details)
              **/
             error = DECIDE_YOURSELF;
 
@@ -160,7 +161,7 @@ public void next() {
         }
 
         /**
-         ** finish this: decide the dataset in the next visualization
+         ** Finish this: decide the dataset (similar to how you did in setup())
          **/
         d = null;
 
@@ -178,14 +179,14 @@ public void next() {
  */
 public void close() {
     /**
-     ** Change this if you need 
+     ** Change this if you need to do some final processing
      **/
     saveExpData();
     exit();
 }
 
 /**
- * Calling this method will set everything to the intro page
+ * Calling this method will set everything to the intro page. Use this if you want to run multiple participants without closing Processing (cool!). Make sure you don't overwrite your data.
  */
 public void reset(){
     /**
@@ -203,73 +204,6 @@ public void reset(){
     page2 = false;
     pagelast = false;
     index = -1;
-}
-/**
- * These five variables are the data you need to collect from participants.
- */
-int partipantID = -1;
-int index = -1;
-float error = -1;
-float truePerc = -1;
-float reportPerc = -1;
-
-/**
- * The table saves information for each judgement as a row.
- */
-Table expData = null;
-
-/**
- * The visualizations you need to plug in.
- * You can change the name and order of elements in this array if you don't like.
- * But please don't delete the array.
- */
-
-String[] vis = {
-    "BarChart", "PieChart", "StackedBarChart", "TreeMap", "HorizonBarChart"
-};
-
-/**
- * add the data in this judgement to the table.
- */ 
-public void saveJudgement() {
-    if (expData == null) {
-        expData = new Table();
-        expData.addColumn("PartipantID");
-        expData.addColumn("Index");
-        expData.addColumn("Vis");
-        expData.addColumn("VisID");
-        expData.addColumn("Error");
-        expData.addColumn("TruePerc");
-        expData.addColumn("ReportPerc");
-    }
-
-    TableRow newRow = expData.addRow();
-    newRow.setInt("PartipantID", partipantID);
-    newRow.setInt("Index", index);
-
-    /**
-     ** finish this: decide current visualization
-     **/
-    newRow.setString("Vis", "" + DECIDE_YOURSELF);
-
-    /**
-     ** finish this: decide current vis id
-     **/
-    newRow.setInt("VisID", DECIDE_YOURSELF);
-    newRow.setFloat("Error", error);
-    newRow.setFloat("TruePerc", truePerc);
-    newRow.setFloat("ReportPerc", reportPerc);
-}
-
-/**
- * Save the table
- * This method is called when the participant reaches the Thanks page and hit the "CLOSE" button.
- */
-public void saveExpData() {
-    /**
-     ** Change this if you need 
-     **/
-    saveTable(expData, "expData.csv");
 }
 class Data {
     class DataPoint {
@@ -307,9 +241,75 @@ class Data {
     }
     
         /**
-         ** finish this: the rest medthods and variables you might use
+         ** finish this: the rest methods and variables you may want to use
          ** 
          **/
+}
+/**
+ * These five variables are the data you need to collect from participants.
+ */
+int partipantID = -1;
+int index = -1;
+float error = -1;
+float truePerc = -1;
+float reportPerc = -1;
+
+/**
+ * The table saves information for each judgement as a row.
+ */
+Table expData = null;
+
+/**
+ * The visualizations you need to plug in.
+ * You can change the name, order, and number of elements in this array.
+ */
+
+String[] vis = {
+    "BarChart", "PieChart", "StackedBarChart", "TreeMap", "LineChart"
+};
+
+/**
+ * add the data for this judgement from the participant to the table.
+ */ 
+public void saveJudgement() {
+    if (expData == null) {
+        expData = new Table();
+        expData.addColumn("PartipantID");
+        expData.addColumn("Index");
+        expData.addColumn("Vis");
+        expData.addColumn("VisID");
+        expData.addColumn("Error");
+        expData.addColumn("TruePerc");
+        expData.addColumn("ReportPerc");
+    }
+
+    TableRow newRow = expData.addRow();
+    newRow.setInt("PartipantID", partipantID);
+    newRow.setInt("Index", index);
+
+    /**
+     ** finish this: decide the current visualization
+     **/
+    newRow.setString("Vis", "" + DECIDE_YOURSELF);
+
+    /**
+     ** finish this: decide current vis id
+     **/
+    newRow.setInt("VisID", DECIDE_YOURSELF);
+    newRow.setFloat("Error", error);
+    newRow.setFloat("TruePerc", truePerc);
+    newRow.setFloat("ReportPerc", reportPerc);
+}
+
+/**
+ * Save the table
+ * This method is called when the participant reaches the "Thanks" page and hit the "CLOSE" button.
+ */
+public void saveExpData() {
+    /**
+     ** Change this if you need 
+     **/
+    saveTable(expData, "expData.csv");
 }
 /********************************************************************************************/
 /********************************************************************************************/
@@ -355,9 +355,9 @@ public void drawInstruction() {
     textAlign(CENTER);
     textSize(fontSize);
     text("Two values are marked with dots. \n " 
-      + "What do you think the percent of the smaller value to the larger value? \n" 
+      + "What percentage is the smaller of the larger? \n" 
       + "Please put your answer below. \n" 
-      + "e.g. If you think the smaller one is exactly a half of the bigger one, \n" 
+      + "e.g. If you think the smaller is exactly a half of the larger, \n" 
       + "please input \"50\"."
       , totalWidth / 2.0f, totalHeight / 2.0f + chartSize / 2.0f);
 }
@@ -390,7 +390,7 @@ public void drawIntro() {
     textAlign(CENTER);
     text("In this experiment, \n" 
           + "you are asked to judge \n" 
-          + "what is the percent of a smaller value to a larger value " 
+          + "ratios between graphical elements " 
           + "in serveral charts. \n\n" 
           + "We won't record any other information from you except your answers.\n" 
           + "Click the \"agree\" button to begin. \n\n" 

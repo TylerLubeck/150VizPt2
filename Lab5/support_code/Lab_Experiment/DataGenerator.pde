@@ -24,13 +24,26 @@ class Data {
     private DataPoint[] data = null;
 
     Data() {
-        // NUM is a global varibale in support.pde
-        data = new DataPoint[NUM];
-
         /**
          ** finish this: how to generate a dataset and mark two of the datapoints
          ** 
          **/
+        // NUM is a global varibale in support.pde
+        data = new DataPoint[NUM];
+        for(int i = 0; i < NUM; i++) {
+            data[i] = new DataPoint(random(0.0, 100.0), false);
+        }
+
+        int m1 = random(0, NUM);
+        int m2 = random(0, NUM);
+        /* No repeat indices */
+        while(m2 != m1) {
+            m2 = random(0, NUM);
+        }
+
+        data[m1].setMark(true);
+        data[m2].setMark(true);
+
     }
     
         /**
