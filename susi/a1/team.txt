@@ -1,0 +1,5 @@
+Karl parsed the SHF and CSV data into trees, and re-purposed barGraph.pde from the lab to work with Drawable things.
+Susi wrote the Squarified Tree Map algorithm / drawing of nodes, tool-tips, coloring, etc.
+Justin implemented the animated drag-and-drop buttons
+
+Everyone collaborated to determine who would do what, and how to link together our separate parts.

@@ -1,0 +1,31 @@
+
+
+class Node {
+Node parent;
+ArrayList list_of_children;
+int level;
+int area_sum;
+int id;
+
+// inserts a node into the list of children and add to area_sum
+void insert(Treenode);
+int get_area_sum();
+int get_level();
+int get_id();
+ArrayList get_children();
+Node get_parent();
+
+}
+
+
+class SqTree {
+	Node root;
+	ArrayList Queue;
+
+	//check if queue is empty, if so push root's children, else pop first item of queue 
+	// and push its children and return list_of_children
+	ArrayList getNextList();
+
+}
+
+

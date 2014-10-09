@@ -1,0 +1,23 @@
+#!/bin/bash
+
+LEFT=1
+MIDDLE=2
+RIGHT=3
+
+while [ 1 ]; do
+  xdotool mousemove --sync 1705 365
+  sleep 0.05
+  xdotool click $LEFT
+  xdotool key Up
+  sleep 0.1
+  xdotool key Return
+  sleep 4
+  xdotool key Print
+  sleep 1
+  xdotool key Return
+  sleep 1
+  xdotool mousemove --sync 677 265
+  xdotool click $LEFT
+  sleep 1
+done
+

@@ -1,0 +1,7 @@
+
+The `a2` directory contains the sketch the animated transitions. We implemented the
+basic requirements and 2 of the three additional requirements. This
+sketch has a "./run" script for executing the sketch.
+
+NOTE: must have "processing-java" installed somewhere in your path to use our "run" scripts.
+

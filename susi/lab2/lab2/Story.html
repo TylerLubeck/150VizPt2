@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<!-- <script src = "http://processingjs.org/js/processing.min.js"></script> -->
+<!-- <script type="application/processing" data-processing-target="pjs" src="lab2.pde"></script> -->
+<!-- <canvas id="pjs"></canvas> -->
+<!-- <script src = "jquery.min.js" />
+<script src = "processing.min.js" />
+<script type="text/javascript" src = "d3.v3.min.js"></script> -->
+<script src = "http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src = "http://processingjs.org/js/processing.min.js"></script>
+<script type = "text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+
+<body>
+<h2 id="title">Comp 150 Visualization</h2>
+<p id="intro"></p>
+<canvas id="canvas1" data-processing-sources="lab2.pde step0.pde step1.pde step2.pde graph.pde barGraph.pde drawable.pde button.pde"></canvas>
+<div id = "buttons">
+   <button id = "pre"  onclick = "nextSlide()"> Previous </button>
+   <button id = "next" onclick = "prevSlide()"> Next </button>
+</div>
+<footer>
+  <p>Comp 150-07 (VIZ), Lab 2: Story Telling </p>
+</footer>
+
+
+<script type="application/javascript">
+  
+var p = Processing.getInstanceById('canvas1');
+var curr = 0;
+var adults = [];
+var data;
+  
+Number.prototype.mod = function(n) { return ((this%n)+n)%n; }
+
+function nextSlide() {
+  curr = (curr - 1).mod(3);
+  //console.log(curr);
+  Processing.getInstanceById('canvas1').changeSlide(curr);
+}
+function prevSlide() {
+  curr = (curr + 1).mod(3);
+  //console.log(curr);
+  Processing.getInstanceById('canvas1').changeSlide(curr);
+}
+
+function Adult(data) {
+  this.Age      = data.Age,
+  this.Workclass    = data.Workclass,
+  this.Fnlwgt     = data.Fnlwgt,
+  this.Education    = data.Education,
+  this.EducationNum   = data.EducationNum,
+  this.MaritalStatus  = data.MaritalStatus,
+  this.Occupation   = data.Occupation,
+  this.Relationship   = data.Relationship,
+  this.Race       = data.Race,
+  this.Sex      = data.Sex,
+  this.CapitalGain  = data.CapitalGain,
+  this.CapitalLoss  = data.CapitalLoss,
+  this.HoursPerWeek   = data.HoursPerWeek,
+  this.Country    = data.Country,
+  this.Income     = data.Income
+};
+
+function createAdultArray() {
+  for (var i=0; i< data.length; i++) {
+    var adult = new Adult(data[i]);
+    adults.push(adult);
+  }
+}
+
+d3.csv("data/adult.data", function(d){
+  return {
+      Age:      +d.age,
+      Workclass:    d.workclass,
+      Fnlwgt:     +d.fnlwgt,
+      Education:    d.education,
+      EducationNum:   +d.educationNum,
+      MaritalStatus:  d.maritalStatus,
+      Occupation:   d.occupation,
+      Relationship:   d.relationship,
+      Race:       d.race,
+      Sex:      d.sex,
+      CapitalGain:  +d.capitalGain,
+      CapitalLoss:  +d.capitalLoss,
+      HoursPerWeek:   +d.hoursPerWeek,
+      Country:    d.country,
+      Income:         d.income, 
+    };
+  }, function(err, d) {
+    if (err) return console.log('Oops! csv died.');
+    data = d;
+    //run(data);
+});
+
+createAdultArray();
+Processing.getInstanceById('canvas1').setAdults(adults);
+
+</script>
+
+</html>
