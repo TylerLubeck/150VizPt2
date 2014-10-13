@@ -11,6 +11,10 @@ void setup() {
 	//nodeList = new ArrayList<Node>();
 	Parser parser = new Parser(file);
     nodeList = parser.parse();
+    /* Draw all those relations right quick */
+    for(int i = 0; i < nodeList.size(); i++) {
+    	nodeList.get(i).drawRelations();
+    }
 
     for(Node n: nodeList) {
         println(n.id + ": " + n.mass);

@@ -33,4 +33,11 @@ class Node {
         this.curY = y;
         ellipse(this.curX, this.curY, 2 * this.radius, 2 * this.radius);
     }
+
+    void drawRelations() {
+    	for(int i = 0; i < neighbors.size(); i++) {
+    		line(curX, curY, neighbors.get(i).curX, neighbors.get(i).curY);
+    	}
+    }
+
 }
