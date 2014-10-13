@@ -7,6 +7,7 @@ class Node {
     float radius;
     float r, g, b;
     boolean isClickedOn;
+    float velX, velY;
 
 	Node() {
         this(-1, -1);
@@ -74,6 +75,11 @@ class Node {
             return true;
         }
         return false;
+    }
+
+    float kinEnergy() {
+    	float totesVel = sqrt(pow(this.velX, 2) + pow(this.velY, 2));
+    	return (.5 * this.mass * totesVel);
     }
 
 }

@@ -71,3 +71,16 @@ void mouseReleased() {
         n.isClickedOn = false;
     }
 }
+
+
+
+
+
+/* Calculate total energy of the whole node system */
+float systemEnergy() {
+	float universeEnergy = 0;
+	for(int i = 0; i < nodeList.size(); i++) {
+		universeEnergy += nodeList.get(i).kinEnergy();
+	}
+	return universeEnergy;
+}
