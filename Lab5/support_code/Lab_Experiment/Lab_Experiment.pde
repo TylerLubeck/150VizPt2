@@ -6,6 +6,7 @@ final int DECIDE_YOURSELF = -1; // This is a placeholder for variables you will 
  * This is a global variable for the dataset in your visualization. You'll be overwriting it each trial.
  */
 Data d = null;
+BarGraph bg;
 
 void setup() {
     totalWidth = displayWidth;
@@ -28,12 +29,20 @@ void setup() {
     /**
      ** Finish this: decide how to generate the dataset you are using (see DataGenerator)
      **/
-    d = null;
+    d = new Data();
 
     /**
      ** Finish this: how to generate participant IDs
      ** You can write a short alphanumeric ID generator (cool) or modify this for each participant (less cool).
      **/
+
+    bg = new BarGraph(50, 50);
+
+    for (Data.DataPoint data: d.data) {
+        bg.addBar("point", data.value);
+        println(data.value);
+    }
+
     partipantID = DECIDE_YOURSELF;
 }
 
@@ -56,7 +65,7 @@ void draw() {
         /**
          **  Finish this: decide the chart type. You can do this randomly.
          **/
-        int chartType = DECIDE_YOURSELF;
+        int chartType = 0;
 
         switch (chartType) {
             case -1: // This is a placeholder, you can remove it and use the other cases for the final version
@@ -73,6 +82,8 @@ void draw() {
                 /**
                  ** finish this: 1st visualization
                  **/
+                 println("Rendering bars");
+                 bg.render();
                 break;
             case 1:
                 /**

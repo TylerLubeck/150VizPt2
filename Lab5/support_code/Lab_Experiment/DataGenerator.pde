@@ -1,4 +1,8 @@
 class Data {
+    /* Public indices of the "chosen" marked values */
+    public int m1;
+    public int m2;
+
     class DataPoint {
         private float value = -1;
         private boolean marked = false;
@@ -25,8 +29,7 @@ class Data {
 
     Data() {
         /**
-         ** finish this: how to generate a dataset and mark two of the datapoints
-         ** 
+         ** generate a dataset and mark two of the datapoints
          **/
         // NUM is a global varibale in support.pde
         data = new DataPoint[NUM];
@@ -43,9 +46,19 @@ class Data {
 
         data[m1].setMark(true);
         data[m2].setMark(true);
-
     }
-    
+
+    /* Pass either 0 for the first marked, and 1 for the other 
+     *  Returns the value of the passed index. 
+     *  Will need this to get "truePerc" in Lab_Experiment"
+     */
+    DataPoint getMarkedVal(int num) {
+        if(num != 0) {
+            return data[m1];
+        } else {
+            return data[m2];
+        }
+    }
         /**
          ** finish this: the rest methods and variables you may want to use
          ** 

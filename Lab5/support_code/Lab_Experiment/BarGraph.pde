@@ -110,8 +110,10 @@ class BarGraph {
   }
 
   void render() { 
-    if (!barsHidden) {
+    if (true) {
       for (Bar b : bars) {
+          println("RENDER INDIV BAR");
+          println(b.value);
         b.render();
       }
     }
@@ -151,7 +153,6 @@ class BarGraph {
     //find middle bar
     int iMiddle = bars.size()/2;
     //move to middle
-    moveToMiddle(iMiddle);
     int yCoord = (int)bars.get(0).yCoord - 10;
     //iterate outward in both directions and move to middle
     int iRight = iMiddle + 1;
@@ -167,7 +168,6 @@ class BarGraph {
           iCur = iRight;
           iRight++;
         }
-        moveToMiddle(iCur);
       }
     }
   }
