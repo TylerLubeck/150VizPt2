@@ -5,6 +5,7 @@ class Node {
 	ArrayList<Spring> springs;
 	float curX, curY, curSpeed, curDirection;
     float radius;
+    float velX, velY;
 
 	Node() {
         this(-1, -1);
@@ -38,6 +39,12 @@ class Node {
     	for(int i = 0; i < neighbors.size(); i++) {
     		line(curX, curY, neighbors.get(i).curX, neighbors.get(i).curY);
     	}
+    }
+
+
+    float kinEnergy() {
+    	float totesVel = sqrt(pow(this.velX, 2) + pow(this.velY, 2));
+    	return (.5 * this.mass * totesVel);
     }
 
 }
