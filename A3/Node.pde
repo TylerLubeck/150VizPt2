@@ -33,5 +33,4 @@ class Node {
         this.curY = y;
         ellipse(this.curX, this.curY, 2 * this.radius, 2 * this.radius);
     }
-
 }
