@@ -32,7 +32,7 @@ class Node {
 		curSpeed = curDirection = 0.0;
         this.curX = random(0, width - this.radius);
         this.curY = random(0, height - this.radius);
-        drawPosition(this.curX, this.curY);
+        drawPosition();
 	}
 
     void setPos(float curX, float curY) {
@@ -41,12 +41,6 @@ class Node {
     }
 
     void drawPosition() {
-        drawPosition(this.curX, this.curY);
-    }
-    
-    void drawPosition(float x, float y) {
-        this.curX = x;
-        this.curY = y;
         ellipse(this.curX, this.curY, 2 * this.radius, 2 * this.radius);
     }
 
