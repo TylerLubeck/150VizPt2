@@ -12,10 +12,8 @@ void setup() {
     background(255);
     frame.setResizable(true);
 
-	//nodeList = new ArrayList<Node>();
 	Parser parser = new Parser(file);
     nodeList = parser.parse();
-    /* Draw all those relations right quick */
         
 }
 
@@ -28,21 +26,21 @@ void draw()  {
         image(pickbuffer, 0, 0);
     }
 
+    for(Node n: nodeList)  {
+        n.drawRelations();
+    }
+
     for(Node n: nodeList) {
         if (n.isClickedOn) {
             n.setPos(mouseX, mouseY);
         }
-        n.drawPosition();
-    }
 
-    for(int i = 0; i < nodeList.size(); i++) {
-    	nodeList.get(i).drawRelations();
-    }
-
-    for(Node n: nodeList) {
         if (n.isect(pickbuffer)) {
-            println("INTERSECTING WITH " + n.id);
+            n.setHighlighted(); 
+        } else {
+            n.unsetHighlighted();
         }
+        n.drawPosition(); 
     }
 
 }

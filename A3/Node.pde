@@ -8,6 +8,9 @@ class Node {
     float r, g, b;
     boolean isClickedOn;
     float velX, velY;
+    color highlightColor;
+    color defaultColor;
+    color fillColor;
 
 	Node() {
         this(-1, -1);
@@ -32,16 +35,30 @@ class Node {
 		curSpeed = curDirection = 0.0;
         this.curX = random(0, width - this.radius);
         this.curY = random(0, height - this.radius);
+        this.highlightColor = color(255, 0, 0);
+        this.defaultColor = color(0, 255, 0);
+        this.fillColor = this.defaultColor;
         drawPosition();
 	}
 
-    void setPos(float curX, float curY) {
-        this.curX = curX;
-        this.curY = curY;
+    void setPos(float newX, float newY) {
+
+        newX = newX < this.radius ? this.radius : newX;
+        newX = newX > width - this.radius ? width - this.radius : newX;
+
+        newY = newY < this.radius ? this.radius : newY;
+        newY = newY > height - this.radius ? height - this.radius : newY;
+
+        this.curX = newX;
+        this.curY = newY;
     }
 
     void drawPosition() {
+        fill(this.fillColor);
+        stroke(this.fillColor);
         ellipse(this.curX, this.curY, 2 * this.radius, 2 * this.radius);
+        fill(this.defaultColor);
+        stroke(this.defaultColor);
     }
 
     void drawRelations() {
@@ -76,4 +93,12 @@ class Node {
     	return (.5 * this.mass * totesVel);
     }
 
+
+    void setHighlighted() {
+        this.fillColor = this.highlightColor;
+    }
+
+    void unsetHighlighted() {
+        this.fillColor = this.defaultColor;
+    }
 }
