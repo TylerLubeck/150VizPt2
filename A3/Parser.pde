@@ -1,6 +1,8 @@
 class Parser {
+    ArrayList<Node> nodes;
 	
 	Parser(String fileName) {
+        this.nodes = new ArrayList<Node>();
 		String tempData[];
 		Node tempNode;
 		Spring tempSpring;
@@ -19,6 +21,10 @@ class Parser {
   		}
 	}
 
+    ArrayList<Node> parse() {
+        return this.nodes;
+    }
+
 	void makeConnection(int id1, int id2, Spring spring) {
 		int index1 = -1;
 		int index2 = -1;
@@ -28,8 +34,9 @@ class Parser {
 			else if (nodes.get(i).id == id2)
 				index2 = i;
 		}
-		if (index1 == -1 || index2 == -1)
+		if (index1 == -1 || index2 == -1) {
 			println("ERROR IN PARSING");
+        }
 		nodes.get(index1).neighbors.add(nodes.get(index2));
 		nodes.get(index1).springs.add(spring);
 		nodes.get(index2).neighbors.add(nodes.get(index1));

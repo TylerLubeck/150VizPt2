@@ -1,11 +1,16 @@
 String file = "data.csv";
 
-ArrayList<Node> nodes;
-float k = 3.5;
+ArrayList<Node> nodeList;
+float k = 0.1;
 
 void setup() {
-        size(1200, 800);
-	nodes = new ArrayList<Node>();
+    size(1200, 800);
+	//nodeList = new ArrayList<Node>();
 	Parser parser = new Parser(file);
+    nodeList = parser.parse();
+
+    for(Node n: nodeList) {
+        println(n.id + ": " + n.mass);
+    }
         
 }

@@ -5,7 +5,7 @@ class Spring {
 		this.springL = sprL;
 	}
 
-	float getForce() {
+	double getForce() {
 		return (springL - cur_length) * k;
 	}
 }
