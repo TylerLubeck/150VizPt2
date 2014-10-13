@@ -34,11 +34,11 @@ class Data {
             data[i] = new DataPoint(random(0.0, 100.0), false);
         }
 
-        int m1 = random(0, NUM);
-        int m2 = random(0, NUM);
+        int m1 = int(random(0, int(NUM)));
+        int m2 = int(random(0, int(NUM)));
         /* No repeat indices */
         while(m2 != m1) {
-            m2 = random(0, NUM);
+            m2 = int(random(0, NUM));
         }
 
         data[m1].setMark(true);
