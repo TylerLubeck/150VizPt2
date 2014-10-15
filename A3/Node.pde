@@ -7,6 +7,7 @@ class Node {
     float radius;
     float r, g, b;
     boolean isClickedOn;
+    float netVel;
     float velX, velY;
     color highlightColor;
     color defaultColor;
@@ -28,6 +29,9 @@ class Node {
         this.g = green(id);
         this.b = blue(id);
 		this.mass = mass;
+        this.netVel = 0;
+        this.velX = 0;
+        this.velY = 0;
         this.radius = RADIUS_FACTOR * this.mass;
         this.isClickedOn = false;
 		neighbors = new ArrayList<Node>();
@@ -52,6 +56,33 @@ class Node {
         this.curX = newX;
         this.curY = newY;
     }
+
+
+    /* PROBABLY FUCKIN UP IN HERRRRRR, splitting into x & y */
+    void updatePosition(float currTime, float force) {
+        float acceleration = force / this.mass;
+        /* v = vo + a * t */
+        netVel = netVel + acceleration * currTime;
+        float velX_ = netVel * cos(PI/4);
+        float velY_ = netVel * sin(PI/4);
+        float posX = this.curX + velX_ * currTime + 
+                     .5 * (acceleration * cos(PI/4)) * sq(currTime);
+        float posY = this.curY + velY_ * currTime + 
+                     .5 * (acceleration * sin(PI/4)) * sq(currTime);
+
+        setPos(posX, posY);
+    }
+
+    float totalSpringForces(float k_hooke) {
+        float totalForce = 0;
+        for(int i = 0; i < springs.size(); i++) { /* Cause neighbors and springs indices line up */
+            float distance = dist(curX, curY, neighbors.get(i).curX, neighbors.get(i).curY);
+            /* calculate total forces exerted by attached springs */
+            totalForce += springs.get(i).getForce(k_hooke, distance);
+        }
+        return totalForce;
+    }
+
 
     void drawPosition() {
         fill(this.fillColor);
