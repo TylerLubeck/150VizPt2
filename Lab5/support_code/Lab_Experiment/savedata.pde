@@ -1,7 +1,7 @@
 /**
  * These five variables are the data you need to collect from participants.
  */
-int partipantID = -1;
+String partipantID = "";
 int index = -1;
 float error = -1;
 float truePerc = -1;
@@ -18,7 +18,7 @@ Table expData = null;
  */
 
 String[] vis = {
-    "BarChart", "PieChart", "StackedBarChart", "TreeMap", "LineChart"
+    "PieChart", "BarChart", "StackedBarChart", "BarChart(horizontal)", "TreeMap"
 };
 
 /**
@@ -30,25 +30,20 @@ void saveJudgement() {
         expData.addColumn("PartipantID");
         expData.addColumn("Index");
         expData.addColumn("Vis");
-        expData.addColumn("VisID");
         expData.addColumn("Error");
         expData.addColumn("TruePerc");
         expData.addColumn("ReportPerc");
     }
 
     TableRow newRow = expData.addRow();
-    newRow.setInt("PartipantID", partipantID);
+    newRow.setString("PartipantID", partipantID);
     newRow.setInt("Index", index);
 
     /**
      ** finish this: decide the current visualization
      **/
-    newRow.setString("Vis", "" + DECIDE_YOURSELF);
+    newRow.setString("Vis", vis[chartType]);
 
-    /**
-     ** finish this: decide current vis id
-     **/
-    newRow.setInt("VisID", DECIDE_YOURSELF);
     newRow.setFloat("Error", error);
     newRow.setFloat("TruePerc", truePerc);
     newRow.setFloat("ReportPerc", reportPerc);
@@ -62,5 +57,6 @@ void saveExpData() {
     /**
      ** Change this if you need 
      **/
-    saveTable(expData, "expData.csv");
+    String filename = partipantID + ".csv";
+    saveTable(expData, filename);
 }

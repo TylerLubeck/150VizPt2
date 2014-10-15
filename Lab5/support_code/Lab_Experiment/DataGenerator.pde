@@ -28,22 +28,19 @@ class Data {
     private DataPoint[] data = null;
 
     Data() {
-        /**
-         ** generate a dataset and mark two of the datapoints
-         **/
         // NUM is a global varibale in support.pde
         data = new DataPoint[NUM];
         for(int i = 0; i < NUM; i++) {
             data[i] = new DataPoint(random(0.0, 100.0), false);
         }
 
-        int m1 = int(random(0, int(NUM)));
-        int m2 = int(random(0, int(NUM)));
+        m1 = int(random(0, int(NUM)));
+        m2 = int(random(0, int(NUM)));
         /* No repeat indices */
-        while(m2 != m1) {
+        while(m2 == m1) {
             m2 = int(random(0, NUM));
         }
-
+        
         data[m1].setMark(true);
         data[m2].setMark(true);
     }
@@ -59,6 +56,19 @@ class Data {
             return data[m2];
         }
     }
+    
+    float getValue(int i) {
+        return data[i].getValue();
+    }
+    
+    boolean isMarked(int i) {
+        return data[i].isMarked();
+    }
+    
+    int getSize() {
+      return data.length;
+    }
+    
         /**
          ** finish this: the rest methods and variables you may want to use
          ** 

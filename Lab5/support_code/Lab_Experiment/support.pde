@@ -60,6 +60,7 @@ void drawTextField() {
     cp5.addTextfield("answer")
         .setPosition(totalWidth / 2.0 - chartSize / 2.0, totalHeight / 2.0 + chartSize / 2.0 + margin * 2)
         .setSize(textFieldWidth, textFieldHeight)
+        .setFocus(true)
         .setColorCaptionLabel(color(0, 0, 0))
         .setFont(createFont("arial", 14))
         .setAutoClear(true);
