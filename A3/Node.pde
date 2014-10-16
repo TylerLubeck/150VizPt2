@@ -35,6 +35,7 @@ class Node {
 		curSpeed = curDirection = 0.0;
         this.curX = random(0, width - this.radius);
         this.curY = random(0, height - this.radius);
+        setPos(this.curX, this.curY);
         this.highlightColor = color(255, 0, 0);
         this.defaultColor = color(0, 255, 0);
         this.fillColor = this.defaultColor;
