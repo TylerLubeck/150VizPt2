@@ -1,191 +1,82 @@
-class Bar {
-  float value;
-  float xCoord, yCoord, pointX, pointY;
-  float bWidth, bHeight;
-  String label;
-  color fill, stroke;
-
-  Bar() {
-    value = 0;
-    label = "";
-  }
-  Bar( String l, float val, color f, color s) {
-    value = val;
-    label = "(" + l + "," + value + ")";
-    fill = f;
-    stroke = s;
-  }
-
-  void SetGeometry( float xC, float yC, float w, float h) {
-    pointX = xC + w/2;
-    pointY = yC;
-    xCoord = xC;
-    yCoord = yC;
-    bWidth = w;
-    bHeight = h;
-  }
-
-  void render() {
-    stroke(stroke);
-    fill(fill);
-    rect( xCoord, yCoord, bWidth, bHeight );
-  }
-
-  void intersect(int posx, int posy) {
-    if ( posx >= xCoord && posx <= bWidth + xCoord &&
-      posy >= yCoord && posy <= (yCoord+ bHeight)) {
-      fill(color(255, 0, 0));
-      text( label, xCoord - bWidth - 10, yCoord - 2);
-      fill(color(0));
-    }
-  }
-}
-
+import java.util.Collections;
 
 class BarGraph {
-  ArrayList<Bar> bars;
-  float sumBarValues;
-  color fill, stroke;
-  float w, h;
-  float leftSpacing;
-  float rightSpacing;
-  float paddedHeight;
-  float pad;
-  boolean[] barIsAnimating;
-  float barWidth; 
-  boolean barsHidden;
-
-  BarGraph(float w, float h) {
-    bars = new ArrayList<Bar>();
-    fill = color(155, 161, 163);
-    stroke = color(216, 224, 227);
-    this.w = w;
-    this.h = h;
-    //Need to make spacing dynamic
-    this.leftSpacing = 20;
-    this.rightSpacing = 20; 
-    this.paddedHeight = height - 100;
-    this.sumBarValues = 0;
-    barsHidden = false;
+  Data values;
+  float unit;
+  float zeroY, zeroX, x, y, w, h;
+  float maxRange;
+  
+  BarGraph(Data values) {
+    this.values = values;
+    setMaxRange();
   }
-
-  void addBar( String lbl, float val) {
-    Bar b = new Bar( lbl, val, this.fill, this.stroke);
-    bars.add(b);
-  }
-
-  void doneAddingBars() {
-    this.setGeometry();
-    for (Bar b : bars) {
-      this.sumBarValues += b.value;
-    }
-    float masterBarHeight = 3* (paddedHeight / 4);
-
-    //create array
-    barIsAnimating = new boolean[this.bars.size()];
-    setBarsAreAnimatingToFalse();
-    setGeometry();
-  }
-
-  void setGeometry() {
-    //calculate appropriate width/height and spacing for each bar
-    int numBars = bars.size();
-    float barSpacing = 5.0;
-    float totalSpacing = (numBars + 1) * barSpacing;
-    float availableWidth = this.w - totalSpacing - this.leftSpacing - this.rightSpacing;
-    this.barWidth = availableWidth / numBars;
-    float yFactor = 2.0;
-
-    //set up starting coords
-    float startPosX = this.leftSpacing + barSpacing;
-
-    for (int i=0; i< bars.size (); i++) {
-      float barHeight = bars.get(i).value * yFactor;
-      bars.get(i).SetGeometry(startPosX, 
-      paddedHeight - barHeight, 
-      this.barWidth, 
-      barHeight);
-      startPosX+=this.barWidth + barSpacing;
-    }
-  }
-
-  void render() { 
-    if (true) {
-      for (Bar b : bars) {
-          println("RENDER INDIV BAR");
-          println(b.value);
-        b.render();
-      }
-    }
-  }
-
-  boolean barsAreDoneAnimating() {
-    for (boolean b : this.barIsAnimating) {
-      if (b) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  void setBarsAreAnimatingToFalse() {
-    for (int i=0; i<this.barIsAnimating.length; i++) {
-      this.barIsAnimating[i] = false;
-    }
-  }
-
-  void shrink() {
-    float pxShrink = 2;
-    float masterBarHeight = 3* (paddedHeight / 4);
-    for (int i=0; i<bars.size (); i++) {
-      float finalBarHeight = ( bars.get(i).value / this.sumBarValues ) * masterBarHeight;
-      if ((paddedHeight - bars.get(i).yCoord) > finalBarHeight) {
-        bars.get(i).yCoord += pxShrink;
-        bars.get(i).bHeight -= pxShrink;
-        this.barIsAnimating[i] = true;
-      } else {
-        this.barIsAnimating[i] = false;
-      }
-    }
-  }
-
-  void stackBars() {
-    //find middle bar
-    int iMiddle = bars.size()/2;
-    //move to middle
-    int yCoord = (int)bars.get(0).yCoord - 10;
-    //iterate outward in both directions and move to middle
-    int iRight = iMiddle + 1;
-    int iLeft = iMiddle - 1;
-    int iCur = iRight;
-    for (int i=0; i< bars.size () - 1; i++) {
-      //only increment when current is done
-      if (!barIsAnimating[iCur]) {
-        if ( i%2 == 0 ) {
-          iCur = iLeft;
-          iLeft--;
-        } else {
-          iCur = iRight;
-          iRight++;
-        }
-      }
-    }
-  }
-
-  void moveUp() {
-    int middlePosY = Math.round(this.h / 2) - Math.round(bars.get(0).bHeight / 2);
-    float pxMove = 5;
-    for (int i=0; i< bars.size (); i++) {
-      int barPosY = (int)bars.get(i).yCoord;
-      if (barPosY > middlePosY) {
-        bars.get(i).yCoord -= pxMove;
-        this.barIsAnimating[i]=true;
-      } else {
-        this.barIsAnimating[i]=false;
-      }
-    }
+  
+  void draw(float x, float y, float w, float h, boolean vertical) {
+    this.x = x;
+    this.y = y; 
+    this.w = w-2;
+    this.h = h-2;
+    setUnit();
+    if (vertical)
+      drawBarsVertical();
+    else
+      drawBarsHorizontal();
   }
 
   
+  void drawBarsVertical(){
+    zeroY = y + this.h;
+    float xInterval = w / (float(values.getSize()));
+    float tickX = x + xInterval/2.0;
+    float upperX, upperY, widthB, heightB;
+    
+    for (int i = 0; i < values.getSize(); ++i) {
+      fill(255);
+      upperX = tickX-(xInterval*0.8)/2;
+      upperY = zeroY-unit*values.getValue(i);
+      widthB = xInterval*0.8;
+      heightB = unit*values.getValue(i);
+      rect(upperX, upperY, widthB, heightB);
+      if (values.isMarked(i)) {
+        fill(0);
+        ellipse(tickX, zeroY - w*0.02, w*0.01, w*0.01);
+      }
+      tickX+= xInterval;
+    }
+ }
+ 
+ void drawBarsHorizontal(){
+    zeroX = x;
+    float yInterval = h / (float(values.getSize()));
+    float tickY = y + yInterval/2.0;
+    float upperX, upperY, widthB, heightB;
+    
+    for (int i = 0; i < values.getSize(); ++i) {
+      fill(255);
+      upperY = tickY-(yInterval*0.8)/2;
+      upperX = x;
+      heightB = yInterval*0.8;
+      widthB = unit*values.getValue(i);
+      rect(upperX, upperY, widthB, heightB);
+      if (values.isMarked(i)) {
+        fill(0);
+        ellipse(zeroX + w*0.02, tickY, w*0.01, w*0.01);
+      }
+      tickY+= yInterval;
+    }
+ }
+ 
+  void setUnit() {
+     unit = h /maxRange/1.1;
+  } 
+  
+  void setMaxRange() {
+     float max = 0.0;
+     for (int i = 0; i < values.getSize(); ++i) {
+        if (values.getValue(i) > max) 
+          max = values.getValue(i);
+     }
+     maxRange = max;
+  }
 }
 

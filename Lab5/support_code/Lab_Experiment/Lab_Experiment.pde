@@ -1,19 +1,28 @@
 import controlP5.*;
+import java.lang.Object;
+import java.util.Arrays;
 
-final int DECIDE_YOURSELF = -1; // This is a placeholder for variables you will replace.
+final int NUM_REP = 20;
 
-/**
- * This is a global variable for the dataset in your visualization. You'll be overwriting it each trial.
- */
+int chartType;
+ArrayList<Integer> visType;
 Data d = null;
 BarGraph bg;
+PieGraph pg;
+StackedBar sb;
+SqTreeMap sm;
 
 void setup() {
     totalWidth = displayWidth;
     totalHeight = displayHeight;
     chartLeftX = totalWidth / 2.0 - chartSize / 2.0;
     chartLeftY = totalHeight / 2.0 - chartSize / 2.0 - margin_top;
-
+    visType = new ArrayList<Integer>();
+    for (int i = 0; i < vis.length; ++i) {
+      for (int j = 0; j < NUM_REP; ++j)
+        visType.add(i);
+    }
+    
     size((int) totalWidth, (int) totalHeight);
     //if you have a Retina display, use the line below (looks better)
     //size((int) totalWidth, (int) totalHeight, "processing.core.PGraphicsRetina2D");
@@ -26,85 +35,93 @@ void setup() {
     textFont(pfont);
     page1 = true;
 
-    /**
-     ** Finish this: decide how to generate the dataset you are using (see DataGenerator)
-     **/
     d = new Data();
+    int tempIndex;
+    tempIndex = int(random(0, visType.size()));
+    chartType = visType.get(tempIndex);
+    visType.remove(tempIndex);
+    
+    int year, month, day, hour, min;
+    year = year();
+    month = month();
+    day = day();
+    hour = hour();
+    min = minute();
 
-    /**
-     ** Finish this: how to generate participant IDs
-     ** You can write a short alphanumeric ID generator (cool) or modify this for each participant (less cool).
-     **/
-
-    bg = new BarGraph(50, 50);
-
-    for (Data.DataPoint data: d.data) {
-        bg.addBar("point", data.value);
-        println(data.value);
-    }
-
-    partipantID = DECIDE_YOURSELF;
+    partipantID = String.valueOf(year) + "-" + String.valueOf(month) + "-" + String.valueOf(day) + "-" + String.valueOf(hour) + "-" + String.valueOf(min);
 }
 
 void draw() {
     textSize(fontSize);
-    /**
-     ** add more: you may need to draw more stuff on your screen
-     **/
     if (index < 0 && page1) {
         drawIntro();
         page1 = false;
-    } else if (index >= 0 && index < vis.length) {
+    } else if (index >= 0 && index < vis.length* NUM_REP) {
         if (index == 0 && page2) {
             clearIntro();
             drawTextField();
             drawInstruction();
             page2 = false;
         }
-
-        /**
-         **  Finish this: decide the chart type. You can do this randomly.
-         **/
-        int chartType = 0;
-
+        noStroke();
+        fill(255);
+        rect(chartLeftX, chartLeftY-23, 300, 22);
+        fill(0);
+        textSize(20);
+        textAlign(LEFT);
+        text(index+1 + "/100", chartLeftX, chartLeftY-3); 
+        
         switch (chartType) {
-            case -1: // This is a placeholder, you can remove it and use the other cases for the final version
+            case 0:
+                 pg = new PieGraph(d);
                  stroke(0);
                  strokeWeight(1);
                  fill(255);
                  rectMode(CORNER);
-                 /*
-                  * all your charts must be inside this rectangle
-                  */
                  rect(chartLeftX, chartLeftY, chartSize, chartSize);
+                 pg.draw(chartLeftX + chartSize/2, chartLeftY + chartSize/2, chartSize*0.9);
+                 cp5.get(Textfield.class, "answer").setFocus(true);
                  break;
-            case 0:
-                /**
-                 ** finish this: 1st visualization
-                 **/
-                 println("Rendering bars");
-                 bg.render();
-                break;
             case 1:
-                /**
-                 ** finish this: 2nd visualization
-                 **/
-                break;
+                 bg = new BarGraph(d);
+                 stroke(0);
+                 strokeWeight(1);
+                 fill(255);
+                 rectMode(CORNER);
+                 rect(chartLeftX, chartLeftY, chartSize, chartSize);
+                 bg.draw(chartLeftX, chartLeftY, chartSize, chartSize, true);
+                 cp5.get(Textfield.class, "answer").setFocus(true);
+                 break;
             case 2:
-                /**
-                 ** finish this: 3rd visualization
-                 **/
-                break;
+                 sb = new StackedBar(d);
+                 stroke(0);
+                 strokeWeight(1);
+                 fill(255);
+                 rectMode(CORNER);
+                 rect(chartLeftX, chartLeftY, chartSize, chartSize);
+                 sb.draw(chartLeftX, chartLeftY, chartSize, chartSize);
+                 cp5.get(Textfield.class, "answer").setFocus(true);
+                 break;
             case 3:
-                /**
-                 ** finish this: 4th visualization
-                 **/
-                break;
+                 bg = new BarGraph(d);
+                 stroke(0);
+                 strokeWeight(1);
+                 fill(255);
+                 rectMode(CORNER);
+                 rect(chartLeftX, chartLeftY, chartSize, chartSize);
+                 bg.draw(chartLeftX, chartLeftY, chartSize, chartSize, false);
+                 cp5.get(Textfield.class, "answer").setFocus(true);
+                 break;
             case 4:
-                /**
-                 ** finish this: 5th visualization
-                 **/
-                break;
+                 sm = new SqTreeMap(d);
+                 stroke(0);
+                 strokeWeight(1);
+                 fill(255);
+                 rectMode(CORNER);
+                 rect(chartLeftX, chartLeftY, chartSize, chartSize);
+                 sm.draw(chartLeftX, chartLeftY, chartSize, chartSize);
+                 cp5.get(Textfield.class, "answer").setFocus(true);
+                 break;
         }
 
         drawWarning();
@@ -133,34 +150,34 @@ public void next() {
     } else if (num > 100) {
         warning = "Please input a number between 0 - 100!";
     } else {
-        if (index >= 0 && index < vis.length) {
+        if (index >= 0 && index < vis.length*NUM_REP) {
             float ans = parseFloat(cp5.get(Textfield.class, "answer").getText());
 
-            /**
-             ** Finish this: decide how to compute the right answer
-             **/
-            truePerc = DECIDE_YOURSELF; // hint: from your list of DataPoints, extract the two marked ones to calculate the "true" percentage
-
+            float val1 = d.getMarkedVal(0).getValue();
+            float val2 = d.getMarkedVal(1).getValue();
+            truePerc = val1 > val2? val2/val1 : val1/val2;
             reportPerc = ans / 100.0; // this is the participant's response
             
-            /**
-             ** Finish this: decide how to compute the log error from Cleveland and McGill (see the handout for details)
-             **/
-            error = DECIDE_YOURSELF;
+            error = log(abs(reportPerc - truePerc)*100.0 + 1/8.0) / log(2);
 
             saveJudgement();
         }
 
-        /**
-         ** Finish this: decide the dataset (similar to how you did in setup())
-         **/
-        d = null;
-
+        
+    
         cp5.get(Textfield.class, "answer").clear();
         index++;
 
-        if (index == vis.length - 1) {
+        if (index == vis.length*NUM_REP - 1) {
             pagelast = true;
+        }
+        else {
+          d = new Data();
+         
+          int tempIndex;
+          tempIndex = int(random(0, visType.size()));
+          chartType = visType.get(tempIndex);
+          visType.remove(tempIndex);
         }
     }
 }
@@ -169,22 +186,30 @@ public void next() {
  * This method is called when the participant clicked "CLOSE" button on the "Thanks" page.
  */
 public void close() {
-    /**
-     ** Change this if you need to do some final processing
-     **/
     saveExpData();
     exit();
+}
+
+public void keyPressed() {
+  if((index < vis.length * NUM_REP) && (key == ENTER || key == RETURN)) {
+    next();
+  }
 }
 
 /**
  * Calling this method will set everything to the intro page. Use this if you want to run multiple participants without closing Processing (cool!). Make sure you don't overwrite your data.
  */
 public void reset(){
-    /**
-     ** Finish/Use/Change this method if you need 
-     **/
-    partipantID = DECIDE_YOURSELF;
-    d = null;
+    int year, month, day, hour, min;
+    year = year();
+    month = month();
+    day = day();
+    hour = hour();
+    min = minute();
+
+    partipantID = String.valueOf(year) + "-" + String.valueOf(month) + "-" + String.valueOf(day) + "-" + String.valueOf(hour) + "-" + String.valueOf(min);
+
+    d = new Data();
 
     /**
      ** Don't worry about the code below

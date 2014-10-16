@@ -1,11 +1,11 @@
 class Spring {
-	double springL, cur_length;
+	double springL;
 
 	Spring(double sprL) {
 		this.springL = sprL;
 	}
 
-	double getForce() {
-		return (springL - cur_length) * k;
+	double getForce(float k, float cur_length) {
+		return (this.springL - cur_length) * k;
 	}
 }
