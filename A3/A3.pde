@@ -4,7 +4,7 @@ float current_time;
 float DAMPENING = 0.1;
 
 ArrayList<Node> nodeList;
-float TIME_STEP = .01;
+float TIME_STEP = .0001;
 float k = -0.01;
 
 // float COULOMB = 8.9875517873681764 * (pow(10, 9));
@@ -37,7 +37,7 @@ void draw()  {
 
         /* Update velocities & accelerations */
         float allForces = (netRepulsion + netSpring) - DAMPENING;
-        nodeList.get(i).updatePosition(TIME_STEP, allForces);
+        nodeList.get(i).updatePosition(current_time, allForces);
     }
 
 
