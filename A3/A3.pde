@@ -31,6 +31,11 @@ void draw()  {
     /* Calculation loops */
     for(int i = 0; i < nodeList.size(); i++) {
         /* per node */
+        /* Vectors: Force, Acceleration, Velocity */
+        /* Note, mass is scalar */
+        /* PVector netRepulsion = ...
+         * PVector netSpring = ... 
+         */
         float netRepulsion = allRepulsionForces(nodeList.get(i), i);
         float netSpring = nodeList.get(i).totalSpringForces(k);
         //float netSpring = 0;
@@ -67,6 +72,9 @@ void draw()  {
 }
 
 float allRepulsionForces(Node center, int index) {
+    /* PVector sumForces = PVector(0, 0);
+     *      sumForces.add(coulomb_repulsion(center, nodeList.get(i)))
+     */
     float sumForces = 0;
     for(int i = 0; i < nodeList.size(); i++) {
         if(i == index) continue;
@@ -77,6 +85,9 @@ float allRepulsionForces(Node center, int index) {
 }
 
 float coulomb_repulsion(Node n, Node other) {
+    /* PVector direction = PVector(PVector(n.curX, n.curY), PVector(other.curX, other.curY))
+     * return direction.div(COULOMB)
+     */
     float distance = dist(n.curX, n.curY, other.curX, other.curY);
     return COULOMB/distance;
 }

@@ -59,7 +59,6 @@ class Node {
     }
 
 
-    /* PROBABLY FUCKIN UP IN HERRRRRR, splitting into x & y */
     void updatePosition(float currTime, float force) {
         float acceleration = force / this.mass;
         /* v = vo + a * t */
