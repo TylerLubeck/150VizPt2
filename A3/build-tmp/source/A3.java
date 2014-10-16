@@ -20,7 +20,7 @@ float current_time;
 float DAMPENING = 0.1f;
 
 ArrayList<Node> nodeList;
-float TIME_STEP = .01f;
+float TIME_STEP = .0001f;
 float k = -0.01f;
 
 // float COULOMB = 8.9875517873681764 * (pow(10, 9));
@@ -53,7 +53,7 @@ public void draw()  {
 
         /* Update velocities & accelerations */
         float allForces = (netRepulsion + netSpring) - DAMPENING;
-        nodeList.get(i).updatePosition(TIME_STEP, allForces);
+        nodeList.get(i).updatePosition(current_time, allForces);
     }
 
 
@@ -193,6 +193,7 @@ class Node {
     }
 
 
+    /* PROBABLY FUCKIN UP IN HERRRRRR, splitting into x & y */
     public void updatePosition(float currTime, float force) {
         float acceleration = force / this.mass;
         /* v = vo + a * t */
