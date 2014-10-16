@@ -37,17 +37,13 @@ void initSetting() {
             rangeTempValue[0] = rs.getInt("MinTemp");
             rangeTempValue[1] = rs.getInt("MaxTemp");
 
-            println(rangeTempValue);
-
             rangeHumidityValue[0] = rs.getInt("MinHumid");
             rangeHumidityValue[1] = rs.getInt("MaxHumid");
 
-            println(rangeHumidityValue);
 
             rangeWindValue[0] = rs.getInt("MinWind");
             rangeWindValue[1] = rs.getInt("MaxWind");
 
-            println(rangeWindValue);
         }
 
     } catch (Exception e) {
