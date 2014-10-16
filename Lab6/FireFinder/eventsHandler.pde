@@ -2,6 +2,7 @@ import java.sql.ResultSet;
 
 String table_name = "forestfire";
 
+
 class Pair {
     float X;
     float Y;
@@ -117,7 +118,7 @@ void submitQuery() {
     try {
         // submit the sql query and get a ResultSet from the database
        rs  = (ResultSet) DBHandler.exeQuery(sql);
-
+        
        while(rs.next()) {
             println("(" + rs.getFloat("X") + "," + rs.getFloat("Y") + ")");
             Pair p = new Pair(rs.getFloat("X"), rs.getFloat("Y"));
