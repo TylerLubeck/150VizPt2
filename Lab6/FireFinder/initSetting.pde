@@ -22,7 +22,27 @@ void initSetting() {
      
     try {
         // submit the sql query and get a ResultSet from the database
+        String temps = "MAX(temp) AS MaxTemp, MIN(temp) as MinTemp, ";
+        String humids = "MAX(humidity) AS MaxHumid, MIN(humidity) as MinHumid, ";
+        String winds = "MAX(wind) AS MaxWind, MIN(wind) as MinWind";
+        sql = "SELECT " + temps + humids + winds + " FROM forestfire";
         rs = (ResultSet) DBHandler.exeQuery(sql);
+        while(rs.next()) {
+            rangeTempValue[0] = rs.getInt("MinTemp");
+            rangeTempValue[1] = rs.getInt("MaxTemp");
+
+            println(rangeTempValue);
+
+            rangeHumidityValue[0] = rs.getInt("MinHumid");
+            rangeHumidityValue[1] = rs.getInt("MaxHumid");
+
+            println(rangeHumidityValue);
+
+            rangeWindValue[0] = rs.getInt("MinWind");
+            rangeWindValue[1] = rs.getInt("MaxWind");
+
+            println(rangeWindValue);
+        }
 
     } catch (Exception e) {
         // should be a java.lang.NullPointerException here when rs is empty
