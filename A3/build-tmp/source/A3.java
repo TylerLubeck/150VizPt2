@@ -17,11 +17,12 @@ public class A3 extends PApplet {
 String file = "data.csv";
 PGraphics pickbuffer = null;
 float current_time;
-float DAMPENING = 0.1f;
+float DAMPENING = 0.9f;
 
 ArrayList<Node> nodeList;
-float TIME_STEP = .0001f;
-float k = -0.01f;
+float TIME_STEP = .01f;
+float k = 0.01f;
+float LOWEST_ENERGY = 0.5f;
 
 // float COULOMB = 8.9875517873681764 * (pow(10, 9));
 float COULOMB = 250;
@@ -30,13 +31,24 @@ int currentSelectedId = -1;
 boolean hasBeenSelected = false;
 
 public void setup() {
-    size(400, 400);
+    size(800, 800);
     background(255);
     frame.setResizable(true);
-    current_time = 0;
+    current_time = TIME_STEP;
 
 	Parser parser = new Parser(file);
     nodeList = parser.parse();
+
+   for(int i = 0; i < nodeList.size(); i++) {
+
+        PVector netRepulsion = allRepulsionForces(nodeList.get(i), i);
+        PVector netSpring = nodeList.get(i).totalSpringForces(k);
+        //float netSpring = 0;
+
+        /* Update velocities & accelerations */
+        PVector allForces = PVector.mult(PVector.add(netSpring, netRepulsion), DAMPENING);
+        nodeList.get(i).updatePosition(current_time, allForces);
+    }
         
 }
 
@@ -45,15 +57,21 @@ public void draw()  {
     pickbuffer = createGraphics(width, height);
     background(255);
     /* Calculation loops */
-    for(int i = 0; i < nodeList.size(); i++) {
-        /* per node */
-        float netRepulsion = allRepulsionForces(nodeList.get(i), i);
-        float netSpring = nodeList.get(i).totalSpringForces(k);
-        //float netSpring = 0;
 
-        /* Update velocities & accelerations */
-        float allForces = (netRepulsion + netSpring) - DAMPENING;
-        nodeList.get(i).updatePosition(current_time, allForces);
+    if (systemEnergy() > LOWEST_ENERGY) {
+        for(int i = 0; i < nodeList.size(); i++) {
+
+            PVector netRepulsion = allRepulsionForces(nodeList.get(i), i);
+            PVector netSpring = nodeList.get(i).totalSpringForces(k);
+            //float netSpring = 0;
+
+            /* Update velocities & accelerations */
+            PVector allForces = PVector.mult(PVector.add(netSpring, netRepulsion), DAMPENING);
+            nodeList.get(i).updatePosition(current_time, allForces);
+        }
+    } else {
+        println("LOW");
+
     }
 
 
@@ -82,19 +100,22 @@ public void draw()  {
 
 }
 
-public float allRepulsionForces(Node center, int index) {
-    float sumForces = 0;
+public PVector allRepulsionForces(Node center, int index) {
+    /* PVector sumForces = PVector(0, 0);
+     *      sumForces.add(coulomb_repulsion(center, nodeList.get(i)))
+     */
+    PVector sumForces = new PVector(0f,0f);
     for(int i = 0; i < nodeList.size(); i++) {
         if(i == index) continue;
-        sumForces += coulomb_repulsion(center, nodeList.get(i));
+        sumForces.add(coulomb_repulsion(center, nodeList.get(i)));
         //println("sumForce: " + sumForces);
     }
     return sumForces;
 }
 
-public float coulomb_repulsion(Node n, Node other) {
-    float distance = dist(n.curX, n.curY, other.curX, other.curY);
-    return COULOMB/distance;
+public PVector coulomb_repulsion(Node n, Node other) {
+    PVector repulse = new PVector(COULOMB / (n.position.x - other.position.x), COULOMB / (n.position.y - other.position.y));
+    return repulse;
 }
 
 public void drawPickBuffer() {
@@ -131,6 +152,7 @@ public float systemEnergy() {
 	for(int i = 0; i < nodeList.size(); i++) {
 		universeEnergy += nodeList.get(i).kinEnergy();
 	}
+    println("universeEnergy " + universeEnergy);
 	return universeEnergy;
 }
 class Node {
@@ -138,12 +160,11 @@ class Node {
 	int id, mass;
 	ArrayList<Node> neighbors;
 	ArrayList<Spring> springs;
-	float curX, curY, curSpeed, curDirection;
     float radius;
     float r, g, b;
     boolean isClickedOn;
-    float netVel;
-    float velX, velY;
+    PVector netVel;
+    PVector position;
     int highlightColor;
     int defaultColor;
     int fillColor;
@@ -160,25 +181,32 @@ class Node {
 
 	Node(int id, int mass) {
 		this.id = id;
-        this.r = red(id);
-        this.g = green(id);
-        this.b = blue(id);
-		this.mass = mass;
-        this.netVel = 0;
-        this.velX = 0;
-        this.velY = 0;
-        this.radius = RADIUS_FACTOR * this.mass;
-        this.isClickedOn = false;
-		neighbors = new ArrayList<Node>();
-		springs = new ArrayList<Spring>();
-		curSpeed = curDirection = 0.0f;
-        this.curX = random(0, width - this.radius);
-        this.curY = random(0, height - this.radius);
+        this.mass = mass;
+        this.r = red(id); this.g = green(id); this.b = blue(id);
+        
+        float _X = random(0, width - this.radius);
+        float _Y = random(0, height - this.radius);
+        this.position = new PVector(_X, _Y);
+        
         this.highlightColor = color(255, 0, 0);
         this.defaultColor = color(0, 255, 0);
         this.fillColor = this.defaultColor;
+
+        this.isClickedOn = false;
+        this.radius = RADIUS_FACTOR * this.mass;
+
+        neighbors = new ArrayList<Node>();
+        springs = new ArrayList<Spring>();
+		
+        this.netVel = new PVector(0f, 0f);
+        
+        setPos(this.position);
         drawPosition();
 	}
+
+    public void setPos(PVector pos) {
+        setPos(pos.x, pos.y);
+    }
 
     public void setPos(float newX, float newY) {
 
@@ -188,48 +216,55 @@ class Node {
         newY = newY < this.radius ? this.radius : newY;
         newY = newY > height - this.radius ? height - this.radius : newY;
 
-        this.curX = newX;
-        this.curY = newY;
+        this.position.set(newX, newY);
     }
 
 
-    /* PROBABLY FUCKIN UP IN HERRRRRR, splitting into x & y */
-    public void updatePosition(float currTime, float force) {
-        float acceleration = force / this.mass;
+    public void updatePosition(float currTime, PVector force) {
+        PVector acceleration = PVector.div(force, this.mass);
+        //println("acceleration: " + acceleration);
         /* v = vo + a * t */
-        netVel = netVel + acceleration * currTime;
-        float velX_ = netVel * cos(PI/4);
-        float velY_ = netVel * sin(PI/4);
-        float posX = this.curX + velX_ * currTime + 
-                     .5f * (acceleration * cos(PI/4)) * sq(currTime);
-        float posY = this.curY + velY_ * currTime + 
-                     .5f * (acceleration * sin(PI/4)) * sq(currTime);
+        netVel.add(acceleration);
+        netVel.mult(currTime);
+
+        float velX_ = netVel.x;
+        float velY_ = netVel.y;
+        /* s = so + vt + .5 a t^2 */
+        float posX = this.position.x + velX_ * currTime + 
+                     .5f * (acceleration.x) * sq(currTime);
+        float posY = this.position.y + velY_ * currTime + 
+                     .5f * (acceleration.y) * sq(currTime);
+
 
         setPos(posX, posY);
     }
 
-    public float totalSpringForces(float k_hooke) {
-        float totalForce = 0;
+    public PVector totalSpringForces(float k_hooke) {
+        PVector totalForce = new PVector(0f,0f);
         for(int i = 0; i < springs.size(); i++) { /* Cause neighbors and springs indices line up */
-            float distance = dist(curX, curY, neighbors.get(i).curX, neighbors.get(i).curY);
+            PVector dir = new PVector(this.position.x - neighbors.get(i).position.x, 
+                                      this.position.y - neighbors.get(i).position.y);
             /* calculate total forces exerted by attached springs */
-            totalForce += springs.get(i).getForce(k_hooke, distance);
+            totalForce.add(springs.get(i).getForce(k_hooke, dir));
         }
+        println("SPRING FORCE: " + totalForce);
+        totalForce.mult(-1f);
         return totalForce;
+        //return new PVector(0f, 0f);
     }
 
 
     public void drawPosition() {
         fill(this.fillColor);
         stroke(this.fillColor);
-        ellipse(this.curX, this.curY, 2 * this.radius, 2 * this.radius);
+        ellipse(this.position.x, this.position.y, 2 * this.radius, 2 * this.radius);
         fill(this.defaultColor);
         stroke(this.defaultColor);
     }
 
     public void drawRelations() {
     	for(int i = 0; i < neighbors.size(); i++) {
-    		line(curX, curY, neighbors.get(i).curX, neighbors.get(i).curY);
+    		line(position.x, position.y, neighbors.get(i).position.x, neighbors.get(i).position.y);
     	}
     }
 
@@ -237,14 +272,14 @@ class Node {
         pg.fill(this.r, this.g, this.b);
         pg.stroke(this.r, this.g, this.b);
         pg.strokeWeight(5);
-        pg.ellipse(this.curX, this.curY, 2 * this.radius, 2 * this.radius);
+        pg.ellipse(this.position.x, this.position.y, 2 * this.radius, 2 * this.radius);
     }
 
     public void renderSelected() {
         strokeWeight(1);
         stroke(this.r, this.g, this.b);
         fill(this.r, this.g, this.b, 128);
-        ellipse(this.curX, this.curY, 2 * this.radius, 2 * this.radius);
+        ellipse(this.position.x, this.position.y, 2 * this.radius, 2 * this.radius);
     }
 
     public boolean isect(PGraphics img)  {
@@ -255,8 +290,7 @@ class Node {
     }
 
     public float kinEnergy() {
-    	float totesVel = sqrt(pow(this.velX, 2) + pow(this.velY, 2));
-    	return (.5f * this.mass * totesVel);
+    	return (.5f * this.mass * netVel.mag());
     }
 
 
@@ -314,14 +348,18 @@ class Parser {
 	}
 }
 class Spring {
-	double springL;
+	PVector springL;
 
 	Spring(double sprL) {
-		this.springL = sprL;
+		this.springL = new PVector(1f, 1f);
+		this.springL.mult((float)sprL);
 	}
 
-	public double getForce(float k, float cur_length) {
-		return (this.springL - cur_length) * k;
+	public PVector getForce(float k, PVector curr_dir) {
+		PVector temp = PVector.sub(this.springL, curr_dir);
+		temp.mult(k);
+		return temp;
+
 	}
 }
   static public void main(String[] passedArgs) {

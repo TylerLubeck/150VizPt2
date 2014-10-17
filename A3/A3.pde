@@ -1,11 +1,12 @@
 String file = "data.csv";
 PGraphics pickbuffer = null;
 float current_time;
-float DAMPENING = 0.1;
+float DAMPENING = 0.9;
 
 ArrayList<Node> nodeList;
-float TIME_STEP = .0001;
-float k = -0.01;
+float TIME_STEP = .01;
+float k = 0.01;
+float LOWEST_ENERGY = 0.5;
 
 // float COULOMB = 8.9875517873681764 * (pow(10, 9));
 float COULOMB = 250;
@@ -14,13 +15,24 @@ int currentSelectedId = -1;
 boolean hasBeenSelected = false;
 
 void setup() {
-    size(400, 400);
+    size(800, 800);
     background(255);
     frame.setResizable(true);
-    current_time = 0;
+    current_time = TIME_STEP;
 
 	Parser parser = new Parser(file);
     nodeList = parser.parse();
+
+   for(int i = 0; i < nodeList.size(); i++) {
+
+        PVector netRepulsion = allRepulsionForces(nodeList.get(i), i);
+        PVector netSpring = nodeList.get(i).totalSpringForces(k);
+        //float netSpring = 0;
+
+        /* Update velocities & accelerations */
+        PVector allForces = PVector.mult(PVector.add(netSpring, netRepulsion), DAMPENING);
+        nodeList.get(i).updatePosition(current_time, allForces);
+    }
         
 }
 
@@ -29,20 +41,21 @@ void draw()  {
     pickbuffer = createGraphics(width, height);
     background(255);
     /* Calculation loops */
-    for(int i = 0; i < nodeList.size(); i++) {
-        /* per node */
-        /* Vectors: Force, Acceleration, Velocity */
-        /* Note, mass is scalar */
-        /* PVector netRepulsion = ...
-         * PVector netSpring = ... 
-         */
-        float netRepulsion = allRepulsionForces(nodeList.get(i), i);
-        float netSpring = nodeList.get(i).totalSpringForces(k);
-        //float netSpring = 0;
 
-        /* Update velocities & accelerations */
-        float allForces = (netRepulsion + netSpring) - DAMPENING;
-        nodeList.get(i).updatePosition(current_time, allForces);
+    if (systemEnergy() > LOWEST_ENERGY) {
+        for(int i = 0; i < nodeList.size(); i++) {
+
+            PVector netRepulsion = allRepulsionForces(nodeList.get(i), i);
+            PVector netSpring = nodeList.get(i).totalSpringForces(k);
+            //float netSpring = 0;
+
+            /* Update velocities & accelerations */
+            PVector allForces = PVector.mult(PVector.add(netSpring, netRepulsion), DAMPENING);
+            nodeList.get(i).updatePosition(current_time, allForces);
+        }
+    } else {
+        println("LOW");
+
     }
 
 
@@ -71,25 +84,22 @@ void draw()  {
 
 }
 
-float allRepulsionForces(Node center, int index) {
+PVector allRepulsionForces(Node center, int index) {
     /* PVector sumForces = PVector(0, 0);
      *      sumForces.add(coulomb_repulsion(center, nodeList.get(i)))
      */
-    float sumForces = 0;
+    PVector sumForces = new PVector(0f,0f);
     for(int i = 0; i < nodeList.size(); i++) {
         if(i == index) continue;
-        sumForces += coulomb_repulsion(center, nodeList.get(i));
+        sumForces.add(coulomb_repulsion(center, nodeList.get(i)));
         //println("sumForce: " + sumForces);
     }
     return sumForces;
 }
 
-float coulomb_repulsion(Node n, Node other) {
-    /* PVector direction = PVector(PVector(n.curX, n.curY), PVector(other.curX, other.curY))
-     * return direction.div(COULOMB)
-     */
-    float distance = dist(n.curX, n.curY, other.curX, other.curY);
-    return COULOMB/distance;
+PVector coulomb_repulsion(Node n, Node other) {
+    PVector repulse = new PVector(COULOMB / (n.position.x - other.position.x), COULOMB / (n.position.y - other.position.y));
+    return repulse;
 }
 
 void drawPickBuffer() {
@@ -126,5 +136,6 @@ float systemEnergy() {
 	for(int i = 0; i < nodeList.size(); i++) {
 		universeEnergy += nodeList.get(i).kinEnergy();
 	}
+    println("universeEnergy " + universeEnergy);
 	return universeEnergy;
 }

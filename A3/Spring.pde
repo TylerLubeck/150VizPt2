@@ -1,11 +1,15 @@
 class Spring {
-	double springL;
+	PVector springL;
 
 	Spring(double sprL) {
-		this.springL = sprL;
+		this.springL = new PVector(1f, 1f);
+		this.springL.mult((float)sprL);
 	}
 
-	double getForce(float k, float cur_length) {
-		return (this.springL - cur_length) * k;
+	PVector getForce(float k, PVector curr_dir) {
+		PVector temp = PVector.sub(this.springL, curr_dir);
+		temp.mult(k);
+		return temp;
+
 	}
 }
