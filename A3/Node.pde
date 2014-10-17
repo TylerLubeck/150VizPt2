@@ -67,32 +67,59 @@ class Node {
         PVector acceleration = PVector.div(force, this.mass);
         //println("acceleration: " + acceleration);
         /* v = vo + a * t */
+        acceleration.mult(currTime);
         netVel.add(acceleration);
-        netVel.mult(currTime);
 
-        float velX_ = netVel.x;
-        float velY_ = netVel.y;
-        /* s = so + vt + .5 a t^2 */
+        //float velX_ = netVel.x;
+        //float velY_ = netVel.y;
+        /* Because we are using v1 not v0 */
+        /* s = so + vt - .5 a t^2 */
+
+        //println("Force: " + force);
+        PVector vt = PVector.mult(netVel, currTime);
+        //println("vt: " + vt);
+
+        PVector at = PVector.mult(acceleration, .5 * currTime);
+        //println("at: " + at);
+
+        /*
         float posX = this.position.x + velX_ * currTime + 
                      .5 * (acceleration.x) * sq(currTime);
         float posY = this.position.y + velY_ * currTime + 
                      .5 * (acceleration.y) * sq(currTime);
+         */
+
+        PVector newPos = PVector.add(this.position, vt);
+        newPos.sub(at);
+        //println("NODE: " + this.id + ": " + newPos);
 
 
-        setPos(posX, posY);
+        setPos(newPos);
+        netVel.mult(DAMPENING);
     }
 
     PVector totalSpringForces(float k_hooke) {
-        PVector totalForce = new PVector(0f,0f);
-        for(int i = 0; i < springs.size(); i++) { /* Cause neighbors and springs indices line up */
-            PVector dir = new PVector(this.position.x - neighbors.get(i).position.x, 
-                                      this.position.y - neighbors.get(i).position.y);
-            /* calculate total forces exerted by attached springs */
-            totalForce.add(springs.get(i).getForce(k_hooke, dir));
+        PVector totalForces = new PVector(0f, 0f);
+        for(int i = 0; i < this.springs.size(); i++) {
+            Node neighbor = this.neighbors.get(i);
+            Spring spring = this.springs.get(i);
+            PVector thisForce = PVector.sub(this.position, neighbor.position);
+
+            float currLength = dist(this.position.x, this.position.y, 
+                                    neighbor.position.x, neighbor.position.y);
+            currLength *= -1;
+
+            float magnitude = currLength - spring.springL;
+            magnitude *= k_hooke;
+
+
+            thisForce.normalize();
+            thisForce.mult(magnitude);
+            
+            // Get length of spring - goal length
+            totalForces.add(thisForce);
         }
-        println("SPRING FORCE: " + totalForce);
-        return totalForce;
-        //return new PVector(0f, 0f);
+        return totalForces;
     }
 
 

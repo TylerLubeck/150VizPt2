@@ -1,15 +1,15 @@
 String file = "data.csv";
 PGraphics pickbuffer = null;
 float current_time;
-float DAMPENING = 0.9;
+float DAMPENING = 0.8; //to .8
 
 ArrayList<Node> nodeList;
 float TIME_STEP = .01;
-float k = 0.01;
+float k = 0.5;
 float LOWEST_ENERGY = 0.5;
 
 // float COULOMB = 8.9875517873681764 * (pow(10, 9));
-float COULOMB = 250;
+float COULOMB = 500;
 
 int currentSelectedId = -1;
 boolean hasBeenSelected = false;
@@ -19,6 +19,7 @@ void setup() {
     background(255);
     frame.setResizable(true);
     current_time = TIME_STEP;
+    frameRate(5);
 
 	Parser parser = new Parser(file);
     nodeList = parser.parse();
@@ -27,7 +28,6 @@ void setup() {
 
         PVector netRepulsion = allRepulsionForces(nodeList.get(i), i);
         PVector netSpring = nodeList.get(i).totalSpringForces(k);
-        //float netSpring = 0;
 
         /* Update velocities & accelerations */
         PVector allForces = PVector.mult(PVector.add(netSpring, netRepulsion), DAMPENING);
@@ -50,7 +50,8 @@ void draw()  {
             //float netSpring = 0;
 
             /* Update velocities & accelerations */
-            PVector allForces = PVector.mult(PVector.add(netSpring, netRepulsion), DAMPENING);
+            //PVector allForces = PVector.mult(PVector.add(netSpring, netRepulsion), DAMPENING);
+            PVector allForces = PVector.add(netSpring, netRepulsion);
             nodeList.get(i).updatePosition(current_time, allForces);
         }
     } else {
@@ -98,8 +99,17 @@ PVector allRepulsionForces(Node center, int index) {
 }
 
 PVector coulomb_repulsion(Node n, Node other) {
-    PVector repulse = new PVector(COULOMB / (n.position.x - other.position.x), COULOMB / (n.position.y - other.position.y));
-    return repulse;
+    float distance = PVector.dist(n.position, other.position);
+    if (distance< 1) {
+        distance = 1;
+    } 
+    float magnitude = COULOMB / distance;
+
+    PVector thisForce = PVector.sub(n.position, other.position);
+    thisForce.normalize();
+    thisForce.mult(magnitude);
+    
+    return thisForce;
 }
 
 void drawPickBuffer() {
