@@ -17,15 +17,16 @@ public class A3 extends PApplet {
 String file = "data.csv";
 PGraphics pickbuffer = null;
 float current_time;
-float DAMPENING = 0.9f;
+float DAMPENING = 0.8f; //to .8
 
 ArrayList<Node> nodeList;
-float TIME_STEP = .01f;
-float k = 0.01f;
-float LOWEST_ENERGY = 0.5f;
+float TIME_STEP = .001f;
+float k = 0.5f;
+float LOWEST_ENERGY = .5f;
+boolean equilibrium;
 
 // float COULOMB = 8.9875517873681764 * (pow(10, 9));
-float COULOMB = 250;
+float COULOMB = 500;
 
 int currentSelectedId = -1;
 boolean hasBeenSelected = false;
@@ -35,6 +36,8 @@ public void setup() {
     background(255);
     frame.setResizable(true);
     current_time = TIME_STEP;
+    frameRate(15);
+    equilibrium = false;
 
 	Parser parser = new Parser(file);
     nodeList = parser.parse();
@@ -43,7 +46,6 @@ public void setup() {
 
         PVector netRepulsion = allRepulsionForces(nodeList.get(i), i);
         PVector netSpring = nodeList.get(i).totalSpringForces(k);
-        //float netSpring = 0;
 
         /* Update velocities & accelerations */
         PVector allForces = PVector.mult(PVector.add(netSpring, netRepulsion), DAMPENING);
@@ -58,7 +60,7 @@ public void draw()  {
     background(255);
     /* Calculation loops */
 
-    if (systemEnergy() > LOWEST_ENERGY) {
+    if (!equilibrium) {
         for(int i = 0; i < nodeList.size(); i++) {
 
             PVector netRepulsion = allRepulsionForces(nodeList.get(i), i);
@@ -66,7 +68,8 @@ public void draw()  {
             //float netSpring = 0;
 
             /* Update velocities & accelerations */
-            PVector allForces = PVector.mult(PVector.add(netSpring, netRepulsion), DAMPENING);
+            //PVector allForces = PVector.mult(PVector.add(netSpring, netRepulsion), DAMPENING);
+            PVector allForces = PVector.add(netSpring, netRepulsion);
             nodeList.get(i).updatePosition(current_time, allForces);
         }
     } else {
@@ -77,9 +80,9 @@ public void draw()  {
 
     /* Now Render */
     drawPickBuffer();
-    if (keyPressed) {
+   /* if (keyPressed) {
         image(pickbuffer, 0, 0);
-    }
+    }*/
 
     for(Node n: nodeList)  {
         n.drawRelations();
@@ -114,8 +117,17 @@ public PVector allRepulsionForces(Node center, int index) {
 }
 
 public PVector coulomb_repulsion(Node n, Node other) {
-    PVector repulse = new PVector(COULOMB / (n.position.x - other.position.x), COULOMB / (n.position.y - other.position.y));
-    return repulse;
+    float distance = PVector.dist(n.position, other.position);
+    if (distance < .8f) {
+        distance = .8f;
+    } 
+    float magnitude = COULOMB / distance;
+
+    PVector thisForce = PVector.sub(n.position, other.position);
+    thisForce.normalize();
+    thisForce.mult(magnitude);
+    
+    return thisForce;
 }
 
 public void drawPickBuffer() {
@@ -153,10 +165,11 @@ public float systemEnergy() {
 		universeEnergy += nodeList.get(i).kinEnergy();
 	}
     println("universeEnergy " + universeEnergy);
+    if(universeEnergy < LOWEST_ENERGY) equilibrium = true;
 	return universeEnergy;
 }
 class Node {
-    final float RADIUS_FACTOR = 4;
+    final float RADIUS_FACTOR = 3;
 	int id, mass;
 	ArrayList<Node> neighbors;
 	ArrayList<Spring> springs;
@@ -165,9 +178,10 @@ class Node {
     boolean isClickedOn;
     PVector netVel;
     PVector position;
-    int highlightColor;
-    int defaultColor;
+    int COLOR_HIGHLIGHT = color(27, 166, 166);
+    int COLOR_DEFAULT = color(27, 112, 166);
     int fillColor;
+    int COLOR_STROKE = color(52, 92, 166);
 
 	Node() {
         this(-1, -1);
@@ -188,9 +202,7 @@ class Node {
         float _Y = random(0, height - this.radius);
         this.position = new PVector(_X, _Y);
         
-        this.highlightColor = color(255, 0, 0);
-        this.defaultColor = color(0, 255, 0);
-        this.fillColor = this.defaultColor;
+        this.fillColor = COLOR_DEFAULT;
 
         this.isClickedOn = false;
         this.radius = RADIUS_FACTOR * this.mass;
@@ -224,42 +236,67 @@ class Node {
         PVector acceleration = PVector.div(force, this.mass);
         //println("acceleration: " + acceleration);
         /* v = vo + a * t */
+        acceleration.mult(currTime);
         netVel.add(acceleration);
-        netVel.mult(currTime);
+        netVel.mult(DAMPENING);
+        //float velX_ = netVel.x;
+        //float velY_ = netVel.y;
+        /* Because we are using v1 not v0 */
+        /* s = so + vt - .5 a t^2 */
 
-        float velX_ = netVel.x;
-        float velY_ = netVel.y;
-        /* s = so + vt + .5 a t^2 */
+        //println("Force: " + force);
+       // PVector vt = PVector.mult(netVel, currTime);
+        //println("vt: " + vt);
+        
+        PVector at = PVector.mult(acceleration, .5f * currTime);
+        //println("at: " + at);
+        PVector vt = PVector.mult(netVel, currTime);
+        /* s = so + vt + 
         float posX = this.position.x + velX_ * currTime + 
-                     .5f * (acceleration.x) * sq(currTime);
+                     .5 * (acceleration.x) * sq(currTime);
         float posY = this.position.y + velY_ * currTime + 
-                     .5f * (acceleration.y) * sq(currTime);
+                     .5 * (acceleration.y) * sq(currTime);
+         */
 
+        PVector newPos = PVector.add(this.position, vt);
+        newPos.add(at);
+        //println("NODE: " + this.id + ": " + newPos);
 
-        setPos(posX, posY);
+        setPos(newPos);
+        
     }
 
     public PVector totalSpringForces(float k_hooke) {
-        PVector totalForce = new PVector(0f,0f);
-        for(int i = 0; i < springs.size(); i++) { /* Cause neighbors and springs indices line up */
-            PVector dir = new PVector(this.position.x - neighbors.get(i).position.x, 
-                                      this.position.y - neighbors.get(i).position.y);
-            /* calculate total forces exerted by attached springs */
-            totalForce.add(springs.get(i).getForce(k_hooke, dir));
+        PVector totalForces = new PVector(0f, 0f);
+        for(int i = 0; i < this.springs.size(); i++) {
+            Node neighbor = this.neighbors.get(i);
+            Spring spring = this.springs.get(i);
+            PVector thisForce = PVector.sub(this.position, neighbor.position);
+
+            float currLength = dist(this.position.x, this.position.y, 
+                                    neighbor.position.x, neighbor.position.y);
+            currLength *= -1;
+
+            float magnitude = currLength - spring.springL;
+            magnitude *= k_hooke;
+
+
+            thisForce.normalize();
+            thisForce.mult(magnitude);
+            
+            // Get length of spring - goal length
+            totalForces.add(thisForce);
         }
-        println("SPRING FORCE: " + totalForce);
-        totalForce.mult(-1f);
-        return totalForce;
-        //return new PVector(0f, 0f);
+        return totalForces;
     }
 
 
     public void drawPosition() {
         fill(this.fillColor);
-        stroke(this.fillColor);
+        stroke(COLOR_STROKE);
         ellipse(this.position.x, this.position.y, 2 * this.radius, 2 * this.radius);
-        fill(this.defaultColor);
-        stroke(this.defaultColor);
+        fill(this.fillColor);
+        stroke(COLOR_STROKE);
     }
 
     public void drawRelations() {
@@ -295,11 +332,11 @@ class Node {
 
 
     public void setHighlighted() {
-        this.fillColor = this.highlightColor;
+        this.fillColor = COLOR_HIGHLIGHT;
     }
 
     public void unsetHighlighted() {
-        this.fillColor = this.defaultColor;
+        this.fillColor = COLOR_DEFAULT;
     }
 }
 class Parser {
@@ -348,19 +385,27 @@ class Parser {
 	}
 }
 class Spring {
-	PVector springL;
+	float springL;
+    float currLength;
 
 	Spring(double sprL) {
-		this.springL = new PVector(1f, 1f);
-		this.springL.mult((float)sprL);
+        this.springL = (float)sprL;
 	}
 
-	public PVector getForce(float k, PVector curr_dir) {
+    /*
+	PVector getForce(float k, PVector curr_dir) {
 		PVector temp = PVector.sub(this.springL, curr_dir);
 		temp.mult(k);
 		return temp;
-
 	}
+    */
+
+    /*
+    float getLength() {
+        return dist(left.position.x, left.position.y, 
+                    right.position.x, right.position.y);
+    }
+    */
 }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "A3" };

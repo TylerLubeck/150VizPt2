@@ -1,5 +1,5 @@
 class Node {
-    final float RADIUS_FACTOR = 4;
+    final float RADIUS_FACTOR = 3;
 	int id, mass;
 	ArrayList<Node> neighbors;
 	ArrayList<Spring> springs;
@@ -8,9 +8,10 @@ class Node {
     boolean isClickedOn;
     PVector netVel;
     PVector position;
-    color highlightColor;
-    color defaultColor;
+    color COLOR_HIGHLIGHT = color(27, 166, 166);
+    color COLOR_DEFAULT = color(27, 112, 166);
     color fillColor;
+    color COLOR_STROKE = color(52, 92, 166);
 
 	Node() {
         this(-1, -1);
@@ -31,9 +32,7 @@ class Node {
         float _Y = random(0, height - this.radius);
         this.position = new PVector(_X, _Y);
         
-        this.highlightColor = color(255, 0, 0);
-        this.defaultColor = color(0, 255, 0);
-        this.fillColor = this.defaultColor;
+        this.fillColor = COLOR_DEFAULT;
 
         this.isClickedOn = false;
         this.radius = RADIUS_FACTOR * this.mass;
@@ -69,20 +68,20 @@ class Node {
         /* v = vo + a * t */
         acceleration.mult(currTime);
         netVel.add(acceleration);
-
+        netVel.mult(DAMPENING);
         //float velX_ = netVel.x;
         //float velY_ = netVel.y;
         /* Because we are using v1 not v0 */
         /* s = so + vt - .5 a t^2 */
 
         //println("Force: " + force);
-        PVector vt = PVector.mult(netVel, currTime);
+       // PVector vt = PVector.mult(netVel, currTime);
         //println("vt: " + vt);
-
+        
         PVector at = PVector.mult(acceleration, .5 * currTime);
         //println("at: " + at);
-
-        /*
+        PVector vt = PVector.mult(netVel, currTime);
+        /* s = so + vt + 
         float posX = this.position.x + velX_ * currTime + 
                      .5 * (acceleration.x) * sq(currTime);
         float posY = this.position.y + velY_ * currTime + 
@@ -90,12 +89,11 @@ class Node {
          */
 
         PVector newPos = PVector.add(this.position, vt);
-        newPos.sub(at);
+        newPos.add(at);
         //println("NODE: " + this.id + ": " + newPos);
 
-
         setPos(newPos);
-        netVel.mult(DAMPENING);
+        
     }
 
     PVector totalSpringForces(float k_hooke) {
@@ -125,10 +123,10 @@ class Node {
 
     void drawPosition() {
         fill(this.fillColor);
-        stroke(this.fillColor);
+        stroke(COLOR_STROKE);
         ellipse(this.position.x, this.position.y, 2 * this.radius, 2 * this.radius);
-        fill(this.defaultColor);
-        stroke(this.defaultColor);
+        fill(this.fillColor);
+        stroke(COLOR_STROKE);
     }
 
     void drawRelations() {
@@ -164,10 +162,10 @@ class Node {
 
 
     void setHighlighted() {
-        this.fillColor = this.highlightColor;
+        this.fillColor = COLOR_HIGHLIGHT;
     }
 
     void unsetHighlighted() {
-        this.fillColor = this.defaultColor;
+        this.fillColor = COLOR_DEFAULT;
     }
 }

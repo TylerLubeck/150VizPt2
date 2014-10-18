@@ -4,9 +4,10 @@ float current_time;
 float DAMPENING = 0.8; //to .8
 
 ArrayList<Node> nodeList;
-float TIME_STEP = .01;
+float TIME_STEP = .001;
 float k = 0.5;
-float LOWEST_ENERGY = 0.5;
+float LOWEST_ENERGY = .5;
+boolean equilibrium;
 
 // float COULOMB = 8.9875517873681764 * (pow(10, 9));
 float COULOMB = 500;
@@ -19,7 +20,8 @@ void setup() {
     background(255);
     frame.setResizable(true);
     current_time = TIME_STEP;
-    frameRate(5);
+    frameRate(15);
+    equilibrium = false;
 
 	Parser parser = new Parser(file);
     nodeList = parser.parse();
@@ -42,7 +44,7 @@ void draw()  {
     background(255);
     /* Calculation loops */
 
-    if (systemEnergy() > LOWEST_ENERGY) {
+    if (!equilibrium) {
         for(int i = 0; i < nodeList.size(); i++) {
 
             PVector netRepulsion = allRepulsionForces(nodeList.get(i), i);
@@ -62,9 +64,9 @@ void draw()  {
 
     /* Now Render */
     drawPickBuffer();
-    if (keyPressed) {
+   /* if (keyPressed) {
         image(pickbuffer, 0, 0);
-    }
+    }*/
 
     for(Node n: nodeList)  {
         n.drawRelations();
@@ -100,7 +102,7 @@ PVector allRepulsionForces(Node center, int index) {
 
 PVector coulomb_repulsion(Node n, Node other) {
     float distance = PVector.dist(n.position, other.position);
-    if (distance< 1) {
+    if (distance < 1) {
         distance = 1;
     } 
     float magnitude = COULOMB / distance;
@@ -147,5 +149,6 @@ float systemEnergy() {
 		universeEnergy += nodeList.get(i).kinEnergy();
 	}
     println("universeEnergy " + universeEnergy);
+    if(universeEnergy < LOWEST_ENERGY) equilibrium = true;
 	return universeEnergy;
 }
