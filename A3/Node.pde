@@ -64,33 +64,17 @@ class Node {
 
     void updatePosition(float currTime, PVector force) {
         PVector acceleration = PVector.div(force, this.mass);
-        //println("acceleration: " + acceleration);
         /* v = vo + a * t */
         acceleration.mult(currTime);
         netVel.add(acceleration);
         netVel.mult(DAMPENING);
-        //float velX_ = netVel.x;
-        //float velY_ = netVel.y;
-        /* Because we are using v1 not v0 */
         /* s = so + vt - .5 a t^2 */
-
-        //println("Force: " + force);
-       // PVector vt = PVector.mult(netVel, currTime);
-        //println("vt: " + vt);
         
         PVector at = PVector.mult(acceleration, .5 * currTime);
-        //println("at: " + at);
         PVector vt = PVector.mult(netVel, currTime);
-        /* s = so + vt + 
-        float posX = this.position.x + velX_ * currTime + 
-                     .5 * (acceleration.x) * sq(currTime);
-        float posY = this.position.y + velY_ * currTime + 
-                     .5 * (acceleration.y) * sq(currTime);
-         */
 
         PVector newPos = PVector.add(this.position, vt);
         newPos.add(at);
-        //println("NODE: " + this.id + ": " + newPos);
 
         setPos(newPos);
         

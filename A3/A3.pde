@@ -49,10 +49,8 @@ void draw()  {
 
             PVector netRepulsion = allRepulsionForces(nodeList.get(i), i);
             PVector netSpring = nodeList.get(i).totalSpringForces(k);
-            //float netSpring = 0;
 
             /* Update velocities & accelerations */
-            //PVector allForces = PVector.mult(PVector.add(netSpring, netRepulsion), DAMPENING);
             PVector allForces = PVector.add(netSpring, netRepulsion);
             nodeList.get(i).updatePosition(current_time, allForces);
         }
@@ -64,9 +62,6 @@ void draw()  {
 
     /* Now Render */
     drawPickBuffer();
-   /* if (keyPressed) {
-        image(pickbuffer, 0, 0);
-    }*/
 
     for(Node n: nodeList)  {
         n.drawRelations();
@@ -90,14 +85,10 @@ void draw()  {
 }
 
 PVector allRepulsionForces(Node center, int index) {
-    /* PVector sumForces = PVector(0, 0);
-     *      sumForces.add(coulomb_repulsion(center, nodeList.get(i)))
-     */
     PVector sumForces = new PVector(0f,0f);
     for(int i = 0; i < nodeList.size(); i++) {
         if(i == index) continue;
         sumForces.add(coulomb_repulsion(center, nodeList.get(i)));
-        //println("sumForce: " + sumForces);
     }
     return sumForces;
 }
