@@ -6,10 +6,9 @@ float DAMPENING = 0.8; //to .8
 ArrayList<Node> nodeList;
 float TIME_STEP = .001;
 float k = 0.5;
-float LOWEST_ENERGY = .5;
+float LOWEST_ENERGY = 2.5;
 boolean equilibrium;
 
-// float COULOMB = 8.9875517873681764 * (pow(10, 9));
 float COULOMB = 500;
 
 int currentSelectedId = -1;
@@ -20,7 +19,7 @@ void setup() {
     background(255);
     frame.setResizable(true);
     current_time = TIME_STEP;
-    frameRate(15);
+    frameRate(20);
     equilibrium = false;
 
 	Parser parser = new Parser(file);
@@ -42,8 +41,9 @@ void draw()  {
     current_time += TIME_STEP;
     pickbuffer = createGraphics(width, height);
     background(255);
-    /* Calculation loops */
+    
 
+    /* Calculation loops */
     if (!equilibrium) {
         for(int i = 0; i < nodeList.size(); i++) {
 
@@ -84,6 +84,8 @@ void draw()  {
         }
         n.drawPosition(); 
     }
+
+    systemEnergy();
 
 }
 
@@ -128,7 +130,7 @@ void mousePressed() {
     for (Node n : nodeList) {
         if (n.isect(pickbuffer)) {
             n.isClickedOn = true;
-
+            equilibrium = false;
         }
     }
 }
@@ -150,5 +152,6 @@ float systemEnergy() {
 	}
     println("universeEnergy " + universeEnergy);
     if(universeEnergy < LOWEST_ENERGY) equilibrium = true;
+    if(universeEnergy > LOWEST_ENERGY) equilibrium = false;
 	return universeEnergy;
 }
