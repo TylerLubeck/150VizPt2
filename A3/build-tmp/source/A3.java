@@ -20,12 +20,12 @@ float current_time;
 float DAMPENING = 0.8f; //to .8
 
 ArrayList<Node> nodeList;
-float TIME_STEP = .001f;
+float TIME_STEP = .15f;
 float k = 0.5f;
-float LOWEST_ENERGY = 2.5f;
+float LOWEST_ENERGY = .5f;
 boolean equilibrium;
 
-float COULOMB = 650;
+float COULOMB = 500;
 
 int currentSelectedId = -1;
 boolean hasBeenSelected = false;
@@ -65,12 +65,10 @@ public void draw()  {
 
             PVector netRepulsion = allRepulsionForces(nodeList.get(i), i);
             PVector netSpring = nodeList.get(i).totalSpringForces(k);
-            //float netSpring = 0;
 
             /* Update velocities & accelerations */
-            //PVector allForces = PVector.mult(PVector.add(netSpring, netRepulsion), DAMPENING);
             PVector allForces = PVector.add(netSpring, netRepulsion);
-            nodeList.get(i).updatePosition(current_time, allForces);
+            nodeList.get(i).updatePosition(TIME_STEP, allForces);
         }
     } else {
         println("LOW");
@@ -80,9 +78,6 @@ public void draw()  {
 
     /* Now Render */
     drawPickBuffer();
-   /* if (keyPressed) {
-        image(pickbuffer, 0, 0);
-    }*/
 
     for(Node n: nodeList)  {
         n.drawRelations();
@@ -100,20 +95,16 @@ public void draw()  {
         }
         n.drawPosition(); 
     }
-    
+
     systemEnergy();
 
 }
 
 public PVector allRepulsionForces(Node center, int index) {
-    /* PVector sumForces = PVector(0, 0);
-     *      sumForces.add(coulomb_repulsion(center, nodeList.get(i)))
-     */
     PVector sumForces = new PVector(0f,0f);
     for(int i = 0; i < nodeList.size(); i++) {
         if(i == index) continue;
         sumForces.add(coulomb_repulsion(center, nodeList.get(i)));
-        //println("sumForce: " + sumForces);
     }
     return sumForces;
 }
@@ -225,11 +216,13 @@ class Node {
 
     public void setPos(float newX, float newY) {
 
+        /* Bound the circles */
         newX = newX < this.radius ? this.radius : newX;
         newX = newX > width - this.radius ? width - this.radius : newX;
 
         newY = newY < this.radius ? this.radius : newY;
         newY = newY > height - this.radius ? height - this.radius : newY;
+        /*******/
 
         this.position.set(newX, newY);
     }
@@ -237,33 +230,18 @@ class Node {
 
     public void updatePosition(float currTime, PVector force) {
         PVector acceleration = PVector.div(force, this.mass);
-        //println("acceleration: " + acceleration);
+        
         /* v = vo + a * t */
         acceleration.mult(currTime);
         netVel.add(acceleration);
         netVel.mult(DAMPENING);
-        //float velX_ = netVel.x;
-        //float velY_ = netVel.y;
-        /* Because we are using v1 not v0 */
-        /* s = so + vt - .5 a t^2 */
-
-        //println("Force: " + force);
-       // PVector vt = PVector.mult(netVel, currTime);
-        //println("vt: " + vt);
         
+        /* s = so + vt + .5 a t^2 */
         PVector at = PVector.mult(acceleration, .5f * currTime);
-        //println("at: " + at);
         PVector vt = PVector.mult(netVel, currTime);
-        /* s = so + vt + 
-        float posX = this.position.x + velX_ * currTime + 
-                     .5 * (acceleration.x) * sq(currTime);
-        float posY = this.position.y + velY_ * currTime + 
-                     .5 * (acceleration.y) * sq(currTime);
-         */
 
         PVector newPos = PVector.add(this.position, vt);
         newPos.add(at);
-        //println("NODE: " + this.id + ": " + newPos);
 
         setPos(newPos);
         

@@ -52,11 +52,13 @@ class Node {
 
     void setPos(float newX, float newY) {
 
+        /* Bound the circles */
         newX = newX < this.radius ? this.radius : newX;
         newX = newX > width - this.radius ? width - this.radius : newX;
 
         newY = newY < this.radius ? this.radius : newY;
         newY = newY > height - this.radius ? height - this.radius : newY;
+        /*******/
 
         this.position.set(newX, newY);
     }
@@ -64,12 +66,13 @@ class Node {
 
     void updatePosition(float currTime, PVector force) {
         PVector acceleration = PVector.div(force, this.mass);
+        
         /* v = vo + a * t */
         acceleration.mult(currTime);
         netVel.add(acceleration);
         netVel.mult(DAMPENING);
-        /* s = so + vt - .5 a t^2 */
         
+        /* s = so + vt + .5 a t^2 */
         PVector at = PVector.mult(acceleration, .5 * currTime);
         PVector vt = PVector.mult(netVel, currTime);
 

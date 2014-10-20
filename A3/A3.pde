@@ -4,9 +4,9 @@ float current_time;
 float DAMPENING = 0.8; //to .8
 
 ArrayList<Node> nodeList;
-float TIME_STEP = .001;
+float TIME_STEP = .15;
 float k = 0.5;
-float LOWEST_ENERGY = 2.5;
+float LOWEST_ENERGY = .5;
 boolean equilibrium;
 
 float COULOMB = 500;
@@ -52,7 +52,7 @@ void draw()  {
 
             /* Update velocities & accelerations */
             PVector allForces = PVector.add(netSpring, netRepulsion);
-            nodeList.get(i).updatePosition(current_time, allForces);
+            nodeList.get(i).updatePosition(TIME_STEP, allForces);
         }
     } else {
         println("LOW");
