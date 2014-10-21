@@ -110,6 +110,8 @@ PVector coulomb_repulsion(Node n, Node other) {
     if (distance < 1) {
         distance = 1;
     } 
+    /* If we want to do a proper coulomb? */
+    //float magnitude = COULOMB / pow(distance, 2);
     float magnitude = COULOMB / distance;
 
     PVector thisForce = PVector.sub(n.position, other.position);
