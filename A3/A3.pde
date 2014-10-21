@@ -147,9 +147,6 @@ void mouseReleased() {
     calcAndUpdate();
 }
 
-
-
-
 /* Calculate total energy of the whole node system */
 float systemEnergy() {
 	float universeEnergy = 0;
