@@ -132,6 +132,7 @@ class Node implements Comparable<Node>{
     }
 
     void drawRelations() {
+        stroke(COLOR_STROKE);
     	for(int i = 0; i < neighbors.size(); i++) {
     		line(position.x, position.y, neighbors.get(i).position.x, neighbors.get(i).position.y);
     	}
