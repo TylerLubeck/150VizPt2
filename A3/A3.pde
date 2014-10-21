@@ -1,12 +1,13 @@
+import java.util.Collections;
 String file = "data.csv";
 PGraphics pickbuffer = null;
-float current_time;
 float DAMPENING = 0.8; //to .8
 
 ArrayList<Node> nodeList;
 float TIME_STEP = .15;
 float k = 0.5;
-float LOWEST_ENERGY = .5;
+float LOWEST_ENERGY = 0.5;
+float CENTER_PULL = 1.0;
 boolean equilibrium;
 
 float COULOMB = 500;
@@ -15,50 +16,35 @@ int currentSelectedId = -1;
 boolean hasBeenSelected = false;
 
 void setup() {
+    PFont f = loadFont("AdobeKaitiStd-Regular-16.vlw");
+    textFont(f, 16);
     size(800, 800);
     background(255);
     frame.setResizable(true);
-    current_time = TIME_STEP;
     frameRate(20);
     equilibrium = false;
 
-	Parser parser = new Parser(file);
+    Parser parser = new Parser(file);
     nodeList = parser.parse();
+    Collections.sort(nodeList);
 
-   for(int i = 0; i < nodeList.size(); i++) {
+    calcAndUpdate();
 
-        PVector netRepulsion = allRepulsionForces(nodeList.get(i), i);
-        PVector netSpring = nodeList.get(i).totalSpringForces(k);
-
-        /* Update velocities & accelerations */
-        PVector allForces = PVector.mult(PVector.add(netSpring, netRepulsion), DAMPENING);
-        nodeList.get(i).updatePosition(current_time, allForces);
-    }
-        
 }
 
 void draw()  {
-    current_time += TIME_STEP;
     pickbuffer = createGraphics(width, height);
     background(255);
     
 
     /* Calculation loops */
     if (!equilibrium) {
-        for(int i = 0; i < nodeList.size(); i++) {
-
-            PVector netRepulsion = allRepulsionForces(nodeList.get(i), i);
-            PVector netSpring = nodeList.get(i).totalSpringForces(k);
-
-            /* Update velocities & accelerations */
-            PVector allForces = PVector.add(netSpring, netRepulsion);
-            nodeList.get(i).updatePosition(TIME_STEP, allForces);
-        }
-    } else {
-        println("LOW");
-
+        //println(systemEnergy());
+        calcAndUpdate();
+    } 
+    else {
+        pullTowardsCenter();
     }
-
 
     /* Now Render */
     drawPickBuffer();
@@ -80,8 +66,34 @@ void draw()  {
         n.drawPosition(); 
     }
 
+
+
     systemEnergy();
 
+}
+
+void calcAndUpdate() {
+    for(int i = 0; i < nodeList.size(); i++) {
+
+        PVector netRepulsion = allRepulsionForces(nodeList.get(i), i);
+        PVector netSpring = nodeList.get(i).totalSpringForces(k);
+
+        /* Update velocities & accelerations */
+        PVector allForces = PVector.mult(PVector.add(netSpring, netRepulsion), DAMPENING);
+        nodeList.get(i).updatePosition(TIME_STEP, allForces);
+    }
+}
+
+void pullTowardsCenter() {
+    for (Node n: nodeList) {
+        float X = width / 2 - n.position.x;
+        float Y = height / 2 - n.position.y;
+
+        PVector pull = new PVector(X, Y);
+        pull.normalize();
+        pull.mult(CENTER_PULL);
+        n.updatePosition(TIME_STEP, pull);
+    }
 }
 
 PVector allRepulsionForces(Node center, int index) {
@@ -130,6 +142,7 @@ void mouseReleased() {
     for (Node n : nodeList) {
         n.isClickedOn = false;
     }
+    calcAndUpdate();
 }
 
 
@@ -141,8 +154,7 @@ float systemEnergy() {
 	for(int i = 0; i < nodeList.size(); i++) {
 		universeEnergy += nodeList.get(i).kinEnergy();
 	}
-    println("universeEnergy " + universeEnergy);
     if(universeEnergy < LOWEST_ENERGY) equilibrium = true;
     if(universeEnergy > LOWEST_ENERGY) equilibrium = false;
-	return universeEnergy;
+    return universeEnergy;
 }

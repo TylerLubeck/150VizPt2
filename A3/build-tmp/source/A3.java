@@ -3,6 +3,8 @@ import processing.data.*;
 import processing.event.*; 
 import processing.opengl.*; 
 
+import java.util.Collections; 
+
 import java.util.HashMap; 
 import java.util.ArrayList; 
 import java.io.File; 
@@ -14,15 +16,16 @@ import java.io.IOException;
 
 public class A3 extends PApplet {
 
+
 String file = "data.csv";
 PGraphics pickbuffer = null;
-float current_time;
 float DAMPENING = 0.8f; //to .8
 
 ArrayList<Node> nodeList;
 float TIME_STEP = .15f;
 float k = 0.5f;
-float LOWEST_ENERGY = .5f;
+float LOWEST_ENERGY = 0.5f;
+float CENTER_PULL = 1.0f;
 boolean equilibrium;
 
 float COULOMB = 500;
@@ -31,50 +34,35 @@ int currentSelectedId = -1;
 boolean hasBeenSelected = false;
 
 public void setup() {
+    PFont f = loadFont("AdobeKaitiStd-Regular-16.vlw");
+    textFont(f, 16);
     size(800, 800);
     background(255);
     frame.setResizable(true);
-    current_time = TIME_STEP;
     frameRate(20);
     equilibrium = false;
 
-	Parser parser = new Parser(file);
+    Parser parser = new Parser(file);
     nodeList = parser.parse();
+    Collections.sort(nodeList);
 
-   for(int i = 0; i < nodeList.size(); i++) {
+    calcAndUpdate();
 
-        PVector netRepulsion = allRepulsionForces(nodeList.get(i), i);
-        PVector netSpring = nodeList.get(i).totalSpringForces(k);
-
-        /* Update velocities & accelerations */
-        PVector allForces = PVector.mult(PVector.add(netSpring, netRepulsion), DAMPENING);
-        nodeList.get(i).updatePosition(current_time, allForces);
-    }
-        
 }
 
 public void draw()  {
-    current_time += TIME_STEP;
     pickbuffer = createGraphics(width, height);
     background(255);
     
 
     /* Calculation loops */
     if (!equilibrium) {
-        for(int i = 0; i < nodeList.size(); i++) {
-
-            PVector netRepulsion = allRepulsionForces(nodeList.get(i), i);
-            PVector netSpring = nodeList.get(i).totalSpringForces(k);
-
-            /* Update velocities & accelerations */
-            PVector allForces = PVector.add(netSpring, netRepulsion);
-            nodeList.get(i).updatePosition(TIME_STEP, allForces);
-        }
-    } else {
-        println("LOW");
-
+        //println(systemEnergy());
+        calcAndUpdate();
+    } 
+    else {
+        pullTowardsCenter();
     }
-
 
     /* Now Render */
     drawPickBuffer();
@@ -96,8 +84,34 @@ public void draw()  {
         n.drawPosition(); 
     }
 
+
+
     systemEnergy();
 
+}
+
+public void calcAndUpdate() {
+    for(int i = 0; i < nodeList.size(); i++) {
+
+        PVector netRepulsion = allRepulsionForces(nodeList.get(i), i);
+        PVector netSpring = nodeList.get(i).totalSpringForces(k);
+
+        /* Update velocities & accelerations */
+        PVector allForces = PVector.mult(PVector.add(netSpring, netRepulsion), DAMPENING);
+        nodeList.get(i).updatePosition(TIME_STEP, allForces);
+    }
+}
+
+public void pullTowardsCenter() {
+    for (Node n: nodeList) {
+        float X = width / 2 - n.position.x;
+        float Y = height / 2 - n.position.y;
+
+        PVector pull = new PVector(X, Y);
+        pull.normalize();
+        pull.mult(CENTER_PULL);
+        n.updatePosition(TIME_STEP, pull);
+    }
 }
 
 public PVector allRepulsionForces(Node center, int index) {
@@ -146,6 +160,7 @@ public void mouseReleased() {
     for (Node n : nodeList) {
         n.isClickedOn = false;
     }
+    calcAndUpdate();
 }
 
 
@@ -157,12 +172,11 @@ public float systemEnergy() {
 	for(int i = 0; i < nodeList.size(); i++) {
 		universeEnergy += nodeList.get(i).kinEnergy();
 	}
-    println("universeEnergy " + universeEnergy);
     if(universeEnergy < LOWEST_ENERGY) equilibrium = true;
     if(universeEnergy > LOWEST_ENERGY) equilibrium = false;
-	return universeEnergy;
+    return universeEnergy;
 }
-class Node {
+class Node implements Comparable<Node>{
     final float RADIUS_FACTOR = 3;
 	int id, mass;
 	ArrayList<Node> neighbors;
@@ -176,6 +190,7 @@ class Node {
     int COLOR_DEFAULT = color(27, 112, 166);
     int fillColor;
     int COLOR_STROKE = color(52, 92, 166);
+    boolean intersected;
 
 	Node() {
         this(-1, -1);
@@ -191,6 +206,7 @@ class Node {
 		this.id = id;
         this.mass = mass;
         this.r = red(id); this.g = green(id); this.b = blue(id);
+        this.intersected = false;
         
         float _X = random(0, width - this.radius);
         float _Y = random(0, height - this.radius);
@@ -278,6 +294,13 @@ class Node {
         ellipse(this.position.x, this.position.y, 2 * this.radius, 2 * this.radius);
         fill(this.fillColor);
         stroke(COLOR_STROKE);
+        if (this.intersected) {
+            fill(0);
+            textAlign(CENTER);
+            text("id: " + this.id + ", mass: " + this.mass, 
+                 this.position.x, this.position.y);
+        }
+
     }
 
     public void drawRelations() {
@@ -289,7 +312,7 @@ class Node {
     public void renderISect(PGraphics pg) {
         pg.fill(this.r, this.g, this.b);
         pg.stroke(this.r, this.g, this.b);
-        pg.strokeWeight(5);
+        pg.strokeWeight(3);
         pg.ellipse(this.position.x, this.position.y, 2 * this.radius, 2 * this.radius);
     }
 
@@ -298,12 +321,15 @@ class Node {
         stroke(this.r, this.g, this.b);
         fill(this.r, this.g, this.b, 128);
         ellipse(this.position.x, this.position.y, 2 * this.radius, 2 * this.radius);
+        
     }
 
     public boolean isect(PGraphics img)  {
         if (img.get(mouseX, mouseY) == color(this.r, this.g, this.b)) {
+            this.intersected = true;
             return true;
         }
+        this.intersected = false;
         return false;
     }
 
@@ -318,6 +344,10 @@ class Node {
 
     public void unsetHighlighted() {
         this.fillColor = COLOR_DEFAULT;
+    }
+
+    public int compareTo(Node other) {
+        return other.mass - this.mass;
     }
 }
 class Parser {
@@ -371,6 +401,7 @@ class Spring {
 
 	Spring(double sprL) {
         this.springL = (float)sprL;
+        this.springL *= 1/3;
 	}
 
     /*

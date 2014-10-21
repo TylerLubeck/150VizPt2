@@ -1,4 +1,4 @@
-class Node {
+class Node implements Comparable<Node>{
     final float RADIUS_FACTOR = 3;
 	int id, mass;
 	ArrayList<Node> neighbors;
@@ -12,6 +12,7 @@ class Node {
     color COLOR_DEFAULT = color(27, 112, 166);
     color fillColor;
     color COLOR_STROKE = color(52, 92, 166);
+    boolean intersected;
 
 	Node() {
         this(-1, -1);
@@ -27,6 +28,7 @@ class Node {
 		this.id = id;
         this.mass = mass;
         this.r = red(id); this.g = green(id); this.b = blue(id);
+        this.intersected = false;
         
         float _X = random(0, width - this.radius);
         float _Y = random(0, height - this.radius);
@@ -114,6 +116,13 @@ class Node {
         ellipse(this.position.x, this.position.y, 2 * this.radius, 2 * this.radius);
         fill(this.fillColor);
         stroke(COLOR_STROKE);
+        if (this.intersected) {
+            fill(0);
+            textAlign(CENTER);
+            text("id: " + this.id + ", mass: " + this.mass, 
+                 this.position.x, this.position.y);
+        }
+
     }
 
     void drawRelations() {
@@ -125,7 +134,7 @@ class Node {
     void renderISect(PGraphics pg) {
         pg.fill(this.r, this.g, this.b);
         pg.stroke(this.r, this.g, this.b);
-        pg.strokeWeight(5);
+        pg.strokeWeight(3);
         pg.ellipse(this.position.x, this.position.y, 2 * this.radius, 2 * this.radius);
     }
 
@@ -134,12 +143,15 @@ class Node {
         stroke(this.r, this.g, this.b);
         fill(this.r, this.g, this.b, 128);
         ellipse(this.position.x, this.position.y, 2 * this.radius, 2 * this.radius);
+        
     }
 
     boolean isect(PGraphics img)  {
         if (img.get(mouseX, mouseY) == color(this.r, this.g, this.b)) {
+            this.intersected = true;
             return true;
         }
+        this.intersected = false;
         return false;
     }
 
@@ -154,5 +166,9 @@ class Node {
 
     void unsetHighlighted() {
         this.fillColor = COLOR_DEFAULT;
+    }
+
+    int compareTo(Node other) {
+        return other.mass - this.mass;
     }
 }
