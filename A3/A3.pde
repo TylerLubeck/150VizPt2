@@ -39,7 +39,6 @@ void draw()  {
 
     /* Calculation loops */
     if (!equilibrium) {
-        //println(systemEnergy());
         calcAndUpdate();
     } 
     else {
@@ -111,9 +110,6 @@ PVector coulomb_repulsion(Node n, Node other) {
         distance = 1;
     } 
     float magnitude = COULOMB / (distance * distance);
-    /* If we want to do a proper coulomb? */
-    //float magnitude = COULOMB / pow(distance, 2);
-//    float magnitude = COULOMB / distance;
 
     PVector thisForce = PVector.sub(n.position, other.position);
     thisForce.normalize();

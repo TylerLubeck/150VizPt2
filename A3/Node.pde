@@ -131,13 +131,6 @@ class Node implements Comparable<Node>{
 
     }
 
-//    void drawRelations() {
-//        stroke(COLOR_STROKE);
-//    	for(int i = 0; i < neighbors.size(); i++) {
-//    		line(position.x, position.y, neighbors.get(i).position.x, neighbors.get(i).position.y);
-//    	}
-//    }
-
     void drawRelations() {
       stroke(COLOR_STROKE);
       for(int i = 0; i < neighbors.size(); i++) {
@@ -213,10 +206,6 @@ class Node implements Comparable<Node>{
             pushMatrix();
             fill(255, 255, 255, OPACITY);
             rectMode(CORNER);
-            /* WITH NOSTROKE, MIDDLE NODE MYSTERIOUSLY LOSES RELATION
-             * LINES DURING HOVER.
-             * MONEY FOR WHO LEARNS WHY THE HELL THIS IS THE CASE.
-             */
             noStroke();
             rect(x - textWidth(label)/2, y - 16, textWidth(label), 20);
             textAlign(CENTER);
