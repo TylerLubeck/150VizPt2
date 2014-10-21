@@ -124,7 +124,6 @@ class Node implements Comparable<Node>{
         stroke(COLOR_STROKE);
         ellipse(this.position.x, this.position.y, 2 * this.radius, 2 * this.radius);
         fill(this.fillColor);
-        stroke(COLOR_STROKE);
         if (this.intersected) {
             label_node.setTextPos(this.position.x, this.position.y);
             label_node.render();
@@ -146,7 +145,7 @@ class Node implements Comparable<Node>{
     }
 
     void renderSelected() {
-        strokeWeight(1);
+        strokeWeight(3);
         stroke(this.r, this.g, this.b);
         fill(this.r, this.g, this.b, 128);
         ellipse(this.position.x, this.position.y, 2 * this.radius, 2 * this.radius);
@@ -197,9 +196,12 @@ class Node implements Comparable<Node>{
             pushMatrix();
             fill(255, 255, 255, OPACITY);
             rectMode(CORNER);
+            /* WITH NOSTROKE, MIDDLE NODE MYSTERIOUSLY LOSES RELATION
+             * LINES DURING HOVER.
+             * MONEY FOR WHO LEARNS WHY THE HELL THIS IS THE CASE.
+             */
             noStroke();
-            rect(x - textWidth(label)/2, y - 16, 
-                 textWidth(label), 20);
+            rect(x - textWidth(label)/2, y - 16, textWidth(label), 20);
             textAlign(CENTER);
             fill(0);
             text(label, x, y);
