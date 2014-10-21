@@ -191,6 +191,7 @@ class Node implements Comparable<Node>{
     int fillColor;
     int COLOR_STROKE;
     boolean intersected;
+    Textbox label_node;
 
 	Node() {
         this(-1, -1);
@@ -222,6 +223,8 @@ class Node implements Comparable<Node>{
 		
         this.netVel = new PVector(0f, 0f);
         setPos(this.position);
+        String l = ("id: " + this.id + ", mass: " + this.mass);
+        label_node = new Textbox(l, this.position.x, this.position.y);
         drawPosition();
 	}
 
@@ -301,10 +304,8 @@ class Node implements Comparable<Node>{
         fill(this.fillColor);
         stroke(COLOR_STROKE);
         if (this.intersected) {
-            fill(0);
-            textAlign(CENTER);
-            text("id: " + this.id + ", mass: " + this.mass, 
-                 this.position.x, this.position.y);
+            label_node.setTextPos(this.position.x, this.position.y);
+            label_node.render();
         }
 
     }
@@ -356,6 +357,37 @@ class Node implements Comparable<Node>{
 
     public int compareTo(Node other) {
         return other.mass - this.mass;
+    }
+
+    class Textbox {
+        String label;
+        float x, y;
+        int OPACITY = 50;
+        Textbox(String label_, float x_, float y_) {
+            this.label = label_;
+            x = x_;
+            y = y_;
+            render();
+        }
+
+        public void render()
+        {
+            pushMatrix();
+            fill(255, 255, 255, OPACITY);
+            rectMode(CORNER);
+            noStroke();
+            rect(x - textWidth(label)/2, y - 16, 
+                 textWidth(label), 20);
+            textAlign(CENTER);
+            fill(0);
+            text(label, x, y);
+            popMatrix();
+        }
+
+        public void setTextPos(float x_, float y_) {
+              x = x_;
+              y = y_;
+        }
     }
 }
 class Parser {
@@ -411,21 +443,6 @@ class Spring {
         this.springL = (float)sprL;
         this.springL *= 1/3;
 	}
-
-    /*
-	PVector getForce(float k, PVector curr_dir) {
-		PVector temp = PVector.sub(this.springL, curr_dir);
-		temp.mult(k);
-		return temp;
-	}
-    */
-
-    /*
-    float getLength() {
-        return dist(left.position.x, left.position.y, 
-                    right.position.x, right.position.y);
-    }
-    */
 }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "A3" };

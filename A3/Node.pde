@@ -13,6 +13,7 @@ class Node implements Comparable<Node>{
     color fillColor;
     color COLOR_STROKE;
     boolean intersected;
+    Textbox label_node;
 
 	Node() {
         this(-1, -1);
@@ -44,6 +45,8 @@ class Node implements Comparable<Node>{
 		
         this.netVel = new PVector(0f, 0f);
         setPos(this.position);
+        String l = ("id: " + this.id + ", mass: " + this.mass);
+        label_node = new Textbox(l, this.position.x, this.position.y);
         drawPosition();
 	}
 
@@ -123,10 +126,8 @@ class Node implements Comparable<Node>{
         fill(this.fillColor);
         stroke(COLOR_STROKE);
         if (this.intersected) {
-            fill(0);
-            textAlign(CENTER);
-            text("id: " + this.id + ", mass: " + this.mass, 
-                 this.position.x, this.position.y);
+            label_node.setTextPos(this.position.x, this.position.y);
+            label_node.render();
         }
 
     }
@@ -178,5 +179,36 @@ class Node implements Comparable<Node>{
 
     int compareTo(Node other) {
         return other.mass - this.mass;
+    }
+
+    class Textbox {
+        String label;
+        float x, y;
+        int OPACITY = 50;
+        Textbox(String label_, float x_, float y_) {
+            this.label = label_;
+            x = x_;
+            y = y_;
+            render();
+        }
+
+        void render()
+        {
+            pushMatrix();
+            fill(255, 255, 255, OPACITY);
+            rectMode(CORNER);
+            noStroke();
+            rect(x - textWidth(label)/2, y - 16, 
+                 textWidth(label), 20);
+            textAlign(CENTER);
+            fill(0);
+            text(label, x, y);
+            popMatrix();
+        }
+
+        void setTextPos(float x_, float y_) {
+              x = x_;
+              y = y_;
+        }
     }
 }
