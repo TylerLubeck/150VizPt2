@@ -221,7 +221,6 @@ class Node implements Comparable<Node>{
         springs = new ArrayList<Spring>();
 		
         this.netVel = new PVector(0f, 0f);
-        setColors();
         setPos(this.position);
         drawPosition();
 	}
@@ -231,9 +230,9 @@ class Node implements Comparable<Node>{
     }
 
     public void setColors() {
-        int color_factor = neighbors.size() * 4;
-        COLOR_HIGHLIGHT = color(27, 166, 166);
-        COLOR_DEFAULT = color(27, 112, 166 - color_factor);
+        int cf = this.mass * 5;
+        COLOR_HIGHLIGHT = color(27, 166 - cf, 166);
+        COLOR_DEFAULT = color(27, 112 - cf, 166 -  cf);
         COLOR_STROKE = color(52, 92, 166);
     }
 
@@ -341,6 +340,7 @@ class Node implements Comparable<Node>{
     }
 
     public float kinEnergy() {
+        setColors();
     	return (.5f * this.mass * netVel.mag());
     }
 
@@ -351,6 +351,7 @@ class Node implements Comparable<Node>{
 
     public void unsetHighlighted() {
         this.fillColor = COLOR_DEFAULT;
+
     }
 
     public int compareTo(Node other) {
