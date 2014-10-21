@@ -1,0 +1,6 @@
+Additional things we did:
+> Ordered the nodes by mass so that smaller nodes are drawn on top of the larger ones.
+> Implemented a color scheme where heavier nodes show in darker shades of blue.
+> Not that this is revolutionary or anything, but display the current system energy while the program runs.
+> Implemented id and mass display if you hover over a node. 
+> We did all of the additional requirements: boundaries, resizing, and settle at center of screen.
