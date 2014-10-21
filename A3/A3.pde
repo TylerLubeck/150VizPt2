@@ -49,10 +49,6 @@ void draw()  {
     /* Now Render */
     drawPickBuffer();
 
-    for(Node n: nodeList)  {
-        n.drawRelations();
-    }
-
     for(Node n: nodeList) {
         if (n.isClickedOn) {
             n.setPos(mouseX, mouseY);
@@ -64,6 +60,10 @@ void draw()  {
             n.unsetHighlighted();
         }
         n.drawPosition(); 
+    }
+    
+    for(Node n: nodeList)  {
+        n.drawRelations();
     }
 
 
