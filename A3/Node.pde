@@ -8,10 +8,10 @@ class Node implements Comparable<Node>{
     boolean isClickedOn;
     PVector netVel;
     PVector position;
-    color COLOR_HIGHLIGHT = color(27, 166, 166);
-    color COLOR_DEFAULT = color(27, 112, 166);
+    color COLOR_HIGHLIGHT;
+    color COLOR_DEFAULT;
     color fillColor;
-    color COLOR_STROKE = color(52, 92, 166);
+    color COLOR_STROKE;
     boolean intersected;
 
 	Node() {
@@ -43,13 +43,20 @@ class Node implements Comparable<Node>{
         springs = new ArrayList<Spring>();
 		
         this.netVel = new PVector(0f, 0f);
-        
+        setColors();
         setPos(this.position);
         drawPosition();
 	}
 
     void setPos(PVector pos) {
         setPos(pos.x, pos.y);
+    }
+
+    void setColors() {
+        int color_factor = neighbors.size() * 4;
+        COLOR_HIGHLIGHT = color(27, 166, 166);
+        COLOR_DEFAULT = color(27, 112, 166 - color_factor);
+        COLOR_STROKE = color(52, 92, 166);
     }
 
     void setPos(float newX, float newY) {

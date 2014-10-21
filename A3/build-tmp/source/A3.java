@@ -85,8 +85,8 @@ public void draw()  {
     }
 
 
-
-    systemEnergy();
+    String energyLabel = str(systemEnergy());
+    text(energyLabel, width - textWidth(energyLabel) - 10, height - 10);
 
 }
 
@@ -186,10 +186,10 @@ class Node implements Comparable<Node>{
     boolean isClickedOn;
     PVector netVel;
     PVector position;
-    int COLOR_HIGHLIGHT = color(27, 166, 166);
-    int COLOR_DEFAULT = color(27, 112, 166);
+    int COLOR_HIGHLIGHT;
+    int COLOR_DEFAULT;
     int fillColor;
-    int COLOR_STROKE = color(52, 92, 166);
+    int COLOR_STROKE;
     boolean intersected;
 
 	Node() {
@@ -221,13 +221,20 @@ class Node implements Comparable<Node>{
         springs = new ArrayList<Spring>();
 		
         this.netVel = new PVector(0f, 0f);
-        
+        setColors();
         setPos(this.position);
         drawPosition();
 	}
 
     public void setPos(PVector pos) {
         setPos(pos.x, pos.y);
+    }
+
+    public void setColors() {
+        int color_factor = neighbors.size() * 4;
+        COLOR_HIGHLIGHT = color(27, 166, 166);
+        COLOR_DEFAULT = color(27, 112, 166 - color_factor);
+        COLOR_STROKE = color(52, 92, 166);
     }
 
     public void setPos(float newX, float newY) {

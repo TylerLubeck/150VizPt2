@@ -67,8 +67,8 @@ void draw()  {
     }
 
 
-
-    systemEnergy();
+    String energyLabel = str(systemEnergy());
+    text(energyLabel, width - textWidth(energyLabel) - 10, height - 10);
 
 }
 
