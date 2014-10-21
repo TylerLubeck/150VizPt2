@@ -5,12 +5,12 @@ float DAMPENING = 0.8; //to .8
 
 ArrayList<Node> nodeList;
 float TIME_STEP = .15;
-float k = 0.5;
+float k = 0.1; // from 0.5
 float LOWEST_ENERGY = 0.5;
 float CENTER_PULL = 1.0;
 boolean equilibrium;
 
-float COULOMB = 500;
+float COULOMB = 15000; // from 500
 
 int currentSelectedId = -1;
 boolean hasBeenSelected = false;
@@ -110,7 +110,7 @@ PVector coulomb_repulsion(Node n, Node other) {
     if (distance < 1) {
         distance = 1;
     } 
-    float magnitude = COULOMB / distance;
+    float magnitude = COULOMB / (distance * distance);
 
     PVector thisForce = PVector.sub(n.position, other.position);
     thisForce.normalize();
