@@ -132,10 +132,20 @@ class Node implements Comparable<Node>{
     }
 
     void drawRelations() {
-    	for(int i = 0; i < neighbors.size(); i++) {
-    		line(position.x, position.y, neighbors.get(i).position.x, neighbors.get(i).position.y);
-    	}
+      stroke(COLOR_STROKE);
+      for(int i = 0; i < neighbors.size(); i++) {
+                float x1, x2, y1, y2, L, dX, dY;
+                dX = neighbors.get(i).position.x - this.position.x;
+                dY = neighbors.get(i).position.y - this.position.y;
+                L = sqrt((dX * dX) + (dY * dY));
+                x1 = dX * this.radius / L + this.position.x;
+                y1 = dY * this.radius / L + this.position.y;
+                x2 = dX * (L-neighbors.get(i).radius)/L + this.position.x;
+                y2 = dY * (L-neighbors.get(i).radius)/L + this.position.y;
+                line(x1, y1, x2, y2);
+      }
     }
+
 
     void renderISect(PGraphics pg) {
         pg.fill(this.r, this.g, this.b);
@@ -196,10 +206,6 @@ class Node implements Comparable<Node>{
             pushMatrix();
             fill(255, 255, 255, OPACITY);
             rectMode(CORNER);
-            /* WITH NOSTROKE, MIDDLE NODE MYSTERIOUSLY LOSES RELATION
-             * LINES DURING HOVER.
-             * MONEY FOR WHO LEARNS WHY THE HELL THIS IS THE CASE.
-             */
             noStroke();
             rect(x - textWidth(label)/2, y - 16, textWidth(label), 20);
             textAlign(CENTER);
