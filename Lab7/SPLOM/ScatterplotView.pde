@@ -66,9 +66,8 @@ class ScatterplotView extends AbstractView {
             conds[0] = cond1;
             conds[1] = cond2;
             conds[2] = cond3;
-            conds[3] = cond4;
+            conds[3] = cond4;            
 
-            
             // send out the message
             Message msg = new Message();
             msg.setSource(name)
