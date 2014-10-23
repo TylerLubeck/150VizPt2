@@ -3,17 +3,24 @@ import java.sql.ResultSet;
 String table_name = "forestfire";
 
 
-class Pair {
+class DataPoint {
     float X;
     float Y;
+    String month, day;
+    float temp, hum, wind;
 
-    Pair(float _X, float _Y) {
+    DataPoint(float _X, float _Y, String _month, String _day, float _temp, float _hum, float _wind) {
         this.X = _X;
         this.Y = _Y;
+        this.month = _month;
+        this.day = _day;
+        this.temp = _temp;
+        this.hum = _hum;
+        this.wind = _wind;
     }
 }
 
-ArrayList<Pair> pairs = new ArrayList<Pair>();
+ArrayList<DataPoint> data = new ArrayList<DataPoint>();
 
 /**
  * @author: Fumeng Yang
@@ -86,7 +93,7 @@ void submitQuery() {
         }
     }
 
-    println(days);
+//    println(days);
 
     /** use getHighValue() to get the upper value of the current selected interval
      ** use getLowValue() to get the lower value
@@ -107,22 +114,23 @@ void submitQuery() {
      ** finish the sql
      ** do read information from the ResultSet
      **/
-    String sql = "SELECT X,Y FROM forestfire WHERE month in (" + months + ") AND day in (" + days + ") ";
+    String sql = "SELECT X,Y, month, day, temp, humidity, wind FROM forestfire WHERE month in (" + months + ") AND day in (" + days + ") ";
     sql += "AND temp BETWEEN " + minTemp + " AND " + maxTemp;
     sql += " AND wind BETWEEN " + minWind + " AND " + maxWind;
     sql += " AND humidity BETWEEN " + minHumid + " AND " + maxHumid;
     ResultSet rs = null;
 
-    pairs.clear();
+    data.clear();
 
     try {
         // submit the sql query and get a ResultSet from the database
        rs  = (ResultSet) DBHandler.exeQuery(sql);
         
        while(rs.next()) {
-            println("(" + rs.getFloat("X") + "," + rs.getFloat("Y") + ")");
-            Pair p = new Pair(rs.getFloat("X"), rs.getFloat("Y"));
-            pairs.add(p);
+//            println("(" + rs.getFloat("X") + "," + rs.getFloat("Y") + ")");
+            DataPoint p = new DataPoint(rs.getFloat("X"), rs.getFloat("Y"), rs.getString("month"), 
+                  rs.getString("day"), rs.getFloat("temp"), rs.getFloat("humidity"), rs.getFloat("wind"));
+            data.add(p);
        }
 
     } catch (Exception e) {

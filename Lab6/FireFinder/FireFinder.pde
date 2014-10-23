@@ -69,7 +69,7 @@ void setup() {
     drawLegend();
 
     interfaceReady = true;
-
+    submitQuery();
     frame.addWindowListener(new WindowAdapter() {
         public void windowClosing(WindowEvent we) {
             closeAll();
