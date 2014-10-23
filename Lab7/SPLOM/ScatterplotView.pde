@@ -68,10 +68,6 @@ class ScatterplotView extends AbstractView {
             conds[2] = cond3;
             conds[3] = cond4;
 
-            for(Condition c: conds) {
-                println(c);
-            }
-            
             
             // send out the message
             Message msg = new Message();
