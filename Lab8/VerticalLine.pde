@@ -14,6 +14,17 @@ class VerticalLine {
         this.x = _x;
     }
 
+    float getYPos(float val) {
+        float top = height * .1;
+        float bottom = height * .9;
+        float pos = map(top, bottom, this.min, this.max, val);
+        return pos;
+    }
+
+    void setLineHeight() {
+
+    }
+
     String toString() {
         return String.format("%s: %f -> %f", 
                              this.title, 
