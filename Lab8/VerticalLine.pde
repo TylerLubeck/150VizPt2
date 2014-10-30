@@ -17,12 +17,16 @@ class VerticalLine {
     float getYPos(float val) {
         float top = height * .1;
         float bottom = height * .9;
-        float pos = map(this.min, this.max, top, bottom, val);
+        float pos = map(val, this.min, this.max, top, bottom);
         return pos;
     }
 
-    void setLineHeight() {
-
+    void drawLine() {
+        float top = height * .1;
+        float bottom = height * .9;
+        strokeWeight(10);
+        line(x, bottom, x, top);
+        strokeWeight(1);
     }
 
     String toString() {
