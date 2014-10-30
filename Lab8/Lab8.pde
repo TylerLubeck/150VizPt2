@@ -6,6 +6,7 @@ void readData() {
     table = loadTable("iris.csv", "header");    
     headers = table.getColumnTitles();
     lines = new ArrayList<VerticalLine>();
+    float startingX = width * .1;
 
     int numColumns = table.getColumnCount();
     for(int i = 0; i < numColumns; i++) {
@@ -16,7 +17,14 @@ void readData() {
         VerticalLine newLine = new VerticalLine(minVal, maxVal,
                                                 headers[i]);
         println(newLine.getYPos(1.2));
+        println(newLine);
         lines.add(newLine);
+    }
+    float xInterval = (width * .1) / lines.size();
+
+    for(VerticalLine l : lines) {
+        l.setX(startingX);
+        startingX += xInterval;
     }
 }
 
@@ -36,7 +44,6 @@ void draw() {
       x2 = lines.get(j+1).x;
       y2 = table.getFloatColumn(lines.get(j).title)[i];
       line(x1, lines.get(j).getYPos(y1), x2, lines.get(j+1).getYPos(y2));
-      println("drew some stuff");
     }
   }
 }
