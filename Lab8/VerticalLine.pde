@@ -17,7 +17,7 @@ class VerticalLine {
     float getYPos(float val) {
         float top = height * .1;
         float bottom = height * .9;
-        float pos = map(top, bottom, this.min, this.max, val);
+        float pos = map(this.min, this.max, top, bottom, val);
         return pos;
     }
 
