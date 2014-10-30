@@ -15,12 +15,13 @@ void readData() {
         println(maxVal, minVal);
         VerticalLine newLine = new VerticalLine(minVal, maxVal,
                                                 headers[i]);
-        println(newLine);
+        println(newLine.getYPos(1.2));
         lines.add(newLine);
     }
 }
 
 void setup() {
+    size(600,600);
     readData();
 }
 
