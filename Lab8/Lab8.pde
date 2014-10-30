@@ -20,7 +20,7 @@ void readData() {
         println(newLine);
         lines.add(newLine);
     }
-    float xInterval = (width * .1) / lines.size();
+    float xInterval = width / lines.size();
 
     for(VerticalLine l : lines) {
         l.setX(startingX);
@@ -42,7 +42,7 @@ void draw() {
       x1 = lines.get(j).x;
       y1 = table.getFloatColumn(lines.get(j).title)[i];
       x2 = lines.get(j+1).x;
-      y2 = table.getFloatColumn(lines.get(j).title)[i];
+      y2 = table.getFloatColumn(lines.get(j+1).title)[i];
       line(x1, lines.get(j).getYPos(y1), x2, lines.get(j+1).getYPos(y2));
     }
   }
