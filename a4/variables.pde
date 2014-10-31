@@ -22,3 +22,9 @@ ArrayList<Node> nodes;
 
 HashSet<Integer> selected_nodes;
 
+Heatmap heatmap;
+StackedView stackedView;
+ButtonFrame buttonFrame;
+
+boolean hover, logAnd, logOr;
+

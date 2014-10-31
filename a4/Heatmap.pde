@@ -244,10 +244,12 @@ class Heatmap  {
 
     public void hover() {
     	int row, col;
-    	if (inTabel()) {
+    	if (inTable()) {
     		row = int((mouseY-leftY) / blockH);
     		col = int((mouseX - leftX - pLabelW) / blockW);
-    		selected_nodes.addAll(hMap[row][col].indices);
+                if (hMap[row][col] != null) {
+    		    selected_nodes.addAll(hMap[row][col].indices);
+                }
     	}
     }
 
@@ -268,14 +270,20 @@ class Heatmap  {
     }
 
     boolean inTable() {
-    	return mouseX > leftX + pLabelW && mouseY > leftY 
-    			&& mouseX < leftX + w && mouseY < leftY + h;
+    	return mouseX >= leftX + pLabelW && mouseY >= leftY 
+    			&& mouseX < leftX + w && mouseY < leftY + h - tLabelH;
 	}
 
 
 	public Rectangle getIntersectRegion(Rectangle rect) {
         Rectangle rect2 = new Rectangle(leftX + pLabelW, leftY, leftX + w, leftY + h);
         return getIntersectRegion(rect, rect2);
+    }
+
+    public boolean isIntersected(Rectangle rect1, Rectangle rect2) {
+           boolean flag1 = abs(rect2.p2.x + rect2.p1.x - rect1.p2.x - rect1.p1.x) - (rect1.p2.x - rect1.p1.x + rect2.p2.x - rect2.p1.x) <= 0;
+           boolean flag2 = abs(rect2.p2.y + rect2.p1.y - rect1.p2.y - rect1.p1.y) - (rect1.p2.y - rect1.p1.y + rect2.p2.y - rect2.p1.y) <= 0;
+           return flag1 && flag2;
     }
 
     private Rectangle getIntersectRegion(Rectangle rect1, Rectangle rect2){
