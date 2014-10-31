@@ -20,5 +20,5 @@ String[] header = null;
 
 ArrayList<Node> nodes;
 
-Set<Integer> selected_nodes;
+HashSet<Integer> selected_nodes;
 

@@ -1,21 +1,20 @@
+import java.util.Map.Entry;
 class StackedView {
-     float[] xArray = null;
-     float[] yArray = null;
-     String xTitle = null;
-     String yTitle = null;
-
-    float xMax = -1;
-    float yMax = -1;
-    float xMin = -1;
-    float yMin = -1;
-    float gap = 20;
-
-    int xIndex = -1;
-    int yIndex = -1;
-
+    ArrayList<Node> my_nodes;
     HashMap<String, ArrayList<Integer>> operations;
     HashMap<String, ArrayList<Integer>> syslogs;
     HashMap<String, ArrayList<Integer>> protocols;
+
+    float leftX, leftY;
+    float w, h;
+    float topGap, bottom;
+    float barHeight;
+    float widthGap;
+    float barWidth;
+
+    StackedView() {
+        my_nodes = new ArrayList<Node>();
+    }
 
     // this deals with selection when items are under the mouse cursor
     public void hover() {
@@ -26,65 +25,111 @@ class StackedView {
     // handle sending messages to the Controller when a rectangle is selected
     public void handleThisArea(Rectangle rect) {
         // this rectangle holds the _pixel_ coordinates of the selection rectangle 
-        Rectangle rectSub = getIntersectRegion(rect);
+        //Rectangle rectSub = getIntersectRegion(rect);
 
-        if (rectSub != null) {
-        }
+        //if (rectSub != null) {
+       // }
     }
 
-    public void display() {
-        pushStyle();
-        stroke(0);
-        strokeWeight(1);
-        fill(255);
-        rectMode(CORNER);
+    private void setDims(float _leftX, float _leftY, float _w, float _h) {
+        this.leftX = _leftX;
+        this.leftY = _leftY;
+        this.w = _w;
+        this.h = _h;
+        this.topGap = this.leftY + this.h * .05;
+        this.bottom = this.leftY + this.h;
+        this.barHeight = this.bottom - this.topGap;
+    }
 
+    ArrayList<Bar> makeBars() {
+        ArrayList<Bar> bars = new ArrayList<Bar>();
+        float currentY = this.h;
+        float barWidth = (this.w * .9) / this.my_nodes.size();
+        float widthGap = this.w * .05;
+        float currentX = this.w + widthGap;
 
-        rect(leftX, leftY, w, h);
-
-
-        // for (int i = 0; i < xArray.length; i++) {
-        //     if (marks[i]) {
-        //         fill(pointHighLight);
-        //     } else {
-        //         fill(pointColor);
-        //     }
-        //     noStroke();
-        //     // draw points
-        //     ellipse(xScale(xArray[i]), yScale(yArray[i]*) *) 2);
-        // }
-
-        fill(0);
+        for(Entry<String, ArrayList<Integer>> e : operations.entrySet()) {
+            String title = e.getKey();
+            float thisHeight = e.getValue().size() / this.my_nodes.size();
+            //currentY *= this.barHeight;
+            Bar b = new Bar(currentX, currentY, barWidth, thisHeight,
+                            e.getValue(), title, color(255, 0, 0));
+            currentY -= thisHeight;
+            bars.add(b);
+        }
         
-        // draw labels
-        if(yIndex == 0){
-            text(xTitle, leftX + w / 2.0, leftY - fontSize / 2.0);
+        currentY = this.h;
+        currentX += barWidth + widthGap;
+
+        for(Entry<String, ArrayList<Integer>> e : syslogs.entrySet()) {
+            String title = e.getKey();
+            float thisHeight = e.getValue().size() / this.my_nodes.size();
+            //currentY *= this.barHeight;
+            Bar b = new Bar(currentX, currentY, barWidth, thisHeight,
+                            e.getValue(), title, color(255, 0, 0));
+            currentY -= thisHeight;
+            bars.add(b);
         }
 
-        if(xIndex == 0){
-            pushMatrix();
-            translate(leftX - fontSize / 2.0, leftY + w / 2.0);
-            rotate(radians(-90));
-            text(yTitle, 0, 0);
-            popMatrix();
+        currentY = this.h;
+        currentX += barWidth + widthGap;
+
+        for(Entry<String, ArrayList<Integer>> e : protocols.entrySet()) {
+            String title = e.getKey();
+            float thisHeight = e.getValue().size() / this.my_nodes.size();
+            //currentY *= this.barHeight;
+            Bar b = new Bar(currentX, currentY, barWidth, thisHeight,
+                            e.getValue(), title, color(255, 0, 0));
+            currentY -= thisHeight;
+            bars.add(b);
+        }
+        return bars;
+    }
+
+    public void display(float _leftX, float _leftY, float _w, float _h) {
+        setDims(_leftX, _leftY, _w, _h);
+        
+        pushStyle();
+        //TODO: 
+        setData();
+        ArrayList<Bar> bars = makeBars();
+        println(bars);
+
+        for(Bar b : bars) {
+            b.display();
+            println("DREW THE BAR");
         }
         popStyle();
     }
 
+    /*
     public StackedView setXYIndice(int x, int y) {
         this.xIndex = x;
         this.yIndex = y;
         return this;
     }
+    */
 
     // set the indice of columns that this view can see
     public StackedView setData() {
+        this.my_nodes.clear();
+        if (selected_nodes.isEmpty()) {
+           for(Node n : nodes) {
+                this.my_nodes.add(new Node(n));
+           }
+        } else {
+            for(Node n : nodes) {
+                if(selected_nodes.contains(n.id)) {
+                    this.my_nodes.add(new Node(n));
+                }
+            }
+        }
         
         operations = new HashMap<String, ArrayList<Integer>>();
         syslogs = new HashMap<String, ArrayList<Integer>>();
         protocols = new HashMap<String, ArrayList<Integer>>();
 
-        for(Node n : nodes) {
+        for(Node n : this.my_nodes) {
             String op = n.op;
             String syslog = n.sysPriority;
             String prot = n.prot;
@@ -117,12 +162,15 @@ class StackedView {
         return this;
     }
 
+    /*
     public StackedView setTitles(String xStr, String yStr) {
         this.xTitle = xStr;
         this.yTitle = yStr;
         return this;
     }
+    (/
 
+    /*
     public StackedView initXYRange() {
         xMin = 0;//min(xArray);
         xMax = max(xArray) * 1.2;
@@ -131,7 +179,9 @@ class StackedView {
 
         return this;
     }
+    */
 
+    /*
     float xScale(float x) {
         return leftX + (x - xMin) / (xMax - xMin) * w;
     }
@@ -149,25 +199,36 @@ class StackedView {
     float inverseToYReal(float py) {
         return (h - (py - leftY)) / h * (yMax - yMin) + yMin;
     }
+    */
 }
 
 
 class Bar {
     float x, y;
     float w, h;
+    String title;
+    color c;
     ArrayList<Integer> indices;
 
 
-    Bar(float x_, float y_, float w_, float h_, ArrayList<Integer> inds) {
+    Bar(float x_, float y_, float w_, float h_, ArrayList<Integer> inds,
+         String title_, color c_) {
         indices = new ArrayList<Integer>();
         x = x_;
         y = y_;
         w = w_;
         h = h_;
+        this.title = title_;
+        this.c = c_;
+
         //swag
         for(int i : inds) {
             indices.add(i);
         }
-        rect(x, y, w, h);
+    }
+
+    void display() {
+        fill(color(255, 0, 0));
+        rect(this.x, this.y, this.w, this.h);
     }
 }

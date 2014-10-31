@@ -1,12 +1,16 @@
+import java.util.HashSet;
+StackedView stackedView;
 void setup() {
+    size(600, 600);
+    selected_nodes = new HashSet<Integer>();
+    stackedView = new StackedView();
     Parser parser = new Parser("data_aggregate.csv");
     nodes = parser.parse();
-    for (Node n : nodes) {
-        println(n);
-    }
+    println("PARSED");
 
 }
 
-void loop() {
-
+void draw() {
+    background(255);
+    stackedView.display(0, 0, width, height);
 }
