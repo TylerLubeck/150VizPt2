@@ -45,28 +45,34 @@ class StackedView {
         ArrayList<Bar> bars = new ArrayList<Bar>();
         float currentY = this.h;
         float barWidth = (this.w * .9) / this.my_nodes.size();
+        barWidth = 20;
         float widthGap = this.w * .05;
-        float currentX = this.w + widthGap;
+        float currentX = this.leftX + widthGap;
+            rectMode(CORNER);
 
         for(Entry<String, ArrayList<Integer>> e : operations.entrySet()) {
             String title = e.getKey();
-            float thisHeight = e.getValue().size() / this.my_nodes.size();
-            //currentY *= this.barHeight;
+            float thisHeight = (float)e.getValue().size() / (float)this.my_nodes.size();
+            //println(e.getValue().size() + "/" + this.my_nodes.size());
+            thisHeight *= this.barHeight;
             Bar b = new Bar(currentX, currentY, barWidth, thisHeight,
                             e.getValue(), title, color(255, 0, 0));
+            //println(currentX, currentY, barWidth, thisHeight);
             currentY -= thisHeight;
             bars.add(b);
         }
         
         currentY = this.h;
         currentX += barWidth + widthGap;
+        println("New x: " + currentX);
 
         for(Entry<String, ArrayList<Integer>> e : syslogs.entrySet()) {
             String title = e.getKey();
             float thisHeight = e.getValue().size() / this.my_nodes.size();
-            //currentY *= this.barHeight;
+            rectMode(CORNER);
+            thisHeight *= this.barHeight;
             Bar b = new Bar(currentX, currentY, barWidth, thisHeight,
-                            e.getValue(), title, color(255, 0, 0));
+                            e.getValue(), title, color(0, 255, 0));
             currentY -= thisHeight;
             bars.add(b);
         }
@@ -78,8 +84,10 @@ class StackedView {
             String title = e.getKey();
             float thisHeight = e.getValue().size() / this.my_nodes.size();
             //currentY *= this.barHeight;
+            rectMode(CORNER);
+            thisHeight *= this.barHeight;
             Bar b = new Bar(currentX, currentY, barWidth, thisHeight,
-                            e.getValue(), title, color(255, 0, 0));
+                            e.getValue(), title, color(0, 0, 255));
             currentY -= thisHeight;
             bars.add(b);
         }
@@ -93,11 +101,9 @@ class StackedView {
         //TODO: 
         setData();
         ArrayList<Bar> bars = makeBars();
-        println(bars);
 
         for(Bar b : bars) {
             b.display();
-            println("DREW THE BAR");
         }
         popStyle();
     }
@@ -228,7 +234,7 @@ class Bar {
     }
 
     void display() {
-        fill(color(255, 0, 0));
+        fill(this.c);
         rect(this.x, this.y, this.w, this.h);
     }
 }
