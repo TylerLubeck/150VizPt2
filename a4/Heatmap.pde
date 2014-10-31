@@ -1,19 +1,19 @@
 class HPNode {
-	int genCounter;
+    ArrayList<Integer> indices;
 	int markedCounter;
 
 	HPNode() {
-		this.genCounter = 0;
+		this.indices = new ArrayList<Integer>();
 		this.markedCounter = 0;
 	}
 }
 
-class Heatmap {
+class Heatmap  {
 	ArrayList<Date> times;
 	ArrayList<String> dPorts;
 	HPNode [][] hMap;
 	int numNodes, maxCount, minCount;
-	float pLabelW, tLabelH, blockW, blockH, x0, y0, w, h;
+	float pLabelW, tLabelH, blockW, blockH, leftX, leftY, w, h;
 	SimpleDateFormat sdf;
 	color highlight = color(255, 178, 102);
 
@@ -29,7 +29,6 @@ class Heatmap {
 		numNodes = nodes.size();
 		boolean changedTime = false, changedPort = false;
 		for(Node curNode : nodes) {
-                  println(curNode.time);
 			if (! times.contains(curNode.time)) {
 				times.add(curNode.time);
 				changedTime = true;
@@ -101,7 +100,7 @@ class Heatmap {
 			if (hMap[i][j] == null) {
 				hMap[i][j] = new HPNode();
 			}
-			hMap[i][j].genCounter++;
+            hMap[i][j].indices.add(node.id);
 		}
 	}
 
@@ -113,15 +112,11 @@ class Heatmap {
 			if (hMap[i][j] == null) {
 				hMap[i][j] = new HPNode();
 			}
-			hMap[i][j].genCounter++;
-			if (inRange(node)) {
+            hMap[i][j].indices.add(node.id);
+			if (selected_nodes.contains(node.id)) {
 				hMap[i][j].markedCounter++;
 			}
 		}
-	}
-
-	boolean inRange(Node node) {
-		return false;
 	}
 
 	void resetMarked() {
@@ -136,7 +131,7 @@ class Heatmap {
 
 	void checkMarked() {
 		for (Node node : nodes) {
-			if (inRange(node)) {
+			if (selected_nodes.contains(node.id)) {
 				hMap[dPorts.indexOf(node.dPort)][times.indexOf(node.time)].markedCounter++;
 			}
 		}
@@ -146,14 +141,14 @@ class Heatmap {
 		int min = nodes.size(), max = 0;
 		for (int i = 0; i < dPorts.size(); ++i) {
 			for (int j = 0; j < times.size(); ++j) {
-				if (hMap[i][j] != null && hMap[i][j].genCounter > max) {
-					max = hMap[i][j].genCounter;
+				if (hMap[i][j] != null && hMap[i][j].indices.size() > max) {
+					max = hMap[i][j].indices.size();
 				}
 				if (hMap[i][j] == null) {
                     min = 0;
                 }
-                else if (hMap[i][j].genCounter < min) {
-					min = hMap[i][j].genCounter;
+                else if (hMap[i][j].indices.size() < min) {
+					min = hMap[i][j].indices.size();
 				}
 			}
 		}
@@ -173,21 +168,22 @@ class Heatmap {
 		tLabelH = 14;
 	}
 
-	void draw(float _x0, float _y0, float _w, float _h) {
+	public void display(float _x0, float _y0, float _w, float _h) {
 		if (numNodes != nodes.size()) {
 			minCount = maxCount = 0;
 			doCounts(false);
 		}
 		else {
 			resetMarked();
+			checkMarked();
 		}
-		this.x0 = _x0;
-		this.y0 = _y0;
+		this.leftX = _x0;
+		this.leftY = _y0;
 		this.w = _w;
 		this.h = _h;
 		fill(255);
         noStroke();
-        rect(x0, y0, w, h);
+        rect(leftX, leftY, w, h);
         stroke(0);
 		setLabelSize();
 		blockH = (h - tLabelH) / dPorts.size();
@@ -199,7 +195,7 @@ class Heatmap {
 	void drawLabels() {
 		textSize(12);
 		textAlign(CENTER, CENTER);
-		float startX = x0, startY = y0;
+		float startX = leftX, startY = leftY;
 		for (String dPort : dPorts) {
 			fill(220);
 			rect(startX, startY, pLabelW, blockH);
@@ -207,8 +203,8 @@ class Heatmap {
 			text(dPort, startX + pLabelW/2, startY + blockH/2);
 			startY += blockH;
 		}
-		startX = x0 + pLabelW; 
-		startY = y0 + h -tLabelH;
+		startX = leftX + pLabelW; 
+		startY = leftY + h -tLabelH;
 		for (Date time : times) {
 			fill(220);
 			rect(startX, startY, blockW, tLabelH);
@@ -223,10 +219,10 @@ class Heatmap {
     	int count;
     	float startX, startY, colr, colg, colb;
     	for (int i = 0; i < dPorts.size(); ++i) {
-    		startX = x0 + pLabelW;
-    		startY = y0 + i* blockH;
+    		startX = leftX + pLabelW;
+    		startY = leftY + i* blockH;
     		for (int j = 0; j < times.size(); ++j) {
-    			count = hMap[i][j] == null? minCount: hMap[i][j].genCounter;
+    			count = hMap[i][j] == null? minCount: hMap[i][j].indices.size();
                 if (count == 0) {
                 	fill(255);
                 }
@@ -239,11 +235,57 @@ class Heatmap {
     			rect(startX, startY, blockW, blockH);
                 if (hMap[i][j] != null && hMap[i][j].markedCounter != 0) {
                 	fill(highlight);
-                	rect(startX, startY, blockW * hMap[i][j].markedCounter / count, blockH);	
+                	rect(startX, startY, blockW, blockH* hMap[i][j].markedCounter / count);	
                 }
     			startX += blockW;
     		}
     	}
-
     }
+
+    public void hover() {
+    	int row, col;
+    	if (inTabel()) {
+    		row = int((mouseY-leftY) / blockH);
+    		col = int((mouseX - leftX - pLabelW) / blockW);
+    		selected_nodes.addAll(hMap[row][col].indices);
+    	}
+    }
+
+    public void handleThisArea(Rectangle rect) {
+    	int startRow, endRow, startCol, endCol;
+        Rectangle rectSub = getIntersectRegion(rect);
+        if (rectSub != null) {
+        	startRow = int((rectSub.p1.y - leftY) / blockH);
+        	endRow = int((rectSub.p2.y - leftY) / blockH);
+        	startCol = int((rectSub.p1.x - leftX - pLabelW) / blockW);
+        	endCol = int((rectSub.p2.x - leftX - pLabelW) / blockW);
+        	for (int i = startRow; i <= endRow; ++i) {
+        		for (int j = startCol; j <= endCol; ++j) {
+        			selected_nodes.addAll(hMap[i][j].indices);
+        		}
+        	}
+        }
+    }
+
+    boolean inTable() {
+    	return mouseX > leftX + pLabelW && mouseY > leftY 
+    			&& mouseX < leftX + w && mouseY < leftY + h;
+	}
+
+
+	public Rectangle getIntersectRegion(Rectangle rect) {
+        Rectangle rect2 = new Rectangle(leftX + pLabelW, leftY, leftX + w, leftY + h);
+        return getIntersectRegion(rect, rect2);
+    }
+
+    private Rectangle getIntersectRegion(Rectangle rect1, Rectangle rect2){
+          if(isIntersected(rect1, rect2)){
+              float x1 = max(rect1.p1.x, rect2.p1.x);
+              float y1 = max(rect1.p1.y, rect2.p1.y);
+              float x2 = min(rect1.p2.x, rect2.p2.x);
+              float y2 = min(rect1.p2.y, rect2.p2.y);
+              return new Rectangle(x1, y1, x2, y2);
+          }
+          return null;
+     }
 }
