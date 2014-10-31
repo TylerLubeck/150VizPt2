@@ -1,4 +1,3 @@
-ArrayList<Node> nodes;
 void setup() {
     Parser parser = new Parser("data_aggregate.csv");
     nodes = parser.parse();

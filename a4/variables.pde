@@ -15,8 +15,10 @@ float lineHeight = 10;
 
 String path = "data_aggregate.csv";
 
-Table data = null;
 boolean[] marks = null;
 String[] header = null;
 
-Controller contrl = null;
+ArrayList<Node> nodes;
+
+Set<Integer> selected_nodes;
+
