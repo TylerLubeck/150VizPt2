@@ -33,6 +33,19 @@ class Node {
         this.prot = _prot;
     }
 
+    Node(Node n) {
+        this.id = n.id;
+        this.time = n.time;
+        this.sIP = n.sIP;
+        this.sPort = n.sPort;
+        this.dIP = n.dIP;
+        this.dPort = n.dPort;
+        this.sysPriority = n.sysPriority;
+        this.op = n.op;
+        this.prot = n.prot;
+        this.sdf = n.sdf;
+    }
+
     /* converts to String in the format:
      * Node ID at HH:MM:SS: sourceIP -> destIP
      * So,
