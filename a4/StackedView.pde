@@ -23,12 +23,13 @@ class StackedView {
     }
 
     // handle sending messages to the Controller when a rectangle is selected
-    public void handleThisArea(Rectangle rect) {
+    public ArrayList<Integer> handleThisArea(Rectangle rect) {
         // this rectangle holds the _pixel_ coordinates of the selection rectangle 
         //Rectangle rectSub = getIntersectRegion(rect);
 
         //if (rectSub != null) {
        // }
+       return null;
     }
 
     private void setDims(float _leftX, float _leftY, float _w, float _h) {
@@ -64,7 +65,7 @@ class StackedView {
         
         currentY = this.h;
         currentX += barWidth + widthGap;
-        println("New x: " + currentX);
+//        println("New x: " + currentX);
 
         for(Entry<String, ArrayList<Integer>> e : syslogs.entrySet()) {
             String title = e.getKey();

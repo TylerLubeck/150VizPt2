@@ -21,6 +21,8 @@ String[] header = null;
 ArrayList<Node> nodes;
 
 HashSet<Integer> selected_nodes;
+ArrayList<Rectangle> selectedAreas;
+Rectangle selectedArea;
 
 Heatmap heatmap;
 StackedView stackedView;

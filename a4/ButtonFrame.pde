@@ -60,4 +60,20 @@ class ButtonFrame {
         buttonH = h * 0.8;
         buttonW = w * 0.95 / 3 - xInterval;
    }
+   
+   void interpretClick() {
+       if (hoverB.inFocus()) {
+           hover = true;
+           logAnd = logOr = false; 
+       }
+       else if (logAndB.inFocus()) {
+           logAnd = true;
+           hover = logOr = false;
+       }
+       else if (logOrB.inFocus()) {
+           logOr = true;
+           hover = logAnd = false;
+       }  
+     
+   }
 }

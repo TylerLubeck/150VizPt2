@@ -253,20 +253,25 @@ class Heatmap  {
     	}
     }
 
-    public void handleThisArea(Rectangle rect) {
+    public ArrayList<Integer> handleThisArea(Rectangle rect) {
     	int startRow, endRow, startCol, endCol;
         Rectangle rectSub = getIntersectRegion(rect);
+        ArrayList<Integer> temp = new ArrayList<Integer>();
         if (rectSub != null) {
         	startRow = int((rectSub.p1.y - leftY) / blockH);
-        	endRow = int((rectSub.p2.y - leftY) / blockH);
+        	endRow = int((rectSub.p2.y - leftY) / blockH) > dPorts.size() -1  ? dPorts.size() -1 : int((rectSub.p2.y - leftY) / blockH) ;
         	startCol = int((rectSub.p1.x - leftX - pLabelW) / blockW);
         	endCol = int((rectSub.p2.x - leftX - pLabelW) / blockW);
         	for (int i = startRow; i <= endRow; ++i) {
         		for (int j = startCol; j <= endCol; ++j) {
-        			selected_nodes.addAll(hMap[i][j].indices);
+                                if (hMap[i][j] != null) {
+        			     temp.addAll(hMap[i][j].indices);
+                                }
         		}
         	}
-        }
+                return temp;
+        }  
+        return null;
     }
 
     boolean inTable() {
@@ -274,9 +279,8 @@ class Heatmap  {
     			&& mouseX < leftX + w && mouseY < leftY + h - tLabelH;
 	}
 
-
-	public Rectangle getIntersectRegion(Rectangle rect) {
-        Rectangle rect2 = new Rectangle(leftX + pLabelW, leftY, leftX + w, leftY + h);
+    public Rectangle getIntersectRegion(Rectangle rect) {
+        Rectangle rect2 = new Rectangle(leftX + pLabelW, leftY, leftX + w, leftY + h - tLabelH);
         return getIntersectRegion(rect, rect2);
     }
 
