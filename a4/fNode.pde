@@ -20,11 +20,9 @@ class fNode implements Comparable<fNode>{
         this(-1, -1);
 	}
 
-
 	fNode(int id) {
         this(id, -1);
 	}
-
 
 	fNode(int id, int mass) {
 		this.id = id;
@@ -75,7 +73,6 @@ class fNode implements Comparable<fNode>{
         this.position.set(newX, newY);
     }
 
-
     void updatePosition(float currTime, PVector force) {
         PVector acceleration = PVector.div(force, this.mass);
         
@@ -119,7 +116,6 @@ class fNode implements Comparable<fNode>{
         return totalForces;
     }
 
-
     void drawPosition() {
         fill(this.fillColor);
         stroke(COLOR_STROKE);
@@ -146,7 +142,6 @@ class fNode implements Comparable<fNode>{
                 line(x1, y1, x2, y2);
       }
     }
-
 
     void renderISect(PGraphics pg) {
         pg.fill(this.r, this.g, this.b);
@@ -176,7 +171,6 @@ class fNode implements Comparable<fNode>{
         setColors();
     	return (.5 * this.mass * netVel.mag());
     }
-
 
     void setHighlighted() {
         this.fillColor = COLOR_HIGHLIGHT;
