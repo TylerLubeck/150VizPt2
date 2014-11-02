@@ -26,6 +26,7 @@ Rectangle selectedArea;
 
 Heatmap heatmap;
 StackedView stackedView;
+ForceView forceView;
 ButtonFrame buttonFrame;
 
 boolean hover, logAnd, logOr;
