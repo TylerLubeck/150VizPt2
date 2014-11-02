@@ -17,11 +17,11 @@ class ForceView {
     float leftX, leftY;
     float w, h;
     boolean equilibrium;
-    ArrayList<fNode> nodeList;
+    ArrayList<fNode> ipList;
     
     ForceView() {
         this.equilibrium = false;
-        this.nodeList = new ArrayList<fNode>();
+        this.ipList = new ArrayList<fNode>();
         for(Node n : nodes) {
             nodeList.append(convertToFnode(n));
         }
