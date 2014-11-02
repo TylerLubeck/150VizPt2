@@ -92,19 +92,20 @@ void dealWithArea() {
        }
     }
     else {
+      selected_nodes.clear();
         if (! selectedAreas.isEmpty()) {
                for (Rectangle rect : selectedAreas) {
                    temp = stackedView.handleThisArea(rect);
-                   if (temp != null) {
+                   if (temp != null && ! temp.isEmpty()) {
                        if (selected_nodes.isEmpty()) {
                            selected_nodes.addAll(temp);
                        }
                        else {
                            selected_nodes.retainAll(temp);
-                       }    
+                      }    
                    }
                    temp = heatmap.handleThisArea(rect);
-                   if (temp != null) {
+                   if (temp != null && !temp.isEmpty()) {
                        if (selected_nodes.isEmpty()) {
                            selected_nodes.addAll(temp);
                        }
@@ -116,7 +117,7 @@ void dealWithArea() {
          }
          if (selectedArea != null) {
              temp = stackedView.handleThisArea(selectedArea);
-             if (temp != null) {
+             if (temp != null && !temp.isEmpty()) {
                  if (selected_nodes.isEmpty()) {
                      selected_nodes.addAll(temp);
                  }
@@ -125,7 +126,7 @@ void dealWithArea() {
                  }    
              }
              temp = heatmap.handleThisArea(selectedArea);
-             if (temp != null) {
+             if (temp != null && !temp.isEmpty()) {
                  if (selected_nodes.isEmpty()) {
                      selected_nodes.addAll(temp);
                  }
