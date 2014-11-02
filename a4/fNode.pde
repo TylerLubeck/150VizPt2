@@ -3,7 +3,7 @@ class fNode implements Comparable<fNode>{
 	int id, mass;
     String myIP;
 	ArrayList<fNode> neighbors;
-	ArrayList<Spring> springs;
+	ArrayList<Edge> edges;
     float radius;
     float r, g, b;
     boolean isClickedOn;
@@ -40,7 +40,7 @@ class fNode implements Comparable<fNode>{
         this.radius = RADIUS_FACTOR * this.mass;
 
         neighbors = new ArrayList<fNode>();
-        springs = new ArrayList<Spring>();
+        edges = new ArrayList<Edge>();
 		
         this.netVel = new PVector(0f, 0f);
         setPos(this.position);
@@ -92,25 +92,25 @@ class fNode implements Comparable<fNode>{
         
     }
 
-    PVector totalSpringForces(float k_hooke) {
+    PVector totalEdgeForces(float k_hooke) {
         PVector totalForces = new PVector(0f, 0f);
-        for(int i = 0; i < this.springs.size(); i++) {
+        for(int i = 0; i < this.edges.size(); i++) {
             fNode neighbor = this.neighbors.get(i);
-            Spring spring = this.springs.get(i);
+            edge Edge = this.edges.get(i);
             PVector thisForce = PVector.sub(this.position, neighbor.position);
 
             float currLength = dist(this.position.x, this.position.y, 
                                     neighbor.position.x, neighbor.position.y);
             currLength *= -1;
 
-            float magnitude = currLength - spring.springL;
+            float magnitude = currLength - edge.springL;
             magnitude *= k_hooke;
 
 
             thisForce.normalize();
             thisForce.mult(magnitude);
             
-            // Get length of spring - goal length
+            // Get length of Edge - goal length
             totalForces.add(thisForce);
         }
         return totalForces;
