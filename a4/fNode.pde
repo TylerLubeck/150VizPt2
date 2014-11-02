@@ -1,9 +1,9 @@
 class fNode implements Comparable<fNode>{
     final float RADIUS_FACTOR = 3;
 	int id, mass;
+    String myIP;
 	ArrayList<fNode> neighbors;
 	ArrayList<Spring> springs;
-    
     float radius;
     float r, g, b;
     boolean isClickedOn;

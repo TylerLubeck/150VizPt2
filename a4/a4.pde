@@ -13,6 +13,7 @@ void setup() {
     selectedAreas = new ArrayList<Rectangle>();
     stackedView = new StackedView();
     heatmap = new Heatmap();
+    //forceView = new ForceView();
     buttonFrame = new ButtonFrame();
 }
 
