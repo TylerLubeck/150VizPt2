@@ -34,10 +34,18 @@ class StackedView {
     public ArrayList<Integer> handleThisArea(Rectangle rect) {
         // this rectangle holds the _pixel_ coordinates of the selection rectangle 
         //Rectangle rectSub = getIntersectRegion(rect);
+        ArrayList<Integer> ids = new ArrayList<Integer>();
+        for (Bar b : this.allBars) {
+            if(b.withinArea(rect)) {
+                println("WITHIN");
+                for (int id : b.indices) {
+                    ids.add(id);
+                }
+            }
+        }
 
-        //if (rectSub != null) {
-       // }
-       return null;
+
+       return ids;
     }
 
     private void setDims(float _leftX, float _leftY, float _w, float _h) {
@@ -249,5 +257,12 @@ class Bar {
             }
         }
         return false;    
+    }
+
+    boolean withinArea(Rectangle r) {
+       return this.x > r.p1.x &&
+              this.x + this.y < r.p2.x && 
+              this.y > r.p1.y &&
+              this.y + this.h < r.p2.y;
     }
 }
