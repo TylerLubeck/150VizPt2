@@ -11,15 +11,23 @@ class StackedView {
     float barHeight;
     float widthGap;
     float barWidth;
+    ArrayList<Bar> allBars;
 
     StackedView() {
         my_nodes = new ArrayList<Node>();
+        allBars = new ArrayList<Bar>();
     }
 
     // this deals with selection when items are under the mouse cursor
     public void hover() {
         selected_nodes.clear();
-        //TODO: Set selected_nodes set to be the indices of selected nodes
+        for(Bar b : this.allBars) {
+            if(b.isHover(mouseX, mouseY)) {
+                for(int id : b.indices) {
+                    selected_nodes.add(id);
+                }
+            }
+        }
     }
 
     // handle sending messages to the Controller when a rectangle is selected
@@ -37,61 +45,47 @@ class StackedView {
         this.leftY = _leftY;
         this.w = _w;
         this.h = _h;
-        this.topGap = this.leftY + this.h * .05;
+        this.topGap = this.h * .05;
         this.bottom = this.leftY + this.h;
         this.barHeight = this.bottom - this.topGap;
     }
 
-    ArrayList<Bar> makeBars() {
-        ArrayList<Bar> bars = new ArrayList<Bar>();
-        float currentY = this.h;
-        float barWidth = (this.w * .9) / this.my_nodes.size();
-        barWidth = 20;
-        float widthGap = this.w * .05;
-        float currentX = this.leftX + widthGap;
-            rectMode(CORNER);
 
-        for(Entry<String, ArrayList<Integer>> e : operations.entrySet()) {
+    ArrayList<Bar> makeBarsForCollection(HashMap<String, ArrayList<Integer>> collection,
+                                         float currentY, float currentX, float barWidth) {
+
+        ArrayList<Bar> bars = new ArrayList<Bar>();
+        float initRed = 231, initGreen = 232, initBlue = 163;
+        for(Entry<String, ArrayList<Integer>> e : collection.entrySet()) {
             String title = e.getKey();
             float thisHeight = (float)e.getValue().size() / (float)this.my_nodes.size();
-            //println(e.getValue().size() + "/" + this.my_nodes.size());
             thisHeight *= this.barHeight;
+            color c = color(initRed, initGreen, initBlue);
+            initRed -= 30;
+            initGreen -= 30;
+            initBlue -= 30;
             Bar b = new Bar(currentX, currentY, barWidth, thisHeight,
-                            e.getValue(), title, color(255, 0, 0));
-            //println(currentX, currentY, barWidth, thisHeight);
-            currentY -= thisHeight;
+                            e.getValue(), title, c);
+            currentY += thisHeight;
             bars.add(b);
         }
-        
-        currentY = this.h;
+        return bars;
+    }
+
+    ArrayList<Bar> makeBars() {
+        ArrayList<Bar> bars = new ArrayList<Bar>();
+        float barWidth = (this.w * .8) / 3;
+        float widthGap = (this.w - (3 * barWidth)) / 4;
+        float currentX = this.leftX + widthGap;
+        float currentY = this.leftY + this.topGap;
+        rectMode(CORNER);
+
+        bars.addAll(makeBarsForCollection(this.operations, currentY, currentX, barWidth));
         currentX += barWidth + widthGap;
-//        println("New x: " + currentX);
-
-        for(Entry<String, ArrayList<Integer>> e : syslogs.entrySet()) {
-            String title = e.getKey();
-            float thisHeight = e.getValue().size() / this.my_nodes.size();
-            rectMode(CORNER);
-            thisHeight *= this.barHeight;
-            Bar b = new Bar(currentX, currentY, barWidth, thisHeight,
-                            e.getValue(), title, color(0, 255, 0));
-            currentY -= thisHeight;
-            bars.add(b);
-        }
-
-        currentY = this.h;
+        bars.addAll(makeBarsForCollection(this.syslogs, currentY, currentX, barWidth));
         currentX += barWidth + widthGap;
+        bars.addAll(makeBarsForCollection(this.protocols, currentY, currentX, barWidth));
 
-        for(Entry<String, ArrayList<Integer>> e : protocols.entrySet()) {
-            String title = e.getKey();
-            float thisHeight = e.getValue().size() / this.my_nodes.size();
-            //currentY *= this.barHeight;
-            rectMode(CORNER);
-            thisHeight *= this.barHeight;
-            Bar b = new Bar(currentX, currentY, barWidth, thisHeight,
-                            e.getValue(), title, color(0, 0, 255));
-            currentY -= thisHeight;
-            bars.add(b);
-        }
         return bars;
     }
 
@@ -101,9 +95,11 @@ class StackedView {
         pushStyle();
         //TODO: 
         setData();
-        ArrayList<Bar> bars = makeBars();
+        allBars.clear();
+        allBars = makeBars();
 
-        for(Bar b : bars) {
+
+        for(Bar b : allBars) {
             b.display();
         }
         popStyle();
@@ -207,6 +203,7 @@ class StackedView {
         return (h - (py - leftY)) / h * (yMax - yMin) + yMin;
     }
     */
+
 }
 
 
@@ -221,10 +218,10 @@ class Bar {
     Bar(float x_, float y_, float w_, float h_, ArrayList<Integer> inds,
          String title_, color c_) {
         indices = new ArrayList<Integer>();
-        x = x_;
-        y = y_;
-        w = w_;
-        h = h_;
+        this.x = x_;
+        this.y = y_;
+        this.w = w_;
+        this.h = h_;
         this.title = title_;
         this.c = c_;
 
@@ -235,7 +232,22 @@ class Bar {
     }
 
     void display() {
+        rectMode(CORNER);
         fill(this.c);
         rect(this.x, this.y, this.w, this.h);
+        fill(color(0));
+        textAlign(LEFT, TOP);
+        text(this.title + ": " + this.indices.size(), 
+             this.x, this.y,
+             this.w, this.h);
+    }
+
+    boolean isHover(float mousex, float mousey) {
+        if ( mousex > this.x && mousex < this.x + this.w) {
+            if (mousey < this.y + this.h && mousey > this.y) {
+                return true;
+            }
+        }
+        return false;    
     }
 }
