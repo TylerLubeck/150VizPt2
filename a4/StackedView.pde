@@ -18,7 +18,6 @@ class StackedView {
         allBars = new ArrayList<Bar>();
     }
 
-    // this deals with selection when items are under the mouse cursor
     public void hover() {
         selected_nodes.clear();
         for(Bar b : this.allBars) {
@@ -30,7 +29,6 @@ class StackedView {
         }
     }
 
-    // handle sending messages to the Controller when a rectangle is selected
     public ArrayList<Integer> handleThisArea(Rectangle rect) {
         // this rectangle holds the _pixel_ coordinates of the selection rectangle 
         //Rectangle rectSub = getIntersectRegion(rect);
@@ -101,7 +99,6 @@ class StackedView {
         setDims(_leftX, _leftY, _w, _h);
         
         pushStyle();
-        //TODO: 
         setData();
         allBars.clear();
         allBars = makeBars();
@@ -113,15 +110,6 @@ class StackedView {
         popStyle();
     }
 
-    /*
-    public StackedView setXYIndice(int x, int y) {
-        this.xIndex = x;
-        this.yIndex = y;
-        return this;
-    }
-    */
-
-    // set the indice of columns that this view can see
     public StackedView setData() {
         this.my_nodes.clear();
         if (selected_nodes.isEmpty()) {
@@ -173,45 +161,6 @@ class StackedView {
         return this;
     }
 
-    /*
-    public StackedView setTitles(String xStr, String yStr) {
-        this.xTitle = xStr;
-        this.yTitle = yStr;
-        return this;
-    }
-    (/
-
-    /*
-    public StackedView initXYRange() {
-        xMin = 0;//min(xArray);
-        xMax = max(xArray) * 1.2;
-        yMin = 0;//min(yArray);
-        yMax = max(yArray) * 1.2;
-
-        return this;
-    }
-    */
-
-    /*
-    float xScale(float x) {
-        return leftX + (x - xMin) / (xMax - xMin) * w;
-    }
-
-    float yScale(float y) {
-        return leftY + h - ((y - yMin) / (yMax - yMin) * h);
-    }
-
-    // convert from pixel coordinates to data coordinates
-    float inverseToXReal(float px) {
-        return (px - leftX) / w * (xMax - xMin) + xMin;
-    }
-
-    // convert from pixel coordinates to data coordinates
-    float inverseToYReal(float py) {
-        return (h - (py - leftY)) / h * (yMax - yMin) + yMin;
-    }
-    */
-
 }
 
 
@@ -233,7 +182,6 @@ class Bar {
         this.title = title_;
         this.c = c_;
 
-        //swag
         for(int i : inds) {
             indices.add(i);
         }
