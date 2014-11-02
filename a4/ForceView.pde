@@ -17,17 +17,24 @@ class ForceView {
     float leftX, leftY;
     float w, h;
     boolean equilibrium;
-    ArrayList<fNode> ipList;
+    ArrayList<Edge> edgeList;
+    ArrayList<String> ipList;
+    ArrayList<fNode> fNodeList;
     
     ForceView() {
         this.equilibrium = false;
-        this.ipList = new ArrayList<fNode>();
+        this.ipList = new ArrayList<String>();
+        this.edgeList = new ArrayList<Edge>();
+        this.fNodeList = new ArrayList<fNode>();
         for(Node n : nodes) {
-            ipList.append(convertToFnode(n));
+            createFNodeList(n);
         }
+
+
     }
 
-    fNode convertToFnode(Node n) {
+    void makeConnection()
+        
 
     }
 

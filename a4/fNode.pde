@@ -2,7 +2,6 @@ class fNode implements Comparable<fNode>{
     final float RADIUS_FACTOR = 3;
 	int id, mass;
     String myIP;
-	ArrayList<fNode> neighbors;
 	ArrayList<Edge> edges;
     float radius;
     float r, g, b;
@@ -24,8 +23,9 @@ class fNode implements Comparable<fNode>{
         this(id, -1);
 	}
 
-	fNode(int id, int mass) {
+	fNode(int id, String myIP_, int mass) {
 		this.id = id;
+        this.myIP = myIP_;
         this.mass = mass;
         this.r = red(id); this.g = green(id); this.b = blue(id);
         this.intersected = false;
@@ -44,7 +44,7 @@ class fNode implements Comparable<fNode>{
 		
         this.netVel = new PVector(0f, 0f);
         setPos(this.position);
-        String l = ("id: " + this.id + ", mass: " + this.mass);
+        String l = ("ip: " + this.myIP + ", mass: " + this.mass);
         label_fnode = new Textbox(l, this.position.x, this.position.y);
         drawPosition();
 	}

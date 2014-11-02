@@ -1,13 +1,20 @@
 class Edge {
 	float springL;
     float currLength;
-    int nID;
+    //Info about strokeWeight, b/c it is num connections
+    ArrayList<Integer> nIDs;
     String sIP;
     String dIP;
-    int numConnections; 
     int edgeWeight;
+    Edge(){};
 
-	Spring(double sprL) {
+    Edge(String sIP_, String dIP_) {
+    	this.sIP = sIP_;
+    	this.dIP = dIP_;
+    	nIDs = new ArrayList<Integer>();
+    }
+
+	Edge(double sprL) {
         this.springL = (float)sprL;
         this.springL *= 1/3;
 	}
