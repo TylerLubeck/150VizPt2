@@ -1,6 +1,11 @@
-class Spring {
+class Edge {
 	float springL;
     float currLength;
+    int nID;
+    String sIP;
+    String dIP;
+    int numConnections; 
+    int edgeWeight;
 
 	Spring(double sprL) {
         this.springL = (float)sprL;
