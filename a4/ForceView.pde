@@ -18,22 +18,22 @@ class ForceView {
     float w, h;
     boolean equilibrium;
     ArrayList<Edge> edgeList;
-    ArrayList<String> ipList;
+    ArrayList<fNode> ipList;
     ArrayList<fNode> fNodeList;
     
     ForceView() {
         this.equilibrium = false;
-        this.ipList = new ArrayList<String>();
+        this.ipList = new ArrayList<fNode>();
         this.edgeList = new ArrayList<Edge>();
         this.fNodeList = new ArrayList<fNode>();
         for(Node n : nodes) {
-            createFNodeList(n);
+            //createFNodeList(n);
         }
 
 
     }
 
-    void makeConnection()
+    void makeConnection() {
         
 
     }
@@ -46,16 +46,16 @@ class ForceView {
     }
 
     void setup() {
-        Parser parser = new Parser(file);
-        ipList = parser.parse();
-        Collections.sort(ipList);
+        //Parser parser = new Parser(file);
+        //ipList = parser.parse();
+        //Collections.sort(ipList);
 
         calcAndUpdate();
     }
 
     void display(float _leftX, float _leftY, float _w, float _h)  {
         setDims(_leftX, _leftY, _w, _h);
-        pickbuffer = createGraphics(this.w, this.h);
+        pickbuffer = createGraphics((int)this.w, (int)this.h);
 
 
         /* Calculation loops */
@@ -96,7 +96,7 @@ class ForceView {
         for(int i = 0; i < ipList.size(); i++) {
 
             PVector netRepulsion = allRepulsionForces(ipList.get(i), i);
-            PVector netSpring = ipList.get(i).totalSpringForces(k);
+            PVector netSpring = ipList.get(i).totalEdgeForces(k);
 
             /* Update velocities & accelerations */
             PVector allForces = PVector.mult(PVector.add(netSpring, netRepulsion), DAMPENING);

@@ -57,17 +57,21 @@ class Node {
     }
 }
 
-
 class Parser {
     String file_name;
     Table table;
     ArrayList<Node> nodes; 
+    HashSet<String> destinations;
+    ArrayList<fNode> fNodes;
+
     
     /*Initialize the parser, but don't the actual parsing yet*/
     Parser(String _file_name) {
         this.file_name = _file_name;
         this.table = loadTable(this.file_name, "header");
         nodes = new ArrayList<Node>();
+        destinations = new HashSet<String>();
+        fNodes = new ArrayList<fNode>();
     }
 
     /* 
@@ -94,9 +98,18 @@ class Parser {
                               sysPriority,
                               op,
                               prot);
+            if (! destinations.contains(dIP)) {
+                println("DOES NOT CONTAIN " + dIP);
+                fNodes.add(new fNode(id_incrementer, dIP, MASS_CONSTANT));
+            }
             id_incrementer++;
+
             nodes.add(n);
         }
         return nodes;
+    }
+
+    ArrayList<fNode> getDestinations() {
+        return fNodes;
     }
 }

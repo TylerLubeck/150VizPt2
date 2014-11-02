@@ -6,6 +6,10 @@ void setup() {
     frame.setTitle("CMV");
     Parser parser = new Parser("data_aggregate.csv");
     nodes = parser.parse();
+    ArrayList<fNode> fNodes = parser.getDestinations();
+    for (fNode n : fNodes) {
+        println(n);
+    }
     hover = true;
     logAnd = logOr = false;
     println("PARSED");

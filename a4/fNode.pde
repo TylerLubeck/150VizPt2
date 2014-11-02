@@ -14,13 +14,14 @@ class fNode implements Comparable<fNode>{
     color COLOR_STROKE;
     boolean intersected;
     Textbox label_fnode;
+    ArrayList<fNode> neighbors;
 
 	fNode() {
-        this(-1, -1);
+        this(-1, "", -1);
 	}
 
 	fNode(int id) {
-        this(id, -1);
+        this(id, "", -1);
 	}
 
 	fNode(int id, String myIP_, int mass) {
@@ -48,6 +49,10 @@ class fNode implements Comparable<fNode>{
         label_fnode = new Textbox(l, this.position.x, this.position.y);
         drawPosition();
 	}
+
+    String toString() {
+        return String.format("ip: %s, mass: %d", this.myIP, this.mass);
+    }
 
     void setPos(PVector pos) {
         setPos(pos.x, pos.y);
@@ -96,7 +101,7 @@ class fNode implements Comparable<fNode>{
         PVector totalForces = new PVector(0f, 0f);
         for(int i = 0; i < this.edges.size(); i++) {
             fNode neighbor = this.neighbors.get(i);
-            edge Edge = this.edges.get(i);
+            Edge edge = this.edges.get(i);
             PVector thisForce = PVector.sub(this.position, neighbor.position);
 
             float currLength = dist(this.position.x, this.position.y, 
