@@ -8,10 +8,11 @@ class Edge {
     int edgeWeight;
     Edge(){};
 
-    Edge(String sIP_, String dIP_) {
+    Edge(String sIP_, String dIP_, int firstnID) {
     	this.ip1 = sIP_;
     	this.ip2 = dIP_;
     	nIDs = new ArrayList<Integer>();
+        nIDs.add(firstnID);
     }
 
 	Edge(double sprL) {
