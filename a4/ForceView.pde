@@ -20,13 +20,18 @@ class ForceView {
     ArrayList<Edge> edgeList;
     ArrayList<fNode> ipList;
     ArrayList<fNode> fNodeList;
+    int minEdges, maxEdges;
     
     ForceView() {
+
         this.equilibrium = false;
         this.ipList = new ArrayList<fNode>();
         this.edgeList = new ArrayList<Edge>();
         this.fNodeList = new ArrayList<fNode>();
+        minEdges = Integer.MAX_VALUE;
+        maxEdges= Integer.MIN_VALUE;
         makeConnections();
+        setNeighbors();
     }
 
 
@@ -36,7 +41,6 @@ class ForceView {
             for(Edge e : this.edgeList) {
                 if((n.sIP.equals(e.ip1) || n.sIP.equals(e.ip2)) &&
                    (n.dIP.equals(e.ip1) || n.dIP.equals(e.ip2))) {
-                        //println("FOUND DUPLICATE");
                         e.nIDs.add(n.id);
                         found = true;
                 }
@@ -53,6 +57,16 @@ class ForceView {
            println(e); 
         }
         //*/
+    }
+
+    void setNeighbors()  {
+        for(Edge e : this.edgeList) {
+            fNode par1 = findNode(e.ip1);
+            fNode par2 = findNode(e.ip2);
+            par1.add(par2);
+            par2.add(par1);
+            e.setLength(minEdges, maxEdges);
+        }
     }
 
     void setDims(float _leftX, float _leftY, float _w, float _h) {
