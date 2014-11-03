@@ -26,11 +26,7 @@ class ForceView {
         this.ipList = new ArrayList<fNode>();
         this.edgeList = new ArrayList<Edge>();
         this.fNodeList = new ArrayList<fNode>();
-        for(Node n : nodes) {
-            //createFNodeList(n);
-        }
-
-
+        makeConnections();
     }
 
 
@@ -38,21 +34,25 @@ class ForceView {
         boolean found = false;
         for (Node n : nodes) {
             for(Edge e : this.edgeList) {
-                if((n.sIP == e.ip1 || n.sIP == e.ip2) &&
-                   (n.dIP == e.ip1 || n.dIP == e.ip2)) {
+                if((n.sIP.equals(e.ip1) || n.sIP.equals(e.ip2)) &&
+                   (n.dIP.equals(e.ip1) || n.dIP.equals(e.ip2))) {
+                        //println("FOUND DUPLICATE");
                         e.nIDs.add(n.id);
-                        found == true;
+                        found = true;
                 }
             }
             if (! found)  {
                 Edge e = new Edge(n.sIP, n.dIP, n.id);
                 this.edgeList.add(e);
             }
-        }
 
+            found = false;
+        }
+        //*
         for(Edge e : this.edgeList) {
            println(e); 
         }
+        //*/
     }
 
     void setDims(float _leftX, float _leftY, float _w, float _h) {
