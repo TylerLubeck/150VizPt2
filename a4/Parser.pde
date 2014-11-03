@@ -101,6 +101,7 @@ class Parser {
             if (! destinations.contains(dIP)) {
                 println("DOES NOT CONTAIN " + dIP);
                 fNodes.add(new fNode(id_incrementer, dIP, MASS_CONSTANT));
+                destinations.add(dIP);
             }
             id_incrementer++;
 

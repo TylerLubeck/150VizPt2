@@ -275,7 +275,7 @@ class Heatmap  {
     }
 
     boolean inTable() {
-    	return mouseX >= leftX + pLabelW && mouseY >= leftY 
+    	return mouseX > leftX + pLabelW && mouseY > leftY 
     			&& mouseX < leftX + w && mouseY < leftY + h - tLabelH;
 	}
 
@@ -296,6 +296,9 @@ class Heatmap  {
               float y1 = max(rect1.p1.y, rect2.p1.y);
               float x2 = min(rect1.p2.x, rect2.p2.x);
               float y2 = min(rect1.p2.y, rect2.p2.y);
+              if (y1 == y2 && y1 == leftY) {
+                  return null;
+              }
               return new Rectangle(x1, y1, x2, y2);
           }
           return null;

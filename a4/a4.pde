@@ -46,22 +46,35 @@ public void drawSelectedArea() {
         popStyle();
     }
 
-boolean inStackedView() {
-    return mouseX >=width * 0.75 && mouseX <= width 
-            && mouseY >= height * 0.15 && mouseY <= height  * 0.75;
+boolean inStackedView(float x, float y) {
+    return x >width * 0.75 && x < width 
+            && y > height * 0.15 && y < height  * 0.75;
 }
 
-boolean inHeatmap() {
-    return mouseY >= height * 0.75 && mouseY <= height;
+boolean inHeatmap(float x, float y) {
+    return y > height * 0.75 && y < height;
 }
 
-boolean inButtonFrame() {
-    return mouseX >=width * 0.75 && mouseX <= width 
-            && mouseY >= 0 && mouseY <= height  * 0.15;
+boolean inButtonFrame(float x, float y) {
+    return x > width * 0.75 && x < width 
+            && y > 0 && y < height  * 0.15;
 }
 
 public void setSelectedArea(float x, float y, float x1, float y1) {
-        selectedArea = new Rectangle(x, y, x1, y1);
+        if ((inStackedView(x, y) && inStackedView(x1,y1)) || 
+            (inHeatmap(x, y) && inHeatmap(x1, y1))) {
+              selectedArea = new Rectangle(x, y, x1, y1);
+        }
+        else if (inStackedView(x, y)) {
+            x1 = x1 < width * 0.75 ? width * 0.75 : x1;
+            y1 = y1 < height * 0.15 ? height * 0.15 : y1;
+            y1 = y1 > height * 0.75 ? height * 0.75 : y1;
+            selectedArea = new Rectangle(x, y, x1, y1);
+        }
+        else if (inHeatmap(x, y)) {
+            y1 = y1 < height * 0.75 ? height * 0.75 : y1;
+            selectedArea = new Rectangle(x, y, x1, y1);
+        }
     }
     
     
@@ -92,19 +105,20 @@ void dealWithArea() {
        }
     }
     else {
+      selected_nodes.clear();
         if (! selectedAreas.isEmpty()) {
                for (Rectangle rect : selectedAreas) {
                    temp = stackedView.handleThisArea(rect);
-                   if (temp != null) {
+                   if (temp != null && ! temp.isEmpty()) {
                        if (selected_nodes.isEmpty()) {
                            selected_nodes.addAll(temp);
                        }
                        else {
                            selected_nodes.retainAll(temp);
-                       }    
+                      }    
                    }
                    temp = heatmap.handleThisArea(rect);
-                   if (temp != null) {
+                   if (temp != null && !temp.isEmpty()) {
                        if (selected_nodes.isEmpty()) {
                            selected_nodes.addAll(temp);
                        }
@@ -116,7 +130,7 @@ void dealWithArea() {
          }
          if (selectedArea != null) {
              temp = stackedView.handleThisArea(selectedArea);
-             if (temp != null) {
+             if (temp != null && !temp.isEmpty()) {
                  if (selected_nodes.isEmpty()) {
                      selected_nodes.addAll(temp);
                  }
@@ -125,7 +139,7 @@ void dealWithArea() {
                  }    
              }
              temp = heatmap.handleThisArea(selectedArea);
-             if (temp != null) {
+             if (temp != null && !temp.isEmpty()) {
                  if (selected_nodes.isEmpty()) {
                      selected_nodes.addAll(temp);
                  }
@@ -142,10 +156,10 @@ void dealWithArea() {
 void mouseMoved(MouseEvent e) {
    if (hover) {
        selected_nodes.clear();
-       if(inStackedView()) {
+       if(inStackedView(mouseX, mouseY)) {
            stackedView.hover();
        }
-       else if (inHeatmap()) {
+       else if (inHeatmap(mouseX, mouseY)) {
            heatmap.hover();
        }
    }
@@ -190,7 +204,7 @@ void mouseReleased(MouseEvent e) {
         selectedAreas.clear();
         return;
     }
-    else if(inButtonFrame()) {
+    else if(inButtonFrame(mouseX, mouseY)) {
        buttonFrame.interpretClick();
        return;
     }
