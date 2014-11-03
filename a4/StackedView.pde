@@ -208,9 +208,13 @@ class Bar {
     }
 
     boolean withinArea(Rectangle r) {
-       return this.x > r.p1.x &&
-              this.x + this.y < r.p2.x && 
-              this.y > r.p1.y &&
-              this.y + this.h < r.p2.y;
+      
+       boolean flag1 = abs(r.p2.x + r.p1.x - (this.x + this.w) - this.x) - ((this.x + this.w) - this.x + r.p2.x - r.p1.x) <= 0;
+       boolean flag2 = abs(r.p2.y + r.p1.y - (this.y + this.h) - this.y) - ((this.y + this.h) - this.y + r.p2.y - r.p1.y) <= 0;
+       return flag1 && flag2;
+//       return this.x > r.p1.x &&
+//              this.x + this.w > r.p2.x && 
+//              this.y < r.p1.y &&
+//              this.y + this.h > r.p2.y;
     }
 }

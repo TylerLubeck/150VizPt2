@@ -4,7 +4,7 @@ PGraphics pickbuffer = null;
 float DAMPENING = 0.8; //to .8
 
 ArrayList<Node> nodeList;
-float TIME_STEP = .15;
+float TIME_STEP = .9;
 float k = 0.1; // from 0.5
 float LOWEST_ENERGY = 0.5;
 float CENTER_PULL = 1.0;
@@ -21,7 +21,7 @@ void setup() {
     size(800, 800);
     background(255);
     frame.setResizable(true);
-    frameRate(20);
+    //frameRate(20);
     equilibrium = false;
 
     Parser parser = new Parser(file);

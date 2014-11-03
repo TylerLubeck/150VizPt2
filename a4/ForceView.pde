@@ -137,6 +137,14 @@ class ForceView {
             n.drawRelations();
         }
 
+        for (Edge e : this.edgeList) {
+            fNode nOne = findNode(e.ip1);
+            fNode nTwo = findNode(e.ip2);
+            strokeWeight(e.edgeWeight);
+            println("DRAWING EDGE WITH WEIGHT " + e.edgeWeight);
+            line(nOne.position.x, nOne.position.y, nTwo.position.x, nTwo.position.y);
+        }
+
 
 
         String energyLabel = str(systemEnergy());

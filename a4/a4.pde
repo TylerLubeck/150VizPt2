@@ -28,8 +28,8 @@ void draw() {
     stackedView.display(width * 0.75, height * 0.15, width * 0.25, height * 0.60);
     heatmap.display(0, height * 0.75, width, height * .25);
     forceView.display(0, 0, width * 0.75, height * .25);
-    //*/
     //forceView.display(0, 0, width, height);
+    //forceView.display(0, 0, width * 0.75, height * 0.75);
     drawSelectedArea();
 }
 
@@ -59,6 +59,10 @@ boolean inHeatmap(float x, float y) {
     return y > height * 0.75 && y < height;
 }
 
+boolean inForceView(float x, float y) {
+    return x > 0 && x < width * 0.75 && y > 0 && y < height * 0.75;
+}
+
 boolean inButtonFrame(float x, float y) {
     return x > width * 0.75 && x < width 
             && y > 0 && y < height  * 0.15;
@@ -66,7 +70,8 @@ boolean inButtonFrame(float x, float y) {
 
 public void setSelectedArea(float x, float y, float x1, float y1) {
         if ((inStackedView(x, y) && inStackedView(x1,y1)) || 
-            (inHeatmap(x, y) && inHeatmap(x1, y1))) {
+            (inHeatmap(x, y) && inHeatmap(x1, y1)) || 
+            (inForceView(x, y) && inForceView(x1, y1))) {
               selectedArea = new Rectangle(x, y, x1, y1);
         }
         else if (inStackedView(x, y)) {
@@ -77,6 +82,12 @@ public void setSelectedArea(float x, float y, float x1, float y1) {
         }
         else if (inHeatmap(x, y)) {
             y1 = y1 < height * 0.75 ? height * 0.75 : y1;
+            selectedArea = new Rectangle(x, y, x1, y1);
+        }
+        
+        else if (inForceView(x, y)) {
+            x1 = x1 > width * 0.75 ? width * 0.75 : x1;
+            y1 = y1 > height * 0.75 ? height * 0.75 : y1;
             selectedArea = new Rectangle(x, y, x1, y1);
         }
     }
@@ -95,6 +106,10 @@ void dealWithArea() {
                    if (temp != null) {
                        selected_nodes.addAll(temp);
                    }
+//                   temp = forceView.handleThisArea(rect);
+//                   if (temp != null) {
+//                       selected_nodes.addAll(temp);
+//                   }
                }
        }
        if (selectedArea != null) {
@@ -106,6 +121,10 @@ void dealWithArea() {
            if (temp != null) {
                selected_nodes.addAll(temp);
            }
+//           temp = forceView.handleThisArea(selectedArea);
+//           if (temp != null) {
+//               selected_nodes.addAll(temp);
+//           }
        }
     }
     else {
@@ -130,6 +149,15 @@ void dealWithArea() {
                            selected_nodes.retainAll(temp);
                        }    
                    }
+//                   temp = forceView.handleThisArea(rect);
+//                   if (temp != null && !temp.isEmpty()) {
+//                       if (selected_nodes.isEmpty()) {
+//                           selected_nodes.addAll(temp);
+//                       }
+//                       else {
+//                           selected_nodes.retainAll(temp);
+//                       }    
+//                   }
                }
          }
          if (selectedArea != null) {
@@ -151,6 +179,15 @@ void dealWithArea() {
                      selected_nodes.retainAll(temp);
                  }    
              }
+//             temp = forceView.handleThisArea(selectedArea);
+//             if (temp != null && !temp.isEmpty()) {
+//                 if (selected_nodes.isEmpty()) {
+//                     selected_nodes.addAll(temp);
+//                 }
+//                 else {
+//                     selected_nodes.retainAll(temp);
+//                 }    
+//             }
          }
     }
         
@@ -166,6 +203,9 @@ void mouseMoved(MouseEvent e) {
        else if (inHeatmap(mouseX, mouseY)) {
            heatmap.hover();
        }
+//       else if (inForceView(mouseX, mouseY)) {
+//           forceView.hover();
+//       }
    }
    dealWithArea();
 }
