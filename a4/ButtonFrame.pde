@@ -62,6 +62,8 @@ class ButtonFrame {
    }
    
    void interpretClick() {
+       selectedAreas.clear();
+       selected_nodes.clear();
        if (hoverB.inFocus()) {
            hover = true;
            logAnd = logOr = false; 
