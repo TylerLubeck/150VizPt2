@@ -33,9 +33,26 @@ class ForceView {
 
     }
 
-    void makeConnection() {
-        
 
+    void makeConnections() {
+        boolean found = false;
+        for (Node n : nodes) {
+            for(Edge e : this.edgeList) {
+                if((n.sIP == e.ip1 || n.sIP == e.ip2) &&
+                   (n.dIP == e.ip1 || n.dIP == e.ip2)) {
+                        e.nIDs.add(n.id);
+                        found == true;
+                }
+            }
+            if (! found)  {
+                Edge e = new Edge(n.sIP, n.dIP, n.id);
+                this.edgeList.add(e);
+            }
+        }
+
+        for(Edge e : this.edgeList) {
+           println(e); 
+        }
     }
 
     void setDims(float _leftX, float _leftY, float _w, float _h) {

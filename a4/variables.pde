@@ -32,4 +32,3 @@ ForceView forceView;
 ButtonFrame buttonFrame;
 
 boolean hover, logAnd, logOr;
-

@@ -18,4 +18,8 @@ class Edge {
         this.springL = (float)sprL;
         this.springL *= 1/3;
 	}
+
+    String toString() {
+        return String.format("%d: %s -> %s", this.nIDs.size(), this.ip1, this.ip2);
+    }
 }
