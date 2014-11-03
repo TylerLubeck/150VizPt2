@@ -20,13 +20,18 @@ class ForceView {
     ArrayList<Edge> edgeList;
     ArrayList<fNode> ipList;
     ArrayList<fNode> fNodeList;
+    int minEdges, maxEdges;
     
     ForceView() {
+
         this.equilibrium = false;
         this.ipList = new ArrayList<fNode>();
         this.edgeList = new ArrayList<Edge>();
         this.fNodeList = new ArrayList<fNode>();
+        minEdges = Integer.MAX_VALUE;
+        maxEdges= Integer.MIN_VALUE;
         makeConnections();
+        setNeighbors();
     }
 
     fNode findNode(String ip) {
@@ -66,6 +71,16 @@ class ForceView {
             if (num_nodes > this.maxEdges) {
                 this.maxEdges = num_nodes;
             }
+        }
+    }
+
+    void setNeighbors()  {
+        for(Edge e : this.edgeList) {
+            fNode par1 = findNode(e.ip1);
+            fNode par2 = findNode(e.ip2);
+            par1.add(par2);
+            par2.add(par1);
+            e.setLength(minEdges, maxEdges);
         }
     }
 

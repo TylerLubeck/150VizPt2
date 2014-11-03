@@ -23,4 +23,10 @@ class Edge {
     String toString() {
         return String.format("%d: %s -> %s", this.nIDs.size(), this.ip1, this.ip2);
     }
+
+    void setLength(int min_, int max_) {
+        int minLen = 50;
+        int maxLen = 150;
+        this.springL = map(this.nIDs.size(), min_, max_, minLen, maxLen);
+    }
 }
