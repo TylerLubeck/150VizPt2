@@ -3,15 +3,16 @@ class Edge {
     float currLength;
     //Info about strokeWeight, b/c it is num connections
     ArrayList<Integer> nIDs;
-    String sIP;
-    String dIP;
+    String ip1;
+    String ip2;
     int edgeWeight;
     Edge(){};
 
-    Edge(String sIP_, String dIP_) {
-    	this.sIP = sIP_;
-    	this.dIP = dIP_;
+    Edge(String sIP_, String dIP_, int firstnID) {
+    	this.ip1 = sIP_;
+    	this.ip2 = dIP_;
     	nIDs = new ArrayList<Integer>();
+        nIDs.add(firstnID);
     }
 
 	Edge(double sprL) {
