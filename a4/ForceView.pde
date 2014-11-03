@@ -29,6 +29,16 @@ class ForceView {
         makeConnections();
     }
 
+    fNode findNode(String ip) {
+        for (fNode fn : this.fNodeList) {
+            if (fn.myIP.equals(ip)) {
+                return fn;
+            }
+        }
+
+        println("Could not find Node, probs gonna crash now");
+        return null;
+    }
 
     void makeConnections() {
         boolean found = false;
@@ -36,7 +46,6 @@ class ForceView {
             for(Edge e : this.edgeList) {
                 if((n.sIP.equals(e.ip1) || n.sIP.equals(e.ip2)) &&
                    (n.dIP.equals(e.ip1) || n.dIP.equals(e.ip2))) {
-                        //println("FOUND DUPLICATE");
                         e.nIDs.add(n.id);
                         found = true;
                 }
@@ -48,11 +57,16 @@ class ForceView {
 
             found = false;
         }
-        //*
+        int num_nodes = 0;
         for(Edge e : this.edgeList) {
-           println(e); 
+            num_nodes = e.nIDs.size();
+            if (num_nodes < this.minEdges) {
+                this.minEdges = num_nodes;
+            }
+            if (num_nodes > this.maxEdges) {
+                this.maxEdges = num_nodes;
+            }
         }
-        //*/
     }
 
     void setDims(float _leftX, float _leftY, float _w, float _h) {
