@@ -6,7 +6,7 @@ void setup() {
     frame.setTitle("CMV");
     Parser parser = new Parser("data_aggregate.csv");
     nodes = parser.parse();
-    ArrayList<fNode> fNodes = parser.getDestinations();
+    fNodes = parser.getDestinations();
     for (fNode n : fNodes) {
         println(n);
     }
@@ -23,9 +23,13 @@ void setup() {
 
 void draw() {
     background(255);
+    //*
     buttonFrame.display(width * 0.75, 0, width * 0.25, height * 0.15);
     stackedView.display(width * 0.75, height * 0.15, width * 0.25, height * 0.60);
     heatmap.display(0, height * 0.75, width, height * .25);
+    forceView.display(0, 0, width * 0.75, height * .25);
+    //*/
+    //forceView.display(0, 0, width, height);
     drawSelectedArea();
 }
 

@@ -15,24 +15,27 @@ class fNode implements Comparable<fNode>{
     boolean intersected;
     Textbox label_fnode;
     ArrayList<fNode> neighbors;
+    float w, h;
 
 	fNode() {
-        this(-1, "", -1);
+        this(-1, "", -1, 10, 10);
 	}
 
 	fNode(int id) {
-        this(id, "", -1);
+        this(id, "", -1, 10, 10);
 	}
 
-	fNode(int id, String myIP_, int mass) {
+	fNode(int id, String myIP_, int mass, float _w, float _h) {
+        this.w = _w;
+        this.h = _h;
 		this.id = id;
         this.myIP = myIP_;
         this.mass = mass;
         this.r = red(id); this.g = green(id); this.b = blue(id);
         this.intersected = false;
         
-        float _X = random(0, width - this.radius);
-        float _Y = random(0, height - this.radius);
+        float _X = random(0, this.w - this.radius);
+        float _Y = random(0, this.h - this.radius);
         this.position = new PVector(_X, _Y);
         
         this.fillColor = COLOR_DEFAULT;
@@ -69,10 +72,10 @@ class fNode implements Comparable<fNode>{
 
         /* Bound the circles */
         newX = newX < this.radius ? this.radius : newX;
-        newX = newX > width - this.radius ? width - this.radius : newX;
+        newX = newX > this.w - this.radius ? this.w - this.radius : newX;
 
         newY = newY < this.radius ? this.radius : newY;
-        newY = newY > height - this.radius ? height - this.radius : newY;
+        newY = newY > this.h - this.radius ? this.h - this.radius : newY;
         /*******/
 
         this.position.set(newX, newY);
@@ -144,6 +147,8 @@ class fNode implements Comparable<fNode>{
                 y1 = dY * this.radius / L + this.position.y;
                 x2 = dX * (L-neighbors.get(i).radius)/L + this.position.x;
                 y2 = dY * (L-neighbors.get(i).radius)/L + this.position.y;
+                println(this.edges.size());
+         //       strokeWeight(this.edges.get(i).edgeWeight);
                 line(x1, y1, x2, y2);
       }
     }

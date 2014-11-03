@@ -25,9 +25,10 @@ class ForceView {
     ForceView() {
 
         this.equilibrium = false;
-        this.ipList = new ArrayList<fNode>();
+        //this.ipList = new ArrayList<fNode>();
         this.edgeList = new ArrayList<Edge>();
-        this.fNodeList = new ArrayList<fNode>();
+        this.fNodeList = fNodes;
+        this.ipList = this.fNodeList;
         minEdges = Integer.MAX_VALUE;
         maxEdges= Integer.MIN_VALUE;
         makeConnections();
@@ -75,12 +76,14 @@ class ForceView {
     }
 
     void setNeighbors()  {
+        println(this.edgeList.size());
         for(Edge e : this.edgeList) {
             fNode par1 = findNode(e.ip1);
             fNode par2 = findNode(e.ip2);
-            par1.add(par2);
-            par2.add(par1);
+            par1.neighbors.add(par2);
+            par2.neighbors.add(par1);
             e.setLength(minEdges, maxEdges);
+            par1.edges.add(e);
         }
     }
 
@@ -115,7 +118,9 @@ class ForceView {
         /* Now Render */
         drawPickBuffer();
 
+        println("NUM NODES: " + ipList.size());
         for(fNode n: ipList) {
+            println(n);
             if (n.isClickedOn) {
                 n.setPos(mouseX, mouseY);
             }
@@ -131,6 +136,7 @@ class ForceView {
         for(fNode n: ipList)  {
             n.drawRelations();
         }
+
 
 
         String energyLabel = str(systemEnergy());

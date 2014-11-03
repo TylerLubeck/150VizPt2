@@ -28,5 +28,6 @@ class Edge {
         int minLen = 50;
         int maxLen = 150;
         this.springL = map(this.nIDs.size(), min_, max_, minLen, maxLen);
+        println(springL);
     }
 }
