@@ -130,12 +130,6 @@ class ForceView {
             n.drawPosition(); 
         }
 
-        //*
-        for(fNode n: fNodeList)  {
-            n.drawRelations();
-        }
-        //*/
-
         for (Edge e : this.edgeList) {
             fNode nOne = findNode(e.ip1);
             fNode nTwo = findNode(e.ip2);
@@ -218,21 +212,6 @@ class ForceView {
         pickbuffer.endDraw();
     }
 
-    void mousePressed() {
-        for (fNode n : fNodeList) {
-            if (n.isect(pickbuffer)) {
-                n.isClickedOn = true;
-                equilibrium = false;
-            }
-        }
-    }
-
-    void mouseReleased() {
-        for (fNode n : fNodeList) {
-            n.isClickedOn = false;
-        }
-        calcAndUpdate();
-    }
 
     /* Calculate total energy of the whole node system */
     float systemEnergy() {
