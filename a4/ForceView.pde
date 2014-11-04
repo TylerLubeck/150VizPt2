@@ -1,6 +1,6 @@
 import java.util.Collections;
 PGraphics pickbuffer = null;
-float DAMPENING = 0.8; //to .8
+float DAMPENING = 0.8 ; //to .8
 
 float TIME_STEP = .9;
 float k = 0.1; // from 0.5
@@ -42,7 +42,6 @@ class ForceView {
     ForceView() {
         this.num_done = 0;
         this.equilibrium = false;
-        //this.fNodeList = new ArrayList<fNode>();
         this.edgeList = new ArrayList<Edge>();
         this.fNodeList = fNodes;
         minEdges = Integer.MAX_VALUE;
@@ -112,11 +111,7 @@ class ForceView {
     }
 
     void setup() {
-        //Parser parser = new Parser(file);
-        //fNodeList = parser.parse();
-        //Collections.sort(fNodeList);
-
-        calcAndUpdate();
+           calcAndUpdate();
     }
 
     void hover() {
@@ -144,7 +139,6 @@ class ForceView {
 
         //* Now Render
         drawPickBuffer();
-
 
         for (Edge e : this.edgeList) {
             fNode nOne = findNode(e.ip1);
@@ -254,21 +248,6 @@ class ForceView {
         pickbuffer.endDraw();
     }
 
-    void mousePressed() {
-        for (fNode n : fNodeList) {
-            if (n.isect(pickbuffer)) {
-                n.isClickedOn = true;
-                equilibrium = false;
-            }
-        }
-    }
-
-    void mouseReleased() {
-        for (fNode n : fNodeList) {
-            n.isClickedOn = false;
-        }
-        calcAndUpdate();
-    }
 
     /* Calculate total energy of the whole node system */
     float systemEnergy() {
