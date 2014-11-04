@@ -6,7 +6,10 @@ class Edge {
     String ip1;
     String ip2;
     int edgeWeight;
-    Edge(){};
+
+    Edge(){
+
+    };
 
     Edge(String sIP_, String dIP_, int firstnID) {
     	this.ip1 = sIP_;
@@ -16,20 +19,13 @@ class Edge {
         this.springL = (float)200;
     }
 
-    /*
-	Edge(double sprL) {
-        this.springL = (float)sprL;
-        this.springL *= 1/3;
-	}
-    */
-
     String toString() {
         return String.format("%d: %s -> %s", this.nIDs.size(), this.ip1, this.ip2);
     }
 
     void setLength(int min_, int max_) {
         int minLen = 50;
-        int maxLen = 60;
+        int maxLen = 150;
         int minEdgeW = 3;
         int maxEdgeW = 8;
         this.springL = map(this.nIDs.size(), min_, max_, minLen, maxLen);

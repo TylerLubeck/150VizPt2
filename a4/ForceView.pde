@@ -5,7 +5,7 @@ float DAMPENING = 0.8; //to .8
 float TIME_STEP = .9;
 float k = 0.1; // from 0.5
 float LOWEST_ENERGY = 0.5;
-float CENTER_PULL = 1.0;
+float CENTER_PULL = 0;
 
 float COULOMB = 15000; // from 500
 
@@ -18,21 +18,39 @@ class ForceView {
     float w, h;
     boolean equilibrium;
     ArrayList<Edge> edgeList;
-    ArrayList<fNode> ipList;
     ArrayList<fNode> fNodeList;
     int minEdges, maxEdges;
+    int num_done;
+
+
+    void drawCircles() {
+        //this.h = height;
+        //this.w = width * 0.75;
+        float lg_diam = this.h * .95;
+        float lg_rad = lg_diam / 2;
+        float lg_circ = PI * lg_diam;
+        float sm_diam = lg_circ / this.fNodeList.size();
+
+        for (int i = 0; i <  this.fNodeList.size(); ++i) {
+            float angle = i * TWO_PI / this.fNodeList.size();
+            float x = this.w / 2 + cos(angle) * lg_rad;
+            float y = this.h / 2 + sin(angle) * lg_rad;
+            this.fNodeList.get(i).setPos(x, y);
+        }
+    }
     
     ForceView() {
-
+        this.num_done = 0;
         this.equilibrium = false;
         //this.fNodeList = new ArrayList<fNode>();
         this.edgeList = new ArrayList<Edge>();
         this.fNodeList = fNodes;
-        this.fNodeList = this.fNodeList;
         minEdges = Integer.MAX_VALUE;
         maxEdges= Integer.MIN_VALUE;
         makeConnections();
         setNeighbors();
+        //drawCircles();
+
     }
 
     fNode findNode(String ip) {
@@ -101,45 +119,39 @@ class ForceView {
         calcAndUpdate();
     }
 
+    void hover() {
+        for(fNode node : this.fNodeList) {
+            node.hover();
+        }
+    }
+    
     void display(float _leftX, float _leftY, float _w, float _h)  {
         setDims(_leftX, _leftY, _w, _h);
+        for(fNode n : this.fNodeList) {
+            n.setDims(_w, _h);
+        }
         pickbuffer = createGraphics((int)this.w, (int)this.h);
 
-
-        /* Calculation loops */
-        if (!equilibrium) {
+        drawCircles();
+        //* Calculation loops
+        if (!equilibrium && this.num_done < 2) {
             calcAndUpdate();
+            this.num_done++;
         } 
         else {
             pullTowardsCenter();
         }
 
-        /* Now Render */
+        //* Now Render
         drawPickBuffer();
 
-        for(fNode n: fNodeList) {
-            if (n.isClickedOn) {
-                n.setPos(mouseX, mouseY);
-            }
-
-            if (n.isect(pickbuffer)) {
-                n.setHighlighted(); 
-            } else {
-                n.unsetHighlighted();
-            }
-            n.drawPosition(); 
-        }
-
-        //*
-        for(fNode n: fNodeList)  {
-            n.drawRelations();
-        }
-        //*/
 
         for (Edge e : this.edgeList) {
             fNode nOne = findNode(e.ip1);
             fNode nTwo = findNode(e.ip2);
             pushStyle();
+            color COLOR_STROKE = color(52, 92, 166);
+            stroke(COLOR_STROKE);
             strokeWeight(e.edgeWeight);
             boolean highlight = false;
             for(int i : e.nIDs) {
@@ -154,11 +166,35 @@ class ForceView {
             popStyle();
         }
 
+        for(fNode n: fNodeList) {
+            if (n.isClickedOn) {
+                n.setPos(mouseX, mouseY);
+            }
 
+            if (n.isect(pickbuffer)) {
+                n.setHighlighted(); 
+            } else {
+                n.unsetHighlighted();
+            }
+            n.drawPosition(); 
+        }
 
         String energyLabel = str(systemEnergy());
         text(energyLabel, this.w - textWidth(energyLabel) - 2, this.h - 10);
+    }
 
+    ArrayList<Integer> handleThisArea(Rectangle rect) {
+        ArrayList<Integer> selectedNodes = new ArrayList<Integer>();
+        for(fNode fn : this.fNodeList) {
+            if(fn.withinArea(rect)) {
+                for(Node n : nodes) {
+                    if (fn.myIP.equals(n.sIP) || fn.myIP.equals(n.dIP)) {
+                        selectedNodes.add(n.id);
+                    }
+                }
+            }
+        }
+        return selectedNodes;
     }
 
     void calcAndUpdate() {
