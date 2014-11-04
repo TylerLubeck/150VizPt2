@@ -133,16 +133,20 @@ class ForceView {
             n.drawPosition(); 
         }
 
+        //*
         for(fNode n: ipList)  {
             n.drawRelations();
         }
+        //*/
 
         for (Edge e : this.edgeList) {
             fNode nOne = findNode(e.ip1);
             fNode nTwo = findNode(e.ip2);
+            pushStyle();
             strokeWeight(e.edgeWeight);
             println("DRAWING EDGE WITH WEIGHT " + e.edgeWeight);
             line(nOne.position.x, nOne.position.y, nTwo.position.x, nTwo.position.y);
+            popStyle();
         }
 
 

@@ -27,7 +27,10 @@ class Edge {
     void setLength(int min_, int max_) {
         int minLen = 50;
         int maxLen = 150;
+        int minEdgeW = 1;
+        int maxEdgeW = 8;
         this.springL = map(this.nIDs.size(), min_, max_, minLen, maxLen);
+        this.edgeWeight = int(map(this.nIDs.size(), min_, max_, minEdgeW, maxEdgeW));
         println(springL);
     }
 }
