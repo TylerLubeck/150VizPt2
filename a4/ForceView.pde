@@ -1,6 +1,6 @@
 import java.util.Collections;
 PGraphics pickbuffer = null;
-float DAMPENING = 0.8; //to .8
+float DAMPENING = 0.8 ; //to .8
 
 float TIME_STEP = .9;
 float k = 0.1; // from 0.5
@@ -25,10 +25,8 @@ class ForceView {
     ForceView() {
 
         this.equilibrium = false;
-        //this.fNodeList = new ArrayList<fNode>();
         this.edgeList = new ArrayList<Edge>();
         this.fNodeList = fNodes;
-        this.fNodeList = this.fNodeList;
         minEdges = Integer.MAX_VALUE;
         maxEdges= Integer.MIN_VALUE;
         makeConnections();
@@ -94,11 +92,7 @@ class ForceView {
     }
 
     void setup() {
-        //Parser parser = new Parser(file);
-        //fNodeList = parser.parse();
-        //Collections.sort(fNodeList);
-
-        calcAndUpdate();
+           calcAndUpdate();
     }
 
     void display(float _leftX, float _leftY, float _w, float _h)  {
