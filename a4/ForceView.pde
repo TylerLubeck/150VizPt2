@@ -25,10 +25,10 @@ class ForceView {
     ForceView() {
 
         this.equilibrium = false;
-        //this.ipList = new ArrayList<fNode>();
+        //this.fNodeList = new ArrayList<fNode>();
         this.edgeList = new ArrayList<Edge>();
         this.fNodeList = fNodes;
-        this.ipList = this.fNodeList;
+        this.fNodeList = this.fNodeList;
         minEdges = Integer.MAX_VALUE;
         maxEdges= Integer.MIN_VALUE;
         makeConnections();
@@ -95,8 +95,8 @@ class ForceView {
 
     void setup() {
         //Parser parser = new Parser(file);
-        //ipList = parser.parse();
-        //Collections.sort(ipList);
+        //fNodeList = parser.parse();
+        //Collections.sort(fNodeList);
 
         calcAndUpdate();
     }
@@ -117,7 +117,7 @@ class ForceView {
         /* Now Render */
         drawPickBuffer();
 
-        for(fNode n: ipList) {
+        for(fNode n: fNodeList) {
             if (n.isClickedOn) {
                 n.setPos(mouseX, mouseY);
             }
@@ -131,7 +131,7 @@ class ForceView {
         }
 
         //*
-        for(fNode n: ipList)  {
+        for(fNode n: fNodeList)  {
             n.drawRelations();
         }
         //*/
@@ -141,6 +141,15 @@ class ForceView {
             fNode nTwo = findNode(e.ip2);
             pushStyle();
             strokeWeight(e.edgeWeight);
+            boolean highlight = false;
+            for(int i : e.nIDs) {
+                if(selected_nodes.contains(i)) {
+                    highlight = true;
+                }
+            }
+            if(highlight) {
+                stroke(pointHighLight);
+            }
             line(nOne.position.x, nOne.position.y, nTwo.position.x, nTwo.position.y);
             popStyle();
         }
@@ -153,19 +162,19 @@ class ForceView {
     }
 
     void calcAndUpdate() {
-        for(int i = 0; i < ipList.size(); i++) {
+        for(int i = 0; i < fNodeList.size(); i++) {
 
-            PVector netRepulsion = allRepulsionForces(ipList.get(i), i);
-            PVector netSpring = ipList.get(i).totalEdgeForces(k);
+            PVector netRepulsion = allRepulsionForces(fNodeList.get(i), i);
+            PVector netSpring = fNodeList.get(i).totalEdgeForces(k);
 
             /* Update velocities & accelerations */
             PVector allForces = PVector.mult(PVector.add(netSpring, netRepulsion), DAMPENING);
-            ipList.get(i).updatePosition(TIME_STEP, allForces);
+            fNodeList.get(i).updatePosition(TIME_STEP, allForces);
         }
     }
 
     void pullTowardsCenter() {
-        for (fNode n: ipList) {
+        for (fNode n: fNodeList) {
             float X = this.w / 2 - n.position.x;
             float Y = this.h / 2 - n.position.y;
 
@@ -178,9 +187,9 @@ class ForceView {
 
     PVector allRepulsionForces(fNode center, int index) {
         PVector sumForces = new PVector(0f,0f);
-        for(int i = 0; i < ipList.size(); i++) {
+        for(int i = 0; i < fNodeList.size(); i++) {
             if(i == index) continue;
-            sumForces.add(coulomb_repulsion(center, ipList.get(i)));
+            sumForces.add(coulomb_repulsion(center, fNodeList.get(i)));
         }
         return sumForces;
     }
@@ -202,7 +211,7 @@ class ForceView {
     void drawPickBuffer() {
         pickbuffer.beginDraw();
 
-        for(fNode n: ipList) {
+        for(fNode n: fNodeList) {
             n.renderISect(pickbuffer);
         }
 
@@ -210,7 +219,7 @@ class ForceView {
     }
 
     void mousePressed() {
-        for (fNode n : ipList) {
+        for (fNode n : fNodeList) {
             if (n.isect(pickbuffer)) {
                 n.isClickedOn = true;
                 equilibrium = false;
@@ -219,7 +228,7 @@ class ForceView {
     }
 
     void mouseReleased() {
-        for (fNode n : ipList) {
+        for (fNode n : fNodeList) {
             n.isClickedOn = false;
         }
         calcAndUpdate();
@@ -228,8 +237,8 @@ class ForceView {
     /* Calculate total energy of the whole node system */
     float systemEnergy() {
         float universeEnergy = 0;
-        for(int i = 0; i < ipList.size(); i++) {
-            universeEnergy += ipList.get(i).kinEnergy();
+        for(int i = 0; i < fNodeList.size(); i++) {
+            universeEnergy += fNodeList.get(i).kinEnergy();
         }
         if(universeEnergy < LOWEST_ENERGY) equilibrium = true;
         if(universeEnergy > LOWEST_ENERGY) equilibrium = false;

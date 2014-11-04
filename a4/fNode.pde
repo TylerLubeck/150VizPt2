@@ -31,6 +31,7 @@ class fNode implements Comparable<fNode>{
 		this.id = id;
         this.myIP = myIP_;
         this.mass = mass;
+        //this.mass = (int)random(10, 20);
         this.r = red(id); this.g = green(id); this.b = blue(id);
         this.intersected = false;
         
@@ -130,6 +131,12 @@ class fNode implements Comparable<fNode>{
         ellipse(this.position.x, this.position.y, 2 * this.radius, 2 * this.radius);
         fill(this.fillColor);
         if (this.intersected) {
+            selected_nodes.clear();
+            for(Node n : nodes) {
+                if(this.myIP.equals(n.sIP) || this.myIP.equals(n.dIP)) {
+                    selected_nodes.add(n.id);
+                }
+            }
             label_fnode.setTextPos(this.position.x, this.position.y);
             label_fnode.render();
         }
