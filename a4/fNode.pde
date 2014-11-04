@@ -135,11 +135,10 @@ class fNode implements Comparable<fNode>{
                 if(this.myIP.equals(n.sIP) || this.myIP.equals(n.dIP)) {
                     selected_nodes.add(n.id);
                 }
-            }
-            label_fnode.setTextPos(this.position.x, this.position.y);
-            label_fnode.render();
+            }   
         }
-
+        label_fnode.setTextPos(this.position.x, this.position.y);
+        label_fnode.render();
     }
 
 
@@ -198,7 +197,7 @@ class fNode implements Comparable<fNode>{
 
         void render()
         {
-            pushMatrix();
+            pushStyle();
             fill(255, 255, 255, OPACITY);
             rectMode(CORNER);
             noStroke();
@@ -206,7 +205,7 @@ class fNode implements Comparable<fNode>{
             textAlign(CENTER);
             fill(0);
             text(label, x, y);
-            popMatrix();
+            popStyle();
         }
 
         void setTextPos(float x_, float y_) {

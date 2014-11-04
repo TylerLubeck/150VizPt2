@@ -5,7 +5,7 @@ float DAMPENING = 0.8 ; //to .8
 float TIME_STEP = .9;
 float k = 0.1; // from 0.5
 float LOWEST_ENERGY = 0.5;
-float CENTER_PULL = 1.0;
+float CENTER_PULL = 0;
 
 float COULOMB = 15000; // from 500
 
@@ -18,7 +18,6 @@ class ForceView {
     float w, h;
     boolean equilibrium;
     ArrayList<Edge> edgeList;
-    ArrayList<fNode> ipList;
     ArrayList<fNode> fNodeList;
     int minEdges, maxEdges;
     
@@ -31,6 +30,10 @@ class ForceView {
         maxEdges= Integer.MIN_VALUE;
         makeConnections();
         setNeighbors();
+
+        for(Edge e : this.edgeList) {
+            println(e);
+        }
     }
 
     fNode findNode(String ip) {
@@ -111,18 +114,7 @@ class ForceView {
         /* Now Render */
         drawPickBuffer();
 
-        for(fNode n: fNodeList) {
-            if (n.isClickedOn) {
-                n.setPos(mouseX, mouseY);
-            }
-
-            if (n.isect(pickbuffer)) {
-                n.setHighlighted(); 
-            } else {
-                n.unsetHighlighted();
-            }
-            n.drawPosition(); 
-        }
+        hover();
 
         for (Edge e : this.edgeList) {
             fNode nOne = findNode(e.ip1);
@@ -147,6 +139,20 @@ class ForceView {
         String energyLabel = str(systemEnergy());
         text(energyLabel, this.w - textWidth(energyLabel) - 2, this.h - 10);
 
+    }
+    void hover() {
+        for(fNode n: fNodeList) {
+            if (n.isClickedOn) {
+                n.setPos(mouseX, mouseY);
+            }
+
+            if (n.isect(pickbuffer)) {
+                n.setHighlighted(); 
+            } else {
+                n.unsetHighlighted();
+            }
+            n.drawPosition(); 
+        }
     }
 
     void calcAndUpdate() {

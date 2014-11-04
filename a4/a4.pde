@@ -27,7 +27,7 @@ void draw() {
     buttonFrame.display(width * 0.75, 0, width * 0.25, height * 0.15);
     stackedView.display(width * 0.75, height * 0.15, width * 0.25, height * 0.60);
     heatmap.display(0, height * 0.75, width, height * .25);
-    forceView.display(0, 0, width * 0.75, height * .25);
+    forceView.display(0, 0, width * 0.75, height * .75);
     //forceView.display(0, 0, width, height);
     //forceView.display(0, 0, width * 0.75, height * 0.75);
     drawSelectedArea();

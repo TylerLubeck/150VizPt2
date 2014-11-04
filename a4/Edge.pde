@@ -17,7 +17,7 @@ class Edge {
     }
 
     String toString() {
-        return String.format("%d: %s -> %s", this.nIDs.size(), this.ip1, this.ip2);
+        return String.format("%d: %s -> %s %f", this.nIDs.size(), this.ip1, this.ip2, this.springL);
     }
 
     void setLength(int min_, int max_) {
@@ -25,7 +25,7 @@ class Edge {
         int maxLen = 60;
         int minEdgeW = 3;
         int maxEdgeW = 8;
-        this.springL = map(this.nIDs.size(), min_, max_, minLen, maxLen);
+        this.springL = (float)map(this.nIDs.size(), min_, max_, minLen, maxLen);
         this.edgeWeight = int(map(this.nIDs.size(), min_, max_, minEdgeW, maxEdgeW));
     }
 }
