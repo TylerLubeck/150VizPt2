@@ -147,7 +147,6 @@ class fNode implements Comparable<fNode>{
                 y1 = dY * this.radius / L + this.position.y;
                 x2 = dX * (L-neighbors.get(i).radius)/L + this.position.x;
                 y2 = dY * (L-neighbors.get(i).radius)/L + this.position.y;
-                println(this.edges.size());
          //       strokeWeight(this.edges.get(i).edgeWeight);
                 line(x1, y1, x2, y2);
       }

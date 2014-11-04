@@ -31,6 +31,5 @@ class Edge {
         int maxEdgeW = 8;
         this.springL = map(this.nIDs.size(), min_, max_, minLen, maxLen);
         this.edgeWeight = int(map(this.nIDs.size(), min_, max_, minEdgeW, maxEdgeW));
-        println(springL);
     }
 }

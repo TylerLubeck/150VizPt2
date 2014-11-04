@@ -35,7 +35,6 @@ class StackedView {
         ArrayList<Integer> ids = new ArrayList<Integer>();
         for (Bar b : this.allBars) {
             if(b.withinArea(rect)) {
-                println("WITHIN");
                 for (int id : b.indices) {
                     ids.add(id);
                 }

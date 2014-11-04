@@ -76,7 +76,6 @@ class ForceView {
     }
 
     void setNeighbors()  {
-        println(this.edgeList.size());
         for(Edge e : this.edgeList) {
             fNode par1 = findNode(e.ip1);
             fNode par2 = findNode(e.ip2);
@@ -118,9 +117,7 @@ class ForceView {
         /* Now Render */
         drawPickBuffer();
 
-        println("NUM NODES: " + ipList.size());
         for(fNode n: ipList) {
-            println(n);
             if (n.isClickedOn) {
                 n.setPos(mouseX, mouseY);
             }
@@ -144,7 +141,6 @@ class ForceView {
             fNode nTwo = findNode(e.ip2);
             pushStyle();
             strokeWeight(e.edgeWeight);
-            println("DRAWING EDGE WITH WEIGHT " + e.edgeWeight);
             line(nOne.position.x, nOne.position.y, nTwo.position.x, nTwo.position.y);
             popStyle();
         }
