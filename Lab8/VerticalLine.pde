@@ -24,9 +24,11 @@ class VerticalLine {
     void drawLine() {
         float top = height * .1;
         float bottom = height * .9;
-        strokeWeight(10);
+        strokeWeight(5);
+        stroke(255,255,255,25);
         line(x, bottom, x, top);
         strokeWeight(1);
+        drawLabel();
     }
 
     String toString() {
@@ -34,5 +36,13 @@ class VerticalLine {
                              this.title, 
                              this.min, 
                              this.max);
+    }
+
+    void drawLabel() {
+        pushStyle();
+        fill(0,230,0);
+        textAlign(CENTER);
+        text(title, x, height * .08);
+        popStyle();
     }
 }
