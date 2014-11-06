@@ -28,7 +28,7 @@ void setup() {
 
 
 void draw() {
-    background(255);
+    background(0);
     float startingX = width * .1;
     float xInterval = width / lines.size();
     for(VerticalLine l : lines) {
@@ -46,7 +46,11 @@ void draw() {
       y1 = table.getFloatColumn(lines.get(j).title)[i];
       x2 = lines.get(j+1).x;
       y2 = table.getFloatColumn(lines.get(j+1).title)[i];
+      pushStyle();
+      strokeWeight(2);
+      stroke(0,230,0,50);
       line(x1, lines.get(j).getYPos(y1), x2, lines.get(j+1).getYPos(y2));
+      popStyle();
       counter++;
     }
   }

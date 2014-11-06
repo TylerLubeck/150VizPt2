@@ -24,7 +24,8 @@ class VerticalLine {
     void drawLine() {
         float top = height * .1;
         float bottom = height * .9;
-        strokeWeight(10);
+        strokeWeight(5);
+        stroke(0,200,0,60);
         line(x, bottom, x, top);
         strokeWeight(1);
         drawLabel();
@@ -39,7 +40,7 @@ class VerticalLine {
 
     void drawLabel() {
         pushStyle();
-        fill(0);
+        fill(0,230,0);
         textAlign(CENTER);
         text(title, x, height * .08);
         popStyle();
