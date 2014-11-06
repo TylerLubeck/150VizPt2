@@ -48,10 +48,15 @@ class fNode implements Comparable<fNode>{
 		
         this.netVel = new PVector(0f, 0f);
         setPos(this.position);
-        String l = ("ip: " + this.myIP + ", mass: " + this.mass);
+        String l = ("IP: " + this.myIP);// + ", mass: " + this.mass);
         label_fnode = new Textbox(l, this.position.x, this.position.y);
-        drawPosition();
+//        drawPosition();
 	}
+
+    void setDims(float _w, float _h) {
+        this.w = _w;
+        this.h = _h;
+    }
 
     String toString() {
         return String.format("ip: %s, mass: %d", this.myIP, this.mass);
@@ -118,7 +123,6 @@ class fNode implements Comparable<fNode>{
             thisForce.normalize();
             thisForce.mult(magnitude);
             
-            // Get length of Edge - goal length
             totalForces.add(thisForce);
         }
         return totalForces;
@@ -129,6 +133,13 @@ class fNode implements Comparable<fNode>{
         stroke(COLOR_STROKE);
         ellipse(this.position.x, this.position.y, 2 * this.radius, 2 * this.radius);
         fill(this.fillColor);
+        pushStyle();
+        label_fnode.setTextPos(this.position.x, this.position.y);
+        label_fnode.render();
+        popStyle();
+    }
+
+    void hover() {
         if (this.intersected) {
             selected_nodes.clear();
             for(Node n : nodes) {
@@ -140,7 +151,6 @@ class fNode implements Comparable<fNode>{
         label_fnode.setTextPos(this.position.x, this.position.y);
         label_fnode.render();
     }
-
 
     void renderISect(PGraphics pg) {
         pg.fill(this.r, this.g, this.b);
@@ -182,6 +192,13 @@ class fNode implements Comparable<fNode>{
 
     int compareTo(fNode other) {
         return other.mass - this.mass;
+    }
+
+    boolean withinArea(Rectangle r) {
+       boolean flag1 = abs(r.p2.x + r.p1.x - (this.position.x + this.radius) - this.position.x) - ((this.position.x + this.radius) - this.position.x + r.p2.x - r.p1.x) <= 0;
+       boolean flag2 = abs(r.p2.y + r.p1.y - (this.position.y + this.radius) - this.position.y) - ((this.position.y + this.radius) - this.position.y + r.p2.y - r.p1.y) <= 0;
+       //println(String.format("%d: %d %d", this.id, flag1, flag2));
+       return flag1 && flag2;
     }
 
     class Textbox {

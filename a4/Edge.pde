@@ -6,7 +6,10 @@ class Edge {
     String ip1;
     String ip2;
     int edgeWeight;
-    Edge(){};
+
+    Edge(){
+
+    };
 
     Edge(String sIP_, String dIP_, int firstnID) {
     	this.ip1 = sIP_;
@@ -22,7 +25,7 @@ class Edge {
 
     void setLength(int min_, int max_) {
         int minLen = 50;
-        int maxLen = 60;
+        int maxLen = 150;
         int minEdgeW = 3;
         int maxEdgeW = 8;
         this.springL = (float)map(this.nIDs.size(), min_, max_, minLen, maxLen);

@@ -7,12 +7,8 @@ void setup() {
     Parser parser = new Parser("data_aggregate.csv");
     nodes = parser.parse();
     fNodes = parser.getDestinations();
-    for (fNode n : fNodes) {
-        println(n);
-    }
     hover = true;
     logAnd = logOr = false;
-    println("PARSED");
     selected_nodes = new HashSet<Integer>();
     selectedAreas = new ArrayList<Rectangle>();
     stackedView = new StackedView();
@@ -106,10 +102,10 @@ void dealWithArea() {
                    if (temp != null) {
                        selected_nodes.addAll(temp);
                    }
-//                   temp = forceView.handleThisArea(rect);
-//                   if (temp != null) {
-//                       selected_nodes.addAll(temp);
-//                   }
+                   temp = forceView.handleThisArea(rect);
+                   if (temp != null) {
+                       selected_nodes.addAll(temp);
+                   }
                }
        }
        if (selectedArea != null) {
@@ -121,10 +117,10 @@ void dealWithArea() {
            if (temp != null) {
                selected_nodes.addAll(temp);
            }
-//           temp = forceView.handleThisArea(selectedArea);
-//           if (temp != null) {
-//               selected_nodes.addAll(temp);
-//           }
+           temp = forceView.handleThisArea(selectedArea);
+           if (temp != null) {
+               selected_nodes.addAll(temp);
+           }
        }
     }
     else {
@@ -149,15 +145,15 @@ void dealWithArea() {
                            selected_nodes.retainAll(temp);
                        }    
                    }
-//                   temp = forceView.handleThisArea(rect);
-//                   if (temp != null && !temp.isEmpty()) {
-//                       if (selected_nodes.isEmpty()) {
-//                           selected_nodes.addAll(temp);
-//                       }
-//                       else {
-//                           selected_nodes.retainAll(temp);
-//                       }    
-//                   }
+                   temp = forceView.handleThisArea(rect);
+                   if (temp != null && !temp.isEmpty()) {
+                       if (selected_nodes.isEmpty()) {
+                           selected_nodes.addAll(temp);
+                       }
+                       else {
+                           selected_nodes.retainAll(temp);
+                       }    
+                   }
                }
          }
          if (selectedArea != null) {
@@ -179,15 +175,15 @@ void dealWithArea() {
                      selected_nodes.retainAll(temp);
                  }    
              }
-//             temp = forceView.handleThisArea(selectedArea);
-//             if (temp != null && !temp.isEmpty()) {
-//                 if (selected_nodes.isEmpty()) {
-//                     selected_nodes.addAll(temp);
-//                 }
-//                 else {
-//                     selected_nodes.retainAll(temp);
-//                 }    
-//             }
+             temp = forceView.handleThisArea(selectedArea);
+             if (temp != null && !temp.isEmpty()) {
+                 if (selected_nodes.isEmpty()) {
+                     selected_nodes.addAll(temp);
+                 }
+                 else {
+                     selected_nodes.retainAll(temp);
+                 }    
+             }
          }
     }
         
@@ -203,9 +199,9 @@ void mouseMoved(MouseEvent e) {
        else if (inHeatmap(mouseX, mouseY)) {
            heatmap.hover();
        }
-//       else if (inForceView(mouseX, mouseY)) {
-//           forceView.hover();
-//       }
+       else if (inForceView(mouseX, mouseY)) {
+           forceView.hover();
+       }
    }
    dealWithArea();
 }
