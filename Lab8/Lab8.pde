@@ -50,7 +50,5 @@ void draw() {
       counter++;
     }
   }
-
-  println(String.format("Drew %d lines", counter));
   noLoop();
 }
