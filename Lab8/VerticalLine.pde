@@ -25,7 +25,7 @@ class VerticalLine {
         float top = height * .1;
         float bottom = height * .9;
         strokeWeight(5);
-        stroke(0,200,0,60);
+        stroke(255,255,255,25);
         line(x, bottom, x, top);
         strokeWeight(1);
         drawLabel();

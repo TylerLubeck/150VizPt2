@@ -47,7 +47,7 @@ void draw() {
       x2 = lines.get(j+1).x;
       y2 = table.getFloatColumn(lines.get(j+1).title)[i];
       pushStyle();
-      strokeWeight(2);
+      strokeWeight(1);
       stroke(0,230,0,50);
       line(x1, lines.get(j).getYPos(y1), x2, lines.get(j+1).getYPos(y2));
       popStyle();
