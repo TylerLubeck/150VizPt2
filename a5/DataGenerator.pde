@@ -1,0 +1,76 @@
+class Data {
+    /* Public indices of the "chosen" marked values */
+    public int m1;
+    public int m2;
+
+    class DataPoint {
+        private float value = -1;
+        private boolean marked = false;
+
+        DataPoint(float f, boolean m) {
+            this.value = f;
+            this.marked = m;
+        }
+
+        boolean isMarked() {
+            return marked;
+        }
+
+        void setMark(boolean b) {
+            this.marked = b;
+        }
+
+        float getValue() {
+            return this.value;
+        }
+    }
+
+    private DataPoint[] data = null;
+
+    Data() {
+        // NUM is a global varibale in support.pde
+        data = new DataPoint[NUM];
+        for(int i = 0; i < NUM; i++) {
+            data[i] = new DataPoint(random(0.0, 100.0), false);
+        }
+
+        m1 = int(random(0, int(NUM)));
+        m2 = int(random(0, int(NUM)));
+        /* No repeat indices */
+        while(m2 == m1) {
+            m2 = int(random(0, NUM));
+        }
+        
+        data[m1].setMark(true);
+        data[m2].setMark(true);
+    }
+
+    /* Pass either 0 for the first marked, and 1 for the other 
+     *  Returns the value of the passed index. 
+     *  Will need this to get "truePerc" in Lab_Experiment"
+     */
+    DataPoint getMarkedVal(int num) {
+        if(num != 0) {
+            return data[m1];
+        } else {
+            return data[m2];
+        }
+    }
+    
+    float getValue(int i) {
+        return data[i].getValue();
+    }
+    
+    boolean isMarked(int i) {
+        return data[i].isMarked();
+    }
+    
+    int getSize() {
+      return data.length;
+    }
+    
+        /**
+         ** finish this: the rest methods and variables you may want to use
+         ** 
+         **/
+}
