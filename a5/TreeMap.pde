@@ -19,7 +19,7 @@ class Canvas {
 }
 
 class Node {
-  
+  color c;
   float value;
   boolean marked;
   float x, y, w, h;
@@ -27,11 +27,17 @@ class Node {
   Node(float value, boolean marked) {
     this.value = value;
     this.marked = marked;
+    this.c = 0;
   }
 }
 
 
 class SqTreeMap  {
+  color[] colors = {
+   color(166,206,227),color(31,120,180),color(178,223,138),color(51,160,44),color(251,154,153),color(227,26,28),
+   color(253,191,111),color(255,127,0),color(202,178,214),color(106,61,154)};
+  
+  
   ArrayList<Node> values;
   float totalVal;
   float overallWidth;
@@ -84,6 +90,13 @@ class SqTreeMap  {
     float currentRatio = 0;
     float tempRatio;
     
+    for (int i = 0; i < children.size (); i++) {
+      if (children.get(i).c == 0) {
+        children.get(i).c = colors[cIndex];
+        cIndex = ++cIndex%colors.length;
+      }
+    }
+    
     while (children.size () > 0) {
       row.add(children.get(0));
       tempRatio = worstRatio(row, (rowArea + children.get(0).value * c.VA_ratio) / rowLength, c.VA_ratio);
@@ -118,7 +131,7 @@ class SqTreeMap  {
   void drawRow(ArrayList<Node> row, Canvas c, boolean rowVertical, float rowArea, float rowWidth) {
     float tempArea = 0;
     for (int i = 0; i < row.size (); i++) {
-      fill(70, 170, 208);
+      fill(row.get(i).c);
         if (rowVertical) {
           rect(c.x0, (c.y0 + tempArea / rowWidth), rowWidth, (row.get(i).value * c.VA_ratio/ rowWidth));
           if (row.get(i).marked) {
