@@ -49,5 +49,33 @@ class Parser {
             tempConn = new Connection(name1, node1, name2, node2);
             connections.add(tempConn);
         }
+        setSprings();
+    }
+    
+    void setSprings() {
+        int index1 = -1, index2 = -1;
+        Spring tempSpring;
+        for (int i = 0; i < connections.size(); ++i) {
+            for (int j = 0; j < nodes.size(); ++j) {
+                if (nodes.get(j).id == connections.get(i).rNode1)
+                    index1 = j;
+                else if (nodes.get(j).id == connections.get(i).rNode2)
+                    index2 = j;
+            }    
+        }
+        if (nodes.get(index1).neighbors.contains(nodes.get(index2))) {
+            nodes.get(index1).springs.get(nodes.get(index1).neighbors.indexOf(nodes.get(index2))).springL = 
+                                          nodes.get(index1).springs.get(nodes.get(index1).neighbors.indexOf(nodes.get(index2))).springL - 5;
+            nodes.get(index2).springs.get(nodes.get(index2).neighbors.indexOf(nodes.get(index1))).springL =  
+                                          nodes.get(index2).springs.get(nodes.get(index2).neighbors.indexOf(nodes.get(index1))).springL - 5;
+        }
+        else {
+            tempSpring = new Spring(DEFAULT_SPRING);
+            nodes.get(index1).neighbors.add(nodes.get(index2));
+            nodes.get(index1).springs.add(tempSpring);
+            nodes.get(index2).neighbors.add(nodes.get(index1));
+            nodes.get(index2).springs.add(tempSpring);
+        }
+          
     }
 }
