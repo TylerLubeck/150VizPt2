@@ -10,6 +10,8 @@ class RelationshipNode {
     PVector position, netVel;
     ArrayList<RelationshipNode> neighbors;
     ArrayList<Spring> springs;
+    boolean isClickedOn;
+    float offsetX, offsetY;
     
     RelationshipNode(int _id, ArrayList<String> _names) {
          neighbors = new ArrayList<RelationshipNode>();
@@ -26,6 +28,8 @@ class RelationshipNode {
          this.position = new PVector(x, y);
          this.mass = names.size();
          this.netVel = new PVector(0f, 0f);
+         isClickedOn = false;
+         offsetX = offsetY = 0;
     }
     
     void setPos(PVector pos) {
@@ -33,6 +37,10 @@ class RelationshipNode {
     }
     
     void setPos(float newX, float newY) {
+         if (isClickedOn) {
+             newX = newX + offsetX;
+             newY = newY + offsetY;
+         }
          newX = newX < totalSize * 0.5 ? totalSize * 0.5 : newX;
          newX = newX > width - totalSize * 0.5 ? width - totalSize * 0.5 : newX;
          
@@ -204,6 +212,34 @@ class RelationshipNode {
              }
          }
          return maxLength + 4;
+     }
+    
+     boolean intersects() {
+         if (names.size() > 1) {
+             if( ( mouseX >= position.x - 0.5 * names.size() * SQUARE_SIZE - maxL &&
+                      mouseX <= position.x + 0.5 * names.size() * SQUARE_SIZE + maxL &&
+                      mouseY >= position.y - 0.5 * names.size() * SQUARE_SIZE &&
+                      mouseY <= position.y + 0.5 * names.size() * SQUARE_SIZE) ||
+                    ( mouseX >= position.x - 0.5 * names.size() * SQUARE_SIZE &&
+                      mouseX <= position.x + 0.5 * names.size() * SQUARE_SIZE &&
+                      mouseY >= position.y - 0.5 * names.size() * SQUARE_SIZE - maxL &&
+                      mouseY <= position.y + 0.5 * names.size() * SQUARE_SIZE + maxL)) {
+                  offsetX = position.x - mouseX;
+                  offsetY = position.y - mouseY;
+                  return true;
+            }
+         }
+         else {
+             if( mouseX >= position.x - 0.5 * maxL && 
+                    mouseX <= position.x + 0.5 * maxL &&
+                    mouseY >= position.y - 0.5 * SQUARE_SIZE &&
+                    mouseY <= position.y + 0.5 * SQUARE_SIZE) {
+                offsetX = position.x - mouseX;
+                offsetY = position.y - mouseY;
+                return true;
+            }
+         }
+        return false;
      }
     
 }

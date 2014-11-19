@@ -37,6 +37,9 @@ void draw() {
     }
     
     for (RelationshipNode node : nodes) {
+         if (node.isClickedOn) {
+            node.setPos(mouseX, mouseY); 
+         }
          node.drawPosition();
     } 
     drawConnections();
@@ -115,4 +118,20 @@ float systemEnergy() {
     if(universeEnergy < LOWEST_ENERGY) equilibrium = true;
     if(universeEnergy > LOWEST_ENERGY) equilibrium = false;
     return universeEnergy;
+}
+
+void mousePressed() {
+    for (RelationshipNode n : nodes) {
+        if (n.intersects()) {
+            n.isClickedOn = true;
+            equilibrium = false;
+        }
+    }
+}
+
+void mouseReleased() {
+    for (RelationshipNode n : nodes) {
+        n.isClickedOn = false;
+    }
+    calcAndUpdate();
 }
