@@ -18,7 +18,7 @@ Table expData = null;
  */
 
 String[] vis = {
-    "PieChart", "BarChart", "StackedBarChart", "BarChart(horizontal)", "TreeMap"
+    "BarChart - white", "BarChart - mark w/color", "BarChart - all same color", "BarChart - all different color"
 };
 
 /**

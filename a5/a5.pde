@@ -2,15 +2,16 @@ import controlP5.*;
 import java.lang.Object;
 import java.util.Arrays;
 
-final int NUM_REP = 20;
+final int NUM_REP = 30;
 
 int chartType;
 ArrayList<Integer> visType;
+ArrayList<Data> dataset0;
+ArrayList<Data> dataset1;
+ArrayList<Data> dataset2;
+ArrayList<Data> dataset3;
 Data d = null;
 BarGraph bg;
-PieGraph pg;
-StackedBar sb;
-SqTreeMap sm;
 
 void setup() {
     totalWidth = displayWidth;
@@ -22,6 +23,19 @@ void setup() {
       for (int j = 0; j < NUM_REP; ++j)
         visType.add(i);
     }
+    
+    dataset0 = new ArrayList<Data>();
+    dataset1 = new ArrayList<Data>();
+    dataset2 = new ArrayList<Data>();
+    dataset3 = new ArrayList<Data>();
+    for (int i = 0; i < NUM_REP; ++i) {
+        d = new Data();
+        dataset0.add(d);
+        dataset1.add(d);
+        dataset2.add(d);
+        dataset3.add(d);
+    }
+
     
     size((int) totalWidth, (int) totalHeight);
     //if you have a Retina display, use the line below (looks better)
@@ -69,17 +83,17 @@ void draw() {
         fill(0);
         textSize(20);
         textAlign(LEFT);
-        text(index+1 + "/100", chartLeftX, chartLeftY-3); 
+        text(index+1 + "/120", chartLeftX, chartLeftY-3); 
         
         switch (chartType) {
             case 0:
-                 pg = new PieGraph(d);
+                 bg = new BarGraph(d);
                  stroke(0);
                  strokeWeight(1);
                  fill(255);
                  rectMode(CORNER);
                  rect(chartLeftX, chartLeftY, chartSize, chartSize);
-                 pg.draw(chartLeftX + chartSize/2, chartLeftY + chartSize/2, chartSize*0.9);
+                 bg.draw(chartLeftX, chartLeftY, chartSize, chartSize, chartType);
                  cp5.get(Textfield.class, "answer").setFocus(true);
                  break;
             case 1:
@@ -89,17 +103,17 @@ void draw() {
                  fill(255);
                  rectMode(CORNER);
                  rect(chartLeftX, chartLeftY, chartSize, chartSize);
-                 bg.draw(chartLeftX, chartLeftY, chartSize, chartSize, true);
+                 bg.draw(chartLeftX, chartLeftY, chartSize, chartSize, chartType);
                  cp5.get(Textfield.class, "answer").setFocus(true);
                  break;
             case 2:
-                 sb = new StackedBar(d);
+                 bg = new BarGraph(d);
                  stroke(0);
                  strokeWeight(1);
                  fill(255);
                  rectMode(CORNER);
                  rect(chartLeftX, chartLeftY, chartSize, chartSize);
-                 sb.draw(chartLeftX, chartLeftY, chartSize, chartSize);
+                 bg.draw(chartLeftX, chartLeftY, chartSize, chartSize, chartType);
                  cp5.get(Textfield.class, "answer").setFocus(true);
                  break;
             case 3:
@@ -109,17 +123,7 @@ void draw() {
                  fill(255);
                  rectMode(CORNER);
                  rect(chartLeftX, chartLeftY, chartSize, chartSize);
-                 bg.draw(chartLeftX, chartLeftY, chartSize, chartSize, false);
-                 cp5.get(Textfield.class, "answer").setFocus(true);
-                 break;
-            case 4:
-                 sm = new SqTreeMap(d);
-                 stroke(0);
-                 strokeWeight(1);
-                 fill(255);
-                 rectMode(CORNER);
-                 rect(chartLeftX, chartLeftY, chartSize, chartSize);
-                 sm.draw(chartLeftX, chartLeftY, chartSize, chartSize);
+                 bg.draw(chartLeftX, chartLeftY, chartSize, chartSize, chartType);
                  cp5.get(Textfield.class, "answer").setFocus(true);
                  break;
         }
@@ -172,12 +176,30 @@ public void next() {
             pagelast = true;
         }
         else {
-          d = new Data();
          
           int tempIndex;
           tempIndex = int(random(0, visType.size()));
           chartType = visType.get(tempIndex);
           visType.remove(tempIndex);
+          
+          switch (chartType) {
+              case 0: tempIndex = int(random(0, dataset0.size()));
+                      d = dataset0.get(tempIndex);
+                      dataset0.remove(tempIndex);
+                      break;
+              case 1: tempIndex = int(random(0, dataset1.size()));
+                      d = dataset1.get(tempIndex);
+                      dataset1.remove(tempIndex);
+                      break;
+              case 2: tempIndex = int(random(0, dataset2.size()));
+                      d = dataset2.get(tempIndex);
+                      dataset2.remove(tempIndex);
+                      break;
+              case 3: tempIndex = int(random(0, dataset3.size()));
+                      d = dataset3.get(tempIndex);
+                      dataset3.remove(tempIndex);
+                      break;
+          }
         }
     }
 }
