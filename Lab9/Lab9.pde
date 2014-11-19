@@ -1,12 +1,12 @@
 import java.util.Collections;
 
 static int SQUARE_SIZE = 15;
-static int DEFAULT_SPRING = 200;
+static int DEFAULT_SPRING = 50;
 float DAMPENING = 0.8; //to .8
 float TIME_STEP = .9;
-float k = 0.1; // from 0.5
+float k = 0.5; // from 0.5
 float LOWEST_ENERGY = 0.5;
-float CENTER_PULL = 1.0;
+float CENTER_PULL = 0;
 boolean equilibrium;
 String file = "data1.csv";
 
