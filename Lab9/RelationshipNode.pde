@@ -26,7 +26,7 @@ class RelationshipNode {
          float x = random(0.5 * totalSize, width - 0.5 * totalSize);
          float y = random(0.5 * totalSize, height - 0.5 * totalSize);
          this.position = new PVector(x, y);
-         this.mass = names.size();
+         this.mass = 10;//names.size();
          this.netVel = new PVector(0f, 0f);
          isClickedOn = false;
          offsetX = offsetY = 0;
@@ -78,7 +78,12 @@ class RelationshipNode {
 
             float currLength = dist(this.position.x, this.position.y, 
                                     neighbor.position.x, neighbor.position.y);
-            currLength *= -1;
+            
+            //what ben changed to pwn Turo
+            if(i == this.springs.size() - 1) {
+                currLength *= 0;
+            }
+            else { currLength *= -1; }
 
             float magnitude = currLength - spring.springL;
             magnitude *= k_hooke;

@@ -65,9 +65,9 @@ class Parser {
         }
         if (nodes.get(index1).neighbors.contains(nodes.get(index2))) {
             nodes.get(index1).springs.get(nodes.get(index1).neighbors.indexOf(nodes.get(index2))).springL = 
-                                          nodes.get(index1).springs.get(nodes.get(index1).neighbors.indexOf(nodes.get(index2))).springL - 5;
+                                          nodes.get(index1).springs.get(nodes.get(index1).neighbors.indexOf(nodes.get(index2))).springL - 1;
             nodes.get(index2).springs.get(nodes.get(index2).neighbors.indexOf(nodes.get(index1))).springL =  
-                                          nodes.get(index2).springs.get(nodes.get(index2).neighbors.indexOf(nodes.get(index1))).springL - 5;
+                                          nodes.get(index2).springs.get(nodes.get(index2).neighbors.indexOf(nodes.get(index1))).springL - 1;
         }
         else {
             tempSpring = new Spring(DEFAULT_SPRING);

@@ -1,9 +1,9 @@
 import java.util.Collections;
 
 static int SQUARE_SIZE = 15;
-static int DEFAULT_SPRING = 50;
+static int DEFAULT_SPRING = 10;
 float DAMPENING = 0.8; //to .8
-float TIME_STEP = .9;
+float TIME_STEP = 3;
 float k = 0.1; // from 0.5
 float LOWEST_ENERGY = 0.5;
 float CENTER_PULL = 0;
@@ -11,7 +11,7 @@ boolean equilibrium;
 String file = "data1.csv";
 
 
-float COULOMB = 1500; // from 500
+float COULOMB = 5000; // from 500
 
 ArrayList<RelationshipNode> nodes;
 ArrayList<Connection> connections;
@@ -32,9 +32,9 @@ void draw() {
     if (!equilibrium) {
         calcAndUpdate();
     } 
-    else {
-        pullTowardsCenter();
-    }
+    // else {
+    //     pullTowardsCenter();
+    // }
     
     for (RelationshipNode node : nodes) {
          if (node.isClickedOn) {
